@@ -29,7 +29,7 @@ createdb groot_user_service
 ```
 ##Run Application
 ```sh
-ruby ./app.rb
+ruby app.rb
 ```
 
 ##Migrate DB after model alteration

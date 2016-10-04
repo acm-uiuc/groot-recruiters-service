@@ -1,6 +1,6 @@
 #models/user
 
-class User
+class Recruiter
     include DataMapper::Resource
 
     property :id, Serial

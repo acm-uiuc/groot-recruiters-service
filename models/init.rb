@@ -1,1 +1,1 @@
-require_relative './recruiter'
+require_relative './user'

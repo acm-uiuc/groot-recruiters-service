@@ -3,7 +3,7 @@
 ##Model
 ```ruby
 
-class User
+class Recruiter
     include DataMapper::Resource
 
     property :id, Serial
@@ -25,7 +25,7 @@ end
 initdb /usr/local/var/postgres
 pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
 ps auxwww | grep postgres
-createdb groot_user_service
+createdb groot_recruiter_service
 ```
 ##Run Application
 ```sh

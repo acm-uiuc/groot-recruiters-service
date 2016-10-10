@@ -13,6 +13,7 @@ require 'better_errors'
 require 'dm-postgres-adapter'
 
 set :root, File.dirname(__FILE__)
+set :port, 8000
 configure :development do
     DataMapper::Logger.new($stdout, :debug)
     DataMapper.setup(

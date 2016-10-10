@@ -12,31 +12,32 @@ require 'dm-validations'
 require 'better_errors'
 require 'dm-postgres-adapter'
 
-set :root, File.dirname(__FILE__)
-set :port, 8000
-configure :development do
-    DataMapper::Logger.new($stdout, :debug)
-    DataMapper.setup(
-        :default,
-        'postgres://localhost/groot_users_service'
-    )
-    use BetterErrors::Middleware
-    # you need to set the application root in order to abbreviate filenames
-    # within the application:
-    BetterErrors.application_root = File.expand_path('..', __FILE__)
-    DataMapper.auto_upgrade!
+class GrootRecruiterService < Sinatra::Application
+
+    enable :sessions
+
+    configure :development do
+        DataMapper::Logger.new($stdout, :debug)
+        DataMapper.setup(
+            :default,
+            'postgres://localhost/groot_users_service'
+        )
+        use BetterErrors::Middleware
+        # you need to set the application root in order to abbreviate filenames
+        # within the application:
+        BetterErrors.application_root = File.expand_path('..', __FILE__)
+        DataMapper.auto_upgrade!
+    end
+
+    configure :production do
+        DataMapper.setup(
+            :default,
+            'postgres://localhost/groot_users_service'
+        )
+    end
+    DataMapper.finalize
 end
 
-
-configure :production do
-    DataMapper.setup(
-        :default,
-        'postgres://localhost/groot_users_service'
-    )
-end
-
-require_relative './models/init'
-require_relative './routes/init'
-require_relative './helpers/init'
-
-DataMapper.finalize
+require_relative 'helpers/init'
+require_relative 'routes/init'
+require_relative 'models/init'

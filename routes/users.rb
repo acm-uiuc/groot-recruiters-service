@@ -32,8 +32,6 @@ module Sinatra
 
             app.delete '/users/:id' do
                 user ||= User.first(netid: params[:netid]) || halt(404)
-                
-                # Delete Resume from S3 if it exists
                 AWS.delete_resume(user.netid)
                 
                 halt 500 unless user.destroy

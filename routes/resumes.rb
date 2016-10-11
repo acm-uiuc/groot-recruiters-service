@@ -4,7 +4,7 @@ require 'pry'
 module Sinatra
     module ResumesRoutes
         def self.registered(app)
-            app.get '/unapproved_resumes' do
+            app.get '/resumes/unapproved' do
               users = User.all(approved_resume: false, order: [ :netid.desc ])
               result = []
               users.each do |user|
@@ -12,6 +12,7 @@ module Sinatra
                 result << {
                   "firstName": user.first_name,
                   "lastName": user.last_name,
+                  "netid": user.netid,
                   "dateJoined": user.date_joined,
                   "resume": url
                 }
@@ -19,14 +20,37 @@ module Sinatra
               
               ResponseFormat.format_response(result, request.accept)
             end
+            
+            app.put '/resume_status' do
+              string = request.body.read.gsub(/=>/, ":")
+              payload = JSON.parse(string)
+              
+              return [400, "Missing netid"] unless payload["netid"]
+              return [400, "Missing resume status"] unless payload["resume_status"]
+              
+              user = User.first(netid: payload["netid"])
+              
+              return [400, "User not found"] unless user
+              return [400, "Resume already approved"] if user.approved_resume
+              
+              if payload["resume_status"]
+                user.update(approved_resume: true)
+              else
+                # Delete resume and user
+                AWS.delete_resume(user.netid)
+                
+                halt 500 unless user.destroy
+              end
+              return [200, "OK"]
+            end
           
             app.post '/resume' do
                 string = request.body.read.gsub(/=>/, ":")
                 payload = JSON.parse(string)
 
                 return [400, "Missing firstName"] unless payload["firstName"]
-                return [400, "Missing netid"] unless payload["netid"]
                 return [400, "Missing lastName"] unless payload["lastName"]
+                return [400, "Missing netid"] unless payload["netid"]
                 return [400, "Missing resume"] unless payload["resume"]
                 valid = User.is_valid_user?(payload["firstName"], payload["lastName"], payload["netid"])
                 if valid

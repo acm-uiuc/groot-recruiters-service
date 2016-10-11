@@ -32,6 +32,9 @@ module Sinatra
 
             app.delete '/users/:id' do
                 user ||= User.first(netid: params[:netid]) || halt(404)
+                
+                AWS.delete_resume(user.netid)
+                
                 halt 500 unless user.destroy
             end
         end

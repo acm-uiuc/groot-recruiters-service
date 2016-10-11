@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gem 'bundler'
 gem 'rake'
 
-gem 'sinatra'
+gem 'sinatra', '~> 1.4.7'
 gem 'sinatra-contrib'
 gem 'foreigner'
 

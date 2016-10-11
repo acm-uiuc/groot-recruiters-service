@@ -11,8 +11,7 @@ class User
     property :token, String
     property :admin, Boolean
     property :active, Boolean
-    property :status, String
-    
+
     def self.is_valid_user?(first_name, last_name, netid ) #TODO: add password
         if first_name != nil && last_name != nil
             if netid.length <= 8

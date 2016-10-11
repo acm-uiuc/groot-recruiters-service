@@ -11,16 +11,26 @@ require 'dm-timestamps'
 require 'dm-validations'
 require 'better_errors'
 require 'dm-postgres-adapter'
+require_relative 'helpers/init'
+require_relative 'routes/init'
+require_relative 'models/init'
 
-class GrootRecruiterService < Sinatra::Application
+class GrootRecruiterService < Sinatra::Base
 
     enable :sessions
+
+    helpers ResponseFormat
+    helpers Config
+    helpers JSONBase64Decoder
+
+    register Sinatra::ResumesRoutes
+    register Sinatra::UsersRoutes
 
     configure :development do
         DataMapper::Logger.new($stdout, :debug)
         DataMapper.setup(
             :default,
-            'postgres://localhost/groot_users_service'
+            'postgres://localhost/groot_recruiter_service'
         )
         use BetterErrors::Middleware
         # you need to set the application root in order to abbreviate filenames
@@ -32,12 +42,8 @@ class GrootRecruiterService < Sinatra::Application
     configure :production do
         DataMapper.setup(
             :default,
-            'postgres://localhost/groot_users_service'
+            'postgres://localhost/groot_recruiter_service'
         )
     end
     DataMapper.finalize
 end
-
-require_relative 'helpers/init'
-require_relative 'routes/init'
-require_relative 'models/init'

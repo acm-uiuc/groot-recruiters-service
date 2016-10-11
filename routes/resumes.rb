@@ -1,7 +1,25 @@
 # encoding: UTF-8
+require 'pry'
+
 module Sinatra
     module ResumesRoutes
         def self.registered(app)
+            app.get '/unapproved_resumes' do
+              users = User.all(approved_resume: false, order: [ :netid.desc ])
+              result = []
+              users.each do |user|
+                url = AWS.fetch_resume(user.netid)
+                result << {
+                  "firstName": user.first_name,
+                  "lastName": user.last_name,
+                  "dateJoined": user.date_joined,
+                  "resume": url
+                }
+              end
+              
+              ResponseFormat.format_response(result, request.accept)
+            end
+          
             app.post '/resume' do
                 string = request.body.read.gsub(/=>/, ":")
                 payload = JSON.parse(string)
@@ -11,15 +29,13 @@ module Sinatra
                 return [400, "Missing lastName"] unless payload["lastName"]
                 return [400, "Missing resume"] unless payload["resume"]
                 valid = User.is_valid_user?(payload["firstName"], payload["lastName"], payload["netid"])
-                puts valid
-                user = ""
                 if valid
                     user = (User.first_or_create(
                         {
                             netid: payload["netid"]
                         },{
-                            first_name: payload["firstName"],
-                            last_name: payload["lastName"],
+                            first_name: payload["firstName"].capitalize,
+                            last_name: payload["lastName"].capitalize,
                             netid: payload["netid"],
                             date_joined: Time.now.getutc
                         }
@@ -27,6 +43,9 @@ module Sinatra
                     
                     successful_upload = AWS.upload_resume(payload["netid"], payload["resume"])
                     return [400, "Error uploading resume to S3"] unless successful_upload
+                    
+                    user.approved_resume = false
+                    user.save!
                 end
                 status = valid ? 200 : 403
                 return [status, ResponseFormat.format_response(user, request.accept)]

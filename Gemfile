@@ -15,7 +15,7 @@ gem 'dm-timestamps'
 gem 'dm-validations'
 gem 'dm-noisy-failures', '~> 0.2.3'
 gem 'aws-s3'
-
+gem 'pony'
 group :production do
     gem 'dm-postgres-adapter', '~> 1.2'
     gem 'pg'

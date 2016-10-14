@@ -82,7 +82,7 @@ module Sinatra
               return [400, "Missing netid"] unless payload["netid"]
               
               successful_delete = AWS.delete_resume(payload["netid"])
-              return [400, "Error uploading resume with netid #{payload['netid']} to S3"] unless successful_delete
+              return [400, "Error deleting resume with netid #{payload['netid']} to S3"] unless successful_delete
               
               return [200, "OK"]
             end

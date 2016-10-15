@@ -4,6 +4,20 @@ require 'pry'
 module Sinatra
     module ResumesRoutes
         def self.registered(app)
+            app.get '/resumes/netids' do
+              string = request.body.read.gsub(/=>/, ":")
+              payload = JSON.parse(string)
+              result = {}
+              payload["netids"].each do |netid|
+                user = User.first(netid: netid)
+                url = AWS.fetch_resume(user.netid)
+                result[netid] = url
+              end
+              
+              ResponseFormat.format_response(result, request.accept)
+            end
+            
+            
             app.get '/resumes/unapproved' do
               users = User.all(approved_resume: false, order: [ :netid.desc ])
               result = []

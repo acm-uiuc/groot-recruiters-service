@@ -14,6 +14,16 @@ module Sinatra
                 user ||= User.first(netid: params[:netid]) || halt(404)
                 ResponseFormat.format_response(user, request.accept)
             end
+            
+            app.get '/users/search' do
+              graduation_start = payload["graduation_start"] # YYYY-MM-DD
+              graduation_end = payload["graduation_end"] # YYYY-MM-DD
+              level = payload["level"] # Undergraduate, Masters, PHD
+              seeking = payload["seeking"] # Internship (co-op), or Full time
+              
+              num_per_page = payload["num_per_page"]
+              page = payload["page"]
+            end
 
             app.put '/users/:netid' do
                 payload = JSON.parse(request.body.read)

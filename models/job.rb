@@ -3,13 +3,12 @@ class Job
 
     property :id, Serial
     property :posted_on, DateTime
+    property :title, String
     property :company, String
     property :contact_name, String
     property :contact_email, String
     property :contact_phone, String
-    property :type_full, Boolean
-    property :type_parttime, Boolean
-    property :type_intern, Boolean
+    property :job_type, String
     property :description, String
     
 end

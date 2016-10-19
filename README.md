@@ -1,23 +1,5 @@
 #Groot User Service
 
-##Model
-```ruby
-
-class Recruiter
-    include DataMapper::Resource
-
-    property :id, Serial
-    property :first_name, String, required: true
-    property :last_name, String, required: true
-    property :netid, String, required: true, key: true, unique_index: true, length: 1...8
-    property :date_joined, DateTime
-    property :token, String
-    property :admin, Boolean
-    property :active, Boolean
-
-end
-```
-
 ##Installing PostgreSQL
 ```sh
 [package-manager] install postgres
@@ -28,11 +10,30 @@ ps auxwww | grep postgres
 createdb groot_recruiter_service
 ```
 ##Run Application
-```sh
+```
 ruby app.rb
 ```
 
-##Migrate DB after model alteration
-```sh
+##Migrate DB after model alteration (clears all data)
+```
 rake db:migrate
 ```
+
+##API Documentation
+
+###GET /jobs
+
+`curl -X GET http://localhost:4567/jobs`
+
+```
+[{"id":1,"posted_on":"2016-10-19T02:45:49-05:00","title":"Software Engineering Intern","company":"Apple","contact_name":"Steve Jobs","contact_email":"steve@apple.com","contact_phone":"11111111","job_type":"Full-time","description":"Free job"}]
+```
+
+###POST /jobs
+
+`curl -X POST -d '{"job_title" => "Software Engineering Intern1", "org" => "Apple1", "contact-name" => "Steve Jobs", "contact-email" => "steve@apple.com", "contact-phone" => "11111111", "job-type" => "Full-time", "description" => "Free job"}' http://localhost:4567/jobs`
+
+```
+{"id":2,"posted_on":"2016-10-19T16:57:43+00:00","title":"Software Engineering Intern1","company":"Apple1","contact_name":"Steve Jobs","contact_email":"steve@apple.com","contact_phone":"11111111","job_type":"Full-time","description":"Free job"}
+```
+

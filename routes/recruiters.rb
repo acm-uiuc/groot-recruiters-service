@@ -19,7 +19,7 @@ module Sinatra
         
         return [400, "Invalid credentials"] unless recruiter
         
-        return ResponseFormat.format_response(recruiter, request.accept)
+        return [200, "OK"]
       end
       
       app.post '/recruiters/new' do

@@ -2,7 +2,7 @@ module Sinatra
     module JobsRoutes
         def self.registered(app)
             app.get '/jobs' do
-                ResponseFormat.format_response(Job.all(order: [ :posted_on.desc ]), request.accept)
+                ResponseFormat.format_response(Job.all(order: [ :posted_on.desc ], status: "Defer"), request.accept)
             end
             
             app.post '/jobs' do
@@ -27,16 +27,42 @@ module Sinatra
                       contact_phone: payload["contact-phone"],
                       job_type: payload["job-type"],
                       description: payload["description"],
-                      posted_on: Time.now.getutc
+                      posted_on: Time.now.getutc,
+                      status: "Defer"
                   }
               ))
             
               return [200, ResponseFormat.format_response(job, request.accept)]
             end
             
-            # TODO a.put/jobs/status
+            app.put '/jobs/status' do
+              string = request.body.read.gsub(/=>/, ":")
+              payload = JSON.parse(string)
+              
+              return [400, "Missing job title"] unless payload["job_title"]
+              return [400, "Missing organization"] unless payload["org"]
+              return [400, "Missing job status"] unless payload["status"]
+              
+              if Job.is_valid_status(payload["status"])
+                job ||= Job.first(title: payload["job_title"], company: payload["org"]) || halt(404)
+                
+                job.status = payload["status"]
+                job.save!
+              else
+                return [400, "Invalid status #{payload['status']}"]
+              end
+            end
             
-            
+            app.delete '/jobs' do
+              string = request.body.read.gsub(/=>/, ":")
+              payload = JSON.parse(string)
+              
+              return [400, "Missing job title"] unless payload["job_title"]
+              return [400, "Missing organization"] unless payload["org"]
+              
+              job ||= Job.first(title: payload["job_title"], company: payload["org"]) || halt(404)
+              halt 500 unless job.destroy
+            end
         end
     end
     register JobsRoutes

@@ -21,12 +21,11 @@ module Sinatra
               ResponseFormat.format_response(result, request.accept)
             end
             
-            app.put '/resumes/status' do
+            app.put '/resumes/approve' do
               string = request.body.read.gsub(/=>/, ":")
               payload = JSON.parse(string)
               
               return [400, "Missing netid"] unless payload["netid"]
-              return [400, "Missing resume status"] unless payload["resume_status"]
               
               user = User.first(netid: payload["netid"])
               
@@ -44,7 +43,7 @@ module Sinatra
               return [200, "OK"]
             end
           
-            app.post '/resumes/' do
+            app.post '/resumes' do
                 string = request.body.read.gsub(/=>/, ":")
                 payload = JSON.parse(string)
 
@@ -91,7 +90,7 @@ module Sinatra
                 return [status, ResponseFormat.format_response(user, request.accept)]
             end
             
-            app.delete '/resumes/' do
+            app.delete '/resumes' do
               string = request.body.read.gsub(/=>/, ":")
               payload = JSON.parse(string)
               

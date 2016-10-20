@@ -33,6 +33,10 @@ module Sinatra
             
               return [200, ResponseFormat.format_response(job, request.accept)]
             end
+            
+            # TODO a.put/jobs/status
+            
+            
         end
     end
     register JobsRoutes

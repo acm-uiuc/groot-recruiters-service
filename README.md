@@ -25,7 +25,7 @@ rake db:migrate
 
 `curl -X GET http://localhost:4567/jobs`
 
-```
+```json
 [{"id":1,"posted_on":"2016-10-19T02:45:49-05:00","title":"Software Engineering Intern","company":"Apple","contact_name":"Steve Jobs","contact_email":"steve@apple.com","contact_phone":"11111111","job_type":"Full-time","description":"Free job"}]
 ```
 
@@ -33,7 +33,20 @@ rake db:migrate
 
 `curl -X POST -d '{"job_title" => "Software Engineering Intern1", "org" => "Apple1", "contact-name" => "Steve Jobs", "contact-email" => "steve@apple.com", "contact-phone" => "11111111", "job-type" => "Full-time", "description" => "Free job"}' http://localhost:4567/jobs`
 
-```
+```javascript
 {"id":2,"posted_on":"2016-10-19T16:57:43+00:00","title":"Software Engineering Intern1","company":"Apple1","contact_name":"Steve Jobs","contact_email":"steve@apple.com","contact_phone":"11111111","job_type":"Full-time","description":"Free job"}
 ```
 
+###PUT /jobs/status
+
+###GET /recruiters/login
+
+###POST /recruiters/new
+
+###GET /resumes/unapproved
+
+###POST /resumes/
+
+###DELETE /resumes/
+
+###PUT /resumes/status

@@ -21,7 +21,7 @@ module Sinatra
               ResponseFormat.format_response(result, request.accept)
             end
             
-            app.put '/resume_status' do
+            app.put '/resumes/status' do
               string = request.body.read.gsub(/=>/, ":")
               payload = JSON.parse(string)
               
@@ -44,7 +44,7 @@ module Sinatra
               return [200, "OK"]
             end
           
-            app.post '/resume' do
+            app.post '/resumes/' do
                 string = request.body.read.gsub(/=>/, ":")
                 payload = JSON.parse(string)
 
@@ -91,7 +91,7 @@ module Sinatra
                 return [status, ResponseFormat.format_response(user, request.accept)]
             end
             
-            app.delete '/resume' do
+            app.delete '/resumes/' do
               string = request.body.read.gsub(/=>/, ":")
               payload = JSON.parse(string)
               

@@ -51,12 +51,12 @@ module Sinatra
                 netid = user["netid"]
                 user_json = JSON.parse(user.to_json)
                 
-                url = URI.parse("http://localhost:8001/users/#{netid}/isMember")
+                url = URI.parse("http://localhost:8000/user?username=#{netid}")
                 req = Net::HTTP::Get.new(url.to_s)
                 res = Net::HTTP.start(url.host, url.port) { |http|
                   http.request(req)
                 }
-                user_json["is_acm_member"] = JSON.parse(res.body)["isMember"]
+                user_json["is_acm_member"] = JSON.parse(res.body)["Text"] != "404 Not Found"
                 
                 response << user_json
               end

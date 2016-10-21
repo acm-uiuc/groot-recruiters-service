@@ -1,6 +1,7 @@
 # encoding: UTF-8
 require 'date'
 require 'pry'
+require 'net/http'
 
 module Sinatra
     module UsersRoutes
@@ -45,9 +46,21 @@ module Sinatra
               page ||= 1
               start = (page - 1) * num_per_page
               
-              response = {
-                users: matching_users[start..start + num_per_page],
-              }
+              response = []
+              matching_users[start..start + num_per_page].each do |user|
+                netid = user["netid"]
+                user_json = JSON.parse(user.to_json)
+                
+                url = URI.parse("http://localhost:8001/users/#{netid}/isMember")
+                req = Net::HTTP::Get.new(url.to_s)
+                res = Net::HTTP.start(url.host, url.port) { |http|
+                  http.request(req)
+                }
+                user_json["is_acm_member"] = JSON.parse(res.body)["isMember"]
+                
+                response << user_json
+              end
+              
               response[:next_page] = page + 1 if start + num_per_page < matching_users.count
               response[:previous_page] = page - 1 if page > 1 and response[:users].count != 0 
               
@@ -93,7 +106,7 @@ module Sinatra
                 return [status, ResponseFormat.format_response(quote, request.accept)]
             end
 
-            app.delete '/users/:id' do
+            app.delete '/users/:netid' do
                 user ||= User.first(netid: params[:netid]) || halt(404)
                 AWS.delete_resume(user.netid)
                 

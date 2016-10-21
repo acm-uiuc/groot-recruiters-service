@@ -113,4 +113,5 @@ OK
 ###GET /users/search
 
 `curl -X GET -d '{"graduation_start" => "2017-05-01"}' http://localhost:4567/users/search`
+
 `curl -X GET -d '{"job_type" => "Internship"}' http://localhost:4567/users/search`

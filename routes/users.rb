@@ -29,7 +29,7 @@ module Sinatra
               seeking = payload["seeking"] # Internship (co-op), or Full time
               
               num_per_page = payload["page"].to_i if payload["num_per_page"] && payload["num_per_page"].match(/^\d+$/)
-              page = payload["page"].to_i if payload["page"] && payload["page"].match(/^\d+$/)
+              page = (payload["page"] && payload["page"].match(/^\d+$/)) ? payload["page"].to_i : 1
               
               return [400, "Invalid page"] if page <= 0
               
@@ -51,12 +51,13 @@ module Sinatra
                 netid = user["netid"]
                 user_json = JSON.parse(user.to_json)
                 
-                url = URI.parse("http://localhost:8000/user?username=#{netid}")
-                req = Net::HTTP::Get.new(url.to_s)
-                res = Net::HTTP.start(url.host, url.port) { |http|
-                  http.request(req)
-                }
-                user_json["is_acm_member"] = JSON.parse(res.body)["Text"] != "404 Not Found"
+                # # TODO change URL - talk to crowd?
+                # url = URI.parse("http://localhost:8000/user?username=#{netid}")
+                # req = Net::HTTP::Get.new(url.to_s)
+                # res = Net::HTTP.start(url.host, url.port) { |http|
+                #   http.request(req)
+                # }
+                # user_json["is_acm_member"] = JSON.parse(res.body)["Text"] != "404 Not Found"
                 
                 response << user_json
               end

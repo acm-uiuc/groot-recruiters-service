@@ -18,6 +18,30 @@ module Sinatra
         recruiter = Recruiter.first(email: payload['email'], encrypted_password: encrypted_password)
         
         return [400, "Invalid credentials"] unless recruiter
+        return [400, "Account has expired!"] if recruiter.expires_at < Date.today
+        
+        return [200, "OK"]
+      end
+      
+      app.put '/recruiters/' do
+        string = request.body.read.gsub(/=>/, ':')
+        payload = JSON.parse(string)
+        
+        return [400, "Missing email"] unless payload['email']
+        return [400, "Missing password"] unless payload['password']
+        return [400, "Missing password"] unless payload['new_password']
+        
+        # Check that recruiter's password matches what's in the database
+        encryption_key = Config.load_config('encryption')
+        encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + payload['password'])
+        
+        recruiter = Recruiter.first(email: payload['email'], encrypted_password: encrypted_password)
+        
+        return [400, "Invalid email or password combination"] unless recruiter
+        
+        new_encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + payload['new_password'])
+        recruiter.encrypted_password = new_encrypted_password
+        recruiter.save
         
         return [200, "OK"]
       end
@@ -26,7 +50,7 @@ module Sinatra
         string = request.body.read.gsub(/=>/, ':')
         payload = JSON.parse(string)
 
-        return [400, 'Missing company name'] unless payload['company_name']
+        return [400, "Missing company name"] unless payload['company_name']
         return [400, "Missing recruiter's first name"] unless payload['first_name']
         return [400, "Missing recruiter's last name"] unless payload['last_name']
         return [400, "Missing recruiter's email"] unless payload['email']
@@ -50,7 +74,9 @@ module Sinatra
         random_password = ('a'..'z').to_a.sample(8).join
 
         r.encrypted_password = Digest::MD5.hexdigest(encryption['secret'] + random_password)
-
+        
+        r.expires_at = Date.today.next_year
+        
         subject = '[Corporate-l] ACM@UIUC Resume Book'
         html_body = erb :new_account_email, locals: { recruiter: r, password: random_password }
 

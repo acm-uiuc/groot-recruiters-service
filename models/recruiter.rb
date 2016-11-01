@@ -5,6 +5,7 @@ class Recruiter
     
     property :id, Serial
     property :encrypted_password, Text
+    property :expires_at, DateTime
     property :email, String
     property :company_name, String
     property :first_name, String

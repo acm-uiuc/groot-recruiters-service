@@ -23,6 +23,48 @@ module Sinatra
         return [200, "OK"]
       end
       
+      app.get '/recruiters/reset_password' do
+        string = request.body.read.gsub(/=>/, ':')
+        payload = JSON.parse(string)
+        
+        return [400, "Missing email"] unless payload['email']
+        return [400, "Missing first name"] unless payload['first_name']
+        return [400, "Missing last name"] unless payload['last_name']
+        recruiter = Recruiter.first(email: payload['email'])
+        
+        return [400, "Recruiter with email and name combination not found"] unless recruiter
+        
+        # Generate new password
+        encryption = Config.load_config('encryption')
+        random_password = ('a'..'z').to_a.sample(8).join
+        recruiter.encrypted_password = Digest::MD5.hexdigest(encryption['secret'] + random_password)
+        
+        subject = '[Corporate-l] ACM@UIUC Resume Book: New Password Request'
+        html_body = erb :forgot_password_email, locals: { recruiter: recruiter, password: random_password }
+
+        credentials = Config.load_config('email')
+        
+        Pony.options = {
+          subject: subject,
+          body: html_body,
+          via: :smtp,
+          via_options: {
+            address: 'smtp.gmail.com',
+            port: '587',
+            enable_starttls_auto: true,
+            user_name: credentials['username'],
+            password: credentials['password'],
+            authentication: :plain,
+            domain: 'localhost.localdomain'
+          }
+        }
+        Pony.mail(to: payload["email"])
+        
+        recruiter.save
+        
+        return [200, "Sent recruiter email with new password"]
+      end
+      
       app.put '/recruiters/' do
         string = request.body.read.gsub(/=>/, ':')
         payload = JSON.parse(string)
@@ -92,7 +134,7 @@ module Sinatra
             enable_starttls_auto: true,
             user_name: credentials['username'],
             password: credentials['password'],
-            authentication: :plain, # :plain, :login, :cram_md5, no auth by default
+            authentication: :plain,
             domain: 'localhost.localdomain'
           }
         }
@@ -100,7 +142,7 @@ module Sinatra
         # Save if the email sent
         r.save
         
-        return [200, 'Created recruiter']
+        return [200, 'Created recruiter and sent registration email']
       end
     end
   end

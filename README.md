@@ -2,17 +2,22 @@
 
 ##Installing PostgreSQL
 ```sh
-brew install postgres
-createdb groot_recruiter_service
+brew install mysql
 ```
-##Run Application
+
+In `mysql`:
 ```
-ruby app.rb
+CREATE DATABASE groot_recruiter_service
 ```
 
 ##Migrate DB after model alteration (clears all data)
 ```
 rake db:migrate
+```
+
+##Run Application
+```
+ruby app.rb
 ```
 
 ##API Documentation

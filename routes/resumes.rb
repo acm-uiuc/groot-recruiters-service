@@ -21,18 +21,15 @@ module Sinatra
               ResponseFormat.format_response(result, request.accept)
             end
             
-            app.put '/resumes/approve' do
-              string = request.body.read.gsub(/=>/, ":")
-              payload = JSON.parse(string)
+            app.put '/resumes/approve' do              
+              return [400, "Missing netid"] unless params["netid"]
               
-              return [400, "Missing netid"] unless payload["netid"]
-              
-              user = User.first(netid: payload["netid"])
+              user = User.first(netid: params["netid"])
               
               return [400, "User not found"] unless user
               return [400, "Resume already approved"] if user.approved_resume
               
-              if payload["resume_status"]
+              if params["resume_status"]
                 user.update(approved_resume: true)
               else
                 # Delete resume and user
@@ -40,21 +37,19 @@ module Sinatra
                 
                 halt 500 unless user.destroy
               end
-              return [200, "OK"]
+              
+              200
             end
           
             app.post '/resumes' do
-                string = request.body.read.gsub(/=>/, ":")
-                payload = JSON.parse(string)
-
-                first_name = payload["firstName"]
-                last_name = payload["lastName"]
-                netid = payload["netid"]
-                email = payload["email"]
-                graduation_date = payload["gradYear"]
-                degree_type = payload["degreeType"]
-                job_type = payload["jobType"]
-                resume = payload["resume"]
+                first_name = params["firstName"]
+                last_name = params["lastName"]
+                netid = params["netid"]
+                email = params["email"]
+                graduation_date = params["gradYear"]
+                degree_type = params["degreeType"]
+                job_type = params["jobType"]
+                resume = params["resume"]
                 
                 return [400, "Missing first_name"] unless first_name
                 return [400, "Missing netid"] unless netid
@@ -80,7 +75,7 @@ module Sinatra
                       }
                     ))
                     
-                    successful_upload = AWS.upload_resume(payload["netid"], payload["resume"])
+                    successful_upload = AWS.upload_resume(params["netid"], params["resume"])
                     return [400, "Error uploading resume to S3"] unless successful_upload
                     
                     user.approved_resume = false
@@ -91,15 +86,12 @@ module Sinatra
             end
             
             app.delete '/resumes' do
-              string = request.body.read.gsub(/=>/, ":")
-              payload = JSON.parse(string)
+              return [400, "Missing netid"] unless params["netid"]
               
-              return [400, "Missing netid"] unless payload["netid"]
+              successful_delete = AWS.delete_resume(params["netid"])
+              return [400, "Error deleting resume with netid #{params['netid']} to S3"] unless successful_delete
               
-              successful_delete = AWS.delete_resume(payload["netid"])
-              return [400, "Error deleting resume with netid #{payload['netid']} to S3"] unless successful_delete
-              
-              return [200, "OK"]
+              200
             end
         end
     end

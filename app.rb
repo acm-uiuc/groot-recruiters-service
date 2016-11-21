@@ -3,6 +3,7 @@
 require 'json'
 require 'sinatra'
 require 'sinatra/reloader' if development?
+require 'sinatra/cross_origin'
 require 'data_mapper'
 require 'dm-migrations'
 require "dm_noisy_failures"
@@ -25,6 +26,11 @@ class GrootRecruiterService < Sinatra::Base
 
     register Sinatra::ResumesRoutes
     register Sinatra::UsersRoutes
+    register Sinatra::CrossOrigin
+    
+    configure do
+      enable :cross_origin
+    end
 
     configure :development do
         DataMapper::Logger.new($stdout, :debug)

@@ -6,6 +6,7 @@ gem 'rake'
 gem 'sinatra', '~> 1.4.7'
 gem 'sinatra-contrib'
 gem 'foreigner'
+gem "sinatra-cross_origin", "~> 0.3.1"
 
 gem 'json'
 gem 'data_mapper'

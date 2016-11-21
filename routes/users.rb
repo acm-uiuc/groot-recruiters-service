@@ -9,27 +9,32 @@ module Sinatra
             app.get '/' do
                 "This is the groot users service"
             end
+            
+            # HANDLE CORS
+            app.options "*" do
+              response.headers["Allow"] = "HEAD,GET,PUT,POST,DELETE,OPTIONS"
+              response.headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept"
+
+              200
+            end
 
             app.get '/users' do
                 ResponseFormat.format_response(User.all(order: [ :netid.desc ]), request.accept)
             end
             
             app.get '/users/search' do
-              string = request.body.read.gsub(/=>/, ":")
-              payload = JSON.parse(string)
-              
-              graduation_start = payload["graduation_start"] # YYYY-MM-DD
-              graduation_end = payload["graduation_end"] # YYYY-MM-DD
+              graduation_start = params["graduationStart"] # YYYY-MM-DD
+              graduation_end = params["graduationEnd"] # YYYY-MM-DD
               
               graduation_start_date = DateTime.parse(graduation_start) if graduation_start
               graduation_end_date = DateTime.parse(graduation_end) if graduation_end
               
-              netid = payload["netid"]
-              level = payload["level"] # Undergraduate, Masters, PHD
-              seeking = payload["seeking"] # Internship (co-op), or Full time
+              netid = params["netid"]
+              level = params["level"] # Undergraduate, Masters, PHD
+              seeking = params["seeking"] # Internship (co-op), or Full time
               
-              num_per_page = payload["page"].to_i if payload["num_per_page"] && payload["num_per_page"].match(/^\d+$/)
-              page = (payload["page"] && payload["page"].match(/^\d+$/)) ? payload["page"].to_i : 1
+              num_per_page = params["page"].to_i if params["num_per_page"] && params["num_per_page"].match(/^\d+$/)
+              page = (params["page"] && params["page"].match(/^\d+$/)) ? params["page"].to_i : 1
               
               return [400, "Invalid page"] if page <= 0
               
@@ -74,15 +79,13 @@ module Sinatra
             end
 
             app.put '/users/:netid' do
-                payload = JSON.parse(request.body.read)
-                
-                first_name = payload["firstName"]
-                last_name = payload["lastName"]
-                netid = payload["netid"]
-                email = payload["email"]
-                graduation_date = payload["gradYear"]
-                degree_type = payload["degreeType"]
-                job_type = payload["jobType"]
+                first_name = params["firstName"]
+                last_name = params["lastName"]
+                netid = params["netid"]
+                email = params["email"]
+                graduation_date = params["gradYear"]
+                degree_type = params["degreeType"]
+                job_type = params["jobType"]
                 
                 return [400, "Missing first_name"] unless first_name
                 return [400, "Missing netid"] unless netid

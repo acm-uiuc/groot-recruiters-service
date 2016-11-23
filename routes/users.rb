@@ -13,8 +13,8 @@ module Sinatra
             # HANDLE CORS
             app.options "*" do
               response.headers["Allow"] = "HEAD,GET,PUT,POST,DELETE,OPTIONS"
-              response.headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept"
-
+              response.headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept, Origin, Access-Control-Allow-Origin"
+              response.headers["Access-Control-Allow-Origin"] = "*"
               200
             end
 

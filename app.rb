@@ -32,11 +32,12 @@ class GrootRecruiterService < Sinatra::Base
       enable :cross_origin
     end
 
+    db = Config.load_config("db")    
     configure :development do
         DataMapper::Logger.new($stdout, :debug)
         DataMapper.setup(
             :default,
-            'mysql://localhost/groot_recruiter_service'
+            "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
         )
         use BetterErrors::Middleware
         # you need to set the application root in order to abbreviate filenames
@@ -48,8 +49,8 @@ class GrootRecruiterService < Sinatra::Base
     configure :production do
         DataMapper.setup(
             :default,
-            'mysql://localhost/groot_recruiter_service'
-        )
+            "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
+      )
     end
     DataMapper.finalize
 end

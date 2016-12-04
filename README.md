@@ -1,6 +1,6 @@
 #Groot User Service
 
-##Installing PostgreSQL
+##Installing MySQL
 ```sh
 brew install mysql
 ```

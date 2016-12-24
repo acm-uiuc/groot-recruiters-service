@@ -13,27 +13,26 @@ module Sinatra
             end
             
             app.post '/jobs' do
-              string = request.body.read.gsub(/=>/, ":")
-              payload = JSON.parse(string)
+              params = JSON.parse(request.body.read)
               
-              return [400, "Missing job title"] unless payload["job_title"]
-              return [400, "Missing organization"] unless payload["org"]
-              return [400, "Missing contact_name"] unless payload["contact-name"]
-              return [400, "Missing contact email"] unless payload["contact-email"]
-              return [400, "Missing contact phone"] unless payload["contact-phone"]
-              return [400, "Missing job type"] unless payload["job-type"]
-              return [400, "Missing description"] unless payload["description"]
+              return [400, "Missing job title"] unless params["job_title"]
+              return [400, "Missing organization"] unless params["org"]
+              return [400, "Missing contact_name"] unless params["contact-name"]
+              return [400, "Missing contact email"] unless params["contact-email"]
+              return [400, "Missing contact phone"] unless params["contact-phone"]
+              return [400, "Missing job type"] unless params["job-type"]
+              return [400, "Missing description"] unless params["description"]
               
               job = (Job.first_or_create(
                   {
-                      title: payload["job_title"],
-                      company: payload["org"]
+                      title: params["job_title"],
+                      company: params["org"]
                   }, {
-                      contact_name: payload["contact-name"],
-                      contact_email: payload["contact-email"],
-                      contact_phone: payload["contact-phone"],
-                      job_type: payload["job-type"],
-                      description: payload["description"],
+                      contact_name: params["contact-name"],
+                      contact_email: params["contact-email"],
+                      contact_phone: params["contact-phone"],
+                      job_type: params["job-type"],
+                      description: params["description"],
                       posted_on: Time.now.getutc,
                       status: "Defer"
                   }
@@ -43,31 +42,29 @@ module Sinatra
             end
             
             app.put '/jobs/status' do
-              string = request.body.read.gsub(/=>/, ":")
-              payload = JSON.parse(string)
+              params = JSON.parse(request.body.read)
               
-              return [400, "Missing job title"] unless payload["job_title"]
-              return [400, "Missing organization"] unless payload["org"]
-              return [400, "Missing job status"] unless payload["status"]
+              return [400, "Missing job title"] unless params["job_title"]
+              return [400, "Missing organization"] unless params["org"]
+              return [400, "Missing job status"] unless params["status"]
               
-              if Job.is_valid_status(payload["status"])
-                job ||= Job.first(title: payload["job_title"], company: payload["org"]) || halt(404)
+              if Job.is_valid_status(params["status"])
+                job ||= Job.first(title: params["job_title"], company: params["org"]) || halt(404)
                 
-                job.status = payload["status"]
+                job.status = params["status"]
                 job.save!
               else
-                return [400, "Invalid status #{payload['status']}"]
+                return [400, "Invalid status #{params['status']}"]
               end
             end
             
             app.delete '/jobs' do
-              string = request.body.read.gsub(/=>/, ":")
-              payload = JSON.parse(string)
+              params = JSON.parse(request.body.read)
               
-              return [400, "Missing job title"] unless payload["job_title"]
-              return [400, "Missing organization"] unless payload["org"]
+              return [400, "Missing job title"] unless params["job_title"]
+              return [400, "Missing organization"] unless params["org"]
               
-              job ||= Job.first(title: payload["job_title"], company: payload["org"]) || halt(404)
+              job ||= Job.first(title: params["job_title"], company: params["org"]) || halt(404)
               halt 500 unless job.destroy
             end
         end

@@ -13,6 +13,8 @@ module Sinatra
   module RecruiterRoutes
     def self.registered(app)
       app.get '/recruiters/login' do
+        params = JSON.parse(request.body.read)
+
         return [400, "Missing company login"] unless params['email']
         return [400, "Missing password"] unless params['password']
         
@@ -28,6 +30,8 @@ module Sinatra
       end
       
       app.get '/recruiters/reset_password' do
+        params = JSON.parse(request.body.read)
+
         return [400, "Missing email"] unless params['email']
         return [400, "Missing first name"] unless params['first_name']
         return [400, "Missing last name"] unless params['last_name']
@@ -67,6 +71,8 @@ module Sinatra
       end
       
       app.put '/recruiters/' do
+        params = JSON.parse(request.body.read)
+
         return [400, "Missing email"] unless params['email']
         return [400, "Missing password"] unless params['password']
         return [400, "Missing password"] unless params['new_password']
@@ -87,6 +93,8 @@ module Sinatra
       end
       
       app.post '/recruiters/new' do
+        params = JSON.parse(request.body.read)
+        
         return [400, "Missing company name"] unless params['company_name']
         return [400, "Missing recruiter's first name"] unless params['first_name']
         return [400, "Missing recruiter's last name"] unless params['last_name']

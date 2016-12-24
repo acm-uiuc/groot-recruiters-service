@@ -14,7 +14,7 @@ module Sinatra
     module UsersRoutes
         def self.registered(app)
             app.get '/' do
-                "This is the groot users service"
+              "This is the groot users service"
             end
             
             # HANDLE CORS
@@ -26,10 +26,12 @@ module Sinatra
             end
 
             app.get '/users' do
-                ResponseFormat.format_response(User.all(order: [ :netid.desc ]), request.accept)
+              ResponseFormat.format_response(User.all(order: [ :netid.desc ]), request.accept)
             end
             
             app.get '/users/search' do
+              params = JSON.parse(request.body.read)
+
               graduation_start = params["graduationStart"] # YYYY-MM-DD
               graduation_end = params["graduationEnd"] # YYYY-MM-DD
               
@@ -81,47 +83,53 @@ module Sinatra
             end
 
             app.get '/users/:netid' do
-                user ||= User.first(netid: params[:netid]) || halt(404)
-                ResponseFormat.format_response(user, request.accept)
+              params = JSON.parse(request.body.read)
+
+              user ||= User.first(netid: params[:netid]) || halt(404)
+              ResponseFormat.format_response(user, request.accept)
             end
 
             app.put '/users/:netid' do
-                first_name = params["firstName"]
-                last_name = params["lastName"]
-                netid = params["netid"]
-                email = params["email"]
-                graduation_date = params["gradYear"]
-                degree_type = params["degreeType"]
-                job_type = params["jobType"]
-                
-                return [400, "Missing first_name"] unless first_name
-                return [400, "Missing netid"] unless netid
-                return [400, "Missing email"] unless email
-                return [400, "Missing grad_year"] unless graduation_date
-                return [400, "Missing degree_type"] unless degree_type
-                return [400, "Missing job_type"] unless job_type
-                
-                graduation_date_obj = DateTime.parse(graduation_date)
-                
-                user ||= User.first(netid: netid) || halt(404)
-                halt 500 unless user.update(
-                    first_name: first_name,
-                    last_name: last_name,
-                    netid: netid,
-                    email: email,
-                    graduation_date: graduation_date_obj,
-                    degree_type: degree_type,
-                    job_type: job_type,
-                    date_joined: Time.now.getutc
-                )
-                return [status, ResponseFormat.format_response(quote, request.accept)]
+              params = JSON.parse(request.body.read)
+              
+              first_name = params["firstName"]
+              last_name = params["lastName"]
+              netid = params["netid"]
+              email = params["email"]
+              graduation_date = params["gradYear"]
+              degree_type = params["degreeType"]
+              job_type = params["jobType"]
+              
+              return [400, "Missing first_name"] unless first_name
+              return [400, "Missing netid"] unless netid
+              return [400, "Missing email"] unless email
+              return [400, "Missing grad_year"] unless graduation_date
+              return [400, "Missing degree_type"] unless degree_type
+              return [400, "Missing job_type"] unless job_type
+              
+              graduation_date_obj = DateTime.parse(graduation_date)
+              
+              user ||= User.first(netid: netid) || halt(404)
+              halt 500 unless user.update(
+                  first_name: first_name,
+                  last_name: last_name,
+                  netid: netid,
+                  email: email,
+                  graduation_date: graduation_date_obj,
+                  degree_type: degree_type,
+                  job_type: job_type,
+                  date_joined: Time.now.getutc
+              )
+              return [status, ResponseFormat.format_response(quote, request.accept)]
             end
 
             app.delete '/users/:netid' do
-                user ||= User.first(netid: params[:netid]) || halt(404)
-                AWS.delete_resume(user.netid)
-                
-                halt 500 unless user.destroy
+              params = JSON.parse(request.body.read)
+
+              user ||= User.first(netid: params[:netid]) || halt(404)
+              AWS.delete_resume(user.netid)
+              
+              halt 500 unless user.destroy
             end
         end
     end

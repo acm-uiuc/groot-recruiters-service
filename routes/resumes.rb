@@ -28,7 +28,9 @@ module Sinatra
               ResponseFormat.format_response(result, request.accept)
             end
             
-            app.put '/resumes/approve' do              
+            app.put '/resumes/approve' do     
+              params = JSON.parse(request.body.read)
+
               return [400, "Missing netid"] unless params["netid"]
               
               user = User.first(netid: params["netid"])
@@ -95,6 +97,8 @@ module Sinatra
             end
             
             app.delete '/resumes' do
+              params = JSON.parse(request.body.read)
+              
               return [400, "Missing netid"] unless params["netid"]
               
               successful_delete = AWS.delete_resume(params["netid"])

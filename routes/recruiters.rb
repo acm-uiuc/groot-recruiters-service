@@ -13,16 +13,13 @@ module Sinatra
   module RecruiterRoutes
     def self.registered(app)
       app.get '/recruiters/login' do
-        string = request.body.read.gsub(/=>/, ':')
-        payload = JSON.parse(string)
-        
-        return [400, "Missing company login"] unless payload['email']
-        return [400, "Missing password"] unless payload['password']
+        return [400, "Missing company login"] unless params['email']
+        return [400, "Missing password"] unless params['password']
         
         encryption_key = Config.load_config('encryption')
-        encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + payload['password'])
+        encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + params['password'])
         
-        recruiter = Recruiter.first(email: payload['email'], encrypted_password: encrypted_password)
+        recruiter = Recruiter.first(email: params['email'], encrypted_password: encrypted_password)
         
         return [400, "Invalid credentials"] unless recruiter
         return [400, "Account has expired!"] if recruiter.expires_at < Date.today
@@ -31,13 +28,10 @@ module Sinatra
       end
       
       app.get '/recruiters/reset_password' do
-        string = request.body.read.gsub(/=>/, ':')
-        payload = JSON.parse(string)
-        
-        return [400, "Missing email"] unless payload['email']
-        return [400, "Missing first name"] unless payload['first_name']
-        return [400, "Missing last name"] unless payload['last_name']
-        recruiter = Recruiter.first(email: payload['email'])
+        return [400, "Missing email"] unless params['email']
+        return [400, "Missing first name"] unless params['first_name']
+        return [400, "Missing last name"] unless params['last_name']
+        recruiter = Recruiter.first(email: params['email'])
         
         return [400, "Recruiter with email and name combination not found"] unless recruiter
         
@@ -65,7 +59,7 @@ module Sinatra
             domain: 'localhost.localdomain'
           }
         }
-        Pony.mail(to: payload["email"])
+        Pony.mail(to: params["email"])
         
         recruiter.save
         
@@ -73,22 +67,19 @@ module Sinatra
       end
       
       app.put '/recruiters/' do
-        string = request.body.read.gsub(/=>/, ':')
-        payload = JSON.parse(string)
-        
-        return [400, "Missing email"] unless payload['email']
-        return [400, "Missing password"] unless payload['password']
-        return [400, "Missing password"] unless payload['new_password']
+        return [400, "Missing email"] unless params['email']
+        return [400, "Missing password"] unless params['password']
+        return [400, "Missing password"] unless params['new_password']
         
         # Check that recruiter's password matches what's in the database
         encryption_key = Config.load_config('encryption')
-        encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + payload['password'])
+        encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + params['password'])
         
-        recruiter = Recruiter.first(email: payload['email'], encrypted_password: encrypted_password)
+        recruiter = Recruiter.first(email: params['email'], encrypted_password: encrypted_password)
         
         return [400, "Invalid email or password combination"] unless recruiter
         
-        new_encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + payload['new_password'])
+        new_encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + params['new_password'])
         recruiter.encrypted_password = new_encrypted_password
         recruiter.save
         
@@ -96,27 +87,24 @@ module Sinatra
       end
       
       app.post '/recruiters/new' do
-        string = request.body.read.gsub(/=>/, ':')
-        payload = JSON.parse(string)
-
-        return [400, "Missing company name"] unless payload['company_name']
-        return [400, "Missing recruiter's first name"] unless payload['first_name']
-        return [400, "Missing recruiter's last name"] unless payload['last_name']
-        return [400, "Missing recruiter's email"] unless payload['email']
-        return [400, "Missing type"] unless payload['type']
+        return [400, "Missing company name"] unless params['company_name']
+        return [400, "Missing recruiter's first name"] unless params['first_name']
+        return [400, "Missing recruiter's last name"] unless params['last_name']
+        return [400, "Missing recruiter's email"] unless params['email']
+        return [400, "Missing type"] unless params['type']
         
         # Recruiter with these parameters should not exist already
-        recruiter = Recruiter.first(company_name: payload['company_name'], first_name: payload['first_name'], last_name: payload['last_name'])
+        recruiter = Recruiter.first(company_name: params['company_name'], first_name: params['first_name'], last_name: params['last_name'])
 
         return [400, 'Recruiter already exists'] if recruiter
 
         r = Recruiter.new
         
-        r.company_name = payload['company_name']
-        r.first_name = payload['first_name']
-        r.email = payload['email']
-        r.last_name = payload['last_name']
-        r.type = payload['type']
+        r.company_name = params['company_name']
+        r.first_name = params['first_name']
+        r.email = params['email']
+        r.last_name = params['last_name']
+        r.type = params['type']
         
         encryption = Config.load_config('encryption')
 
@@ -145,7 +133,7 @@ module Sinatra
             domain: 'localhost.localdomain'
           }
         }
-        Pony.mail(to: payload["email"])
+        Pony.mail(to: params["email"])
         # Save if the email sent
         r.save
         

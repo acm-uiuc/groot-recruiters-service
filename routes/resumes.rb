@@ -49,6 +49,8 @@ module Sinatra
             end
           
             app.post '/resumes' do
+                params = JSON.parse(request.body.read)
+
                 first_name = params["firstName"]
                 last_name = params["lastName"]
                 netid = params["netid"]

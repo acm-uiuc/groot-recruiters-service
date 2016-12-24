@@ -17,6 +17,7 @@ class Job
     property :contact_phone, String
     property :job_type, String
     property :description, String
+    property :status, String
     
     def self.is_valid_status?(status)
       return ["Approve", "Defer"].include? status

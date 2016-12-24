@@ -30,8 +30,6 @@ module Sinatra
             end
             
             app.get '/users/search' do
-              params = JSON.parse(request.body.read)
-
               graduation_start = params["graduationStart"] # YYYY-MM-DD
               graduation_end = params["graduationEnd"] # YYYY-MM-DD
               
@@ -64,6 +62,7 @@ module Sinatra
               matching_users[start..start + num_per_page].each do |user|
                 netid = user["netid"]
                 user_json = JSON.parse(user.to_json)
+                user_json[:resume_url] = AWS.fetch_resume(netid)
                 
                 # # TODO change URL - talk to crowd?
                 # url = URI.parse("http://localhost:8000/user?username=#{netid}")

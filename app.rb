@@ -39,6 +39,12 @@ class GrootRecruiterService < Sinatra::Base
       enable :cross_origin
     end
 
+    set :raise_sinatra_param_exceptions, true
+
+    error Sinatra::Param::InvalidParameterError do
+        {error: "#{env['sinatra.error'].param} is invalid"}.to_json
+    end
+
     db = Config.load_config("db")    
     configure :development do
         DataMapper::Logger.new($stdout, :debug)

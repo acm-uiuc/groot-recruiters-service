@@ -41,7 +41,7 @@ module Sinatra
         
         # Generate new password
         encryption = Config.load_config('encryption')
-        random_password = ('a'..'z').to_a.sample(8).join
+        random_password = ('a'..'z').to_a.sample(8).join # TODO move this to helper
         recruiter.encrypted_password = Digest::MD5.hexdigest(encryption['secret'] + random_password)
         
         subject = '[Corporate-l] ACM@UIUC Resume Book: New Password Request'
@@ -92,7 +92,7 @@ module Sinatra
         return [200, "OK"]
       end
       
-      app.post '/recruiters/new' do
+      app.post '/recruiters' do
         params = JSON.parse(request.body.read)
         
         return [400, "Missing company name"] unless params['company_name']

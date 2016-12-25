@@ -14,13 +14,11 @@ class User
     property :first_name, String, required: true
     property :last_name, String, required: true
     property :email, String, required: true
-    property :graduation_date, DateTime, required: true
-    property :degree_type, String, required: true
+    property :graduation_date, Date, required: true
+    property :program, String, required: true
     property :job_type, String, required: true
     property :netid, String, required: true, key: true, unique_index: true, length: 1...9
-    property :date_joined, DateTime
-    property :token, String
-    property :admin, Boolean
+    property :date_joined, Date
     property :active, Boolean
     property :approved_resume, Boolean
 

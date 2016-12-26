@@ -10,7 +10,7 @@ module Sinatra
   module AuthsRoutes
     def self.registered(app)
       app.before do
-        halt(400) unless true || Auth.verify_token(env) # TODO make sure this is not true ||
+        halt(400) unless Auth.verify_token(env)
       end
 
       app.get '/status' do

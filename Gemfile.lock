@@ -228,6 +228,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-s3
+  bcrypt
   better_errors
   bundler
   codeclimate-test-reporter

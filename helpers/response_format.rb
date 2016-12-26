@@ -28,9 +28,6 @@ module ResponseFormat
         unless json_params.nil?
             json_params.each { |k, v| params[k.to_sym] = v }
         end
-
-        puts params
-
         params
     end
 end

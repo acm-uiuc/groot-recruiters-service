@@ -15,6 +15,7 @@ gem 'sinatra-contrib'
 gem 'foreigner'
 gem "sinatra-cross_origin", "~> 0.3.1"
 gem 'json'
+gem 'bcrypt'
 gem 'data_mapper'
 gem 'dm-migrations'
 gem 'dm-core'
@@ -24,8 +25,6 @@ gem 'dm-noisy-failures', '~> 0.2.3'
 gem 'aws-s3'
 gem 'pony'
 group :production do
-    # gem 'dm-postgres-adapter', '~> 1.2'
-    # gem 'pg'
     gem 'mysql'
     gem 'dm-mysql-adapter'
 end

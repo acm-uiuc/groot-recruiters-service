@@ -65,6 +65,8 @@ module Sinatra
         recruiter = Recruiter.first(email: params[:email])
         return [400, "Recruiter with email and name combination not found"] unless recruiter
 
+        halt(400) unless recruiter.id != session[:recruiter]
+
         # Generate new password
         random_password, encrypted = Encrypt.generate_encrypted_password
         recruiter.encrypted_password = encrypted
@@ -87,16 +89,13 @@ module Sinatra
         return [400, "Missing password"] unless params[:password]
         return [400, "Missing new password"] unless params[:new_password]
         
-        # Check that recruiter's password matches what's in the database
-        encryption_key = Config.load_config('encryption')
-        encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + params[:password])
-        
+        encrypted_passwod = Encrypt.encrypt_password(params[:password])
         recruiter = Recruiter.first(email: params[:email], encrypted_password: encrypted_password)
         
         return [400, "Invalid email or password combination"] unless recruiter
-        
-        new_encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + params[:new_password])
-        recruiter.encrypted_password = new_encrypted_password
+        halt(400) unless recruiter.id != session[:recruiter]
+
+        recruiter.encrypted_password = Encrypt.encrypt_password(params[:new_password])
         recruiter.save
         
         return [200, "OK"]

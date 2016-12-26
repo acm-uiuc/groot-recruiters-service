@@ -19,12 +19,14 @@ class Job
     property :description, String
     property :status, String
 
-    def self.is_valid?(params)
-      params.each do |attr, val|
-        return [400, "Missing #{attr}"] unless val
+    def self.validate!(params, attributes)
+      attributes.each do |attr|
+        return [400, "Missing #{attr}"] unless params[attr]
         case attr
         when :status
-          return [400, "Invalid status"] unless ["Approve", "Defer"].include? val
+          options = ["Approve", "Defer"]
+          return [400, "Invalid status. Valid statues are: #{options}"] unless options.include? params[attr]
+        end
       end
     end
 end

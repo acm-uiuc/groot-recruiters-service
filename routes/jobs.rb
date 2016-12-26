@@ -15,14 +15,9 @@ module Sinatra
       app.post '/jobs' do
         # TODO protected, look for recruiter in session before continuing
         params = ResponseFormat.get_params(request.body.read)
+        halt(400) unless Auth.verify_admin(env)
 
-        return [400, "Missing job title"] unless params[:job_title]
-        return [400, "Missing organization"] unless params[:organization]
-        return [400, "Missing contact name"] unless params[:contact_name]
-        return [400, "Missing contact email"] unless params[:contact_email]
-        return [400, "Missing contact phone"] unless params[:contact_phone]
-        return [400, "Missing job type"] unless params[:job_type]
-        return [400, "Missing description"] unless params[:description]
+        Job.validate!(params, [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description])
         
         job = (Job.first_or_create({
           title: params[:job_title],
@@ -42,29 +37,24 @@ module Sinatra
       end
       
       app.put '/jobs/status' do
-        params = ResponseFormat.get_params(request.body.read)
-        
-      #   param :job_title, String, required: true
-      #   param :org, String, required: true
-      #   param :status, String, in: ["Approve", "Defer"]
+        halt(400) unless Auth.verify_admin(env)
 
-        return [400, "Missing job title"] unless params["job_title"]
-        return [400, "Missing organization"] unless params["org"]
-        return [400, "Missing job status"] unless params["status"]
+        params = ResponseFormat.get_params(request.body.read)
+        Job.validate!(params, [:job_title, :organization, :status])
         
-        job ||= Job.first(title: params[:job_title], company: params[:org]) || halt(404)
+        job = Job.first(title: params[:job_title], company: params[:organization]) || halt(400)
         
         job.status = params[:status]
         job.save!
       end
       
       app.delete '/jobs' do
-        params = ResponseFormat.get_params(request.body.read)
+        halt(400) unless Auth.verify_admin(env)
 
-        return [400, "Missing job title"] unless params[:job_title]
-        return [400, "Missing organization"] unless params[:organization]
+        params = ResponseFormat.get_params(request.body.read)
+        Job.validate!(params, [:job_title, :organization])
         
-        job ||= Job.first(title: params[:job_title], company: params[:organization]) || halt(404)
+        job = Job.first(title: params[:job_title], company: params[:organization]) || halt(400)
         halt 500 unless job.destroy
       end
     end

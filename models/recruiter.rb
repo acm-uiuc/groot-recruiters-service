@@ -19,9 +19,9 @@ class Recruiter
     property :last_name, String, required: true
     property :type, String
 
-    def self.is_valid?(params)
-      params.each do |attr, val|
-        return [400, "Missing #{attr}"] unless val
+    def self.validate!(params, attributes)
+      attributes.each do |attr|
+        return [400, "Missing #{attr}"] unless params[attr]
       end
     end
 end

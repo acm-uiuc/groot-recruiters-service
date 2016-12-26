@@ -15,6 +15,8 @@ module Sinatra
   module StudentsRoutes
     def self.registered(app)
       app.get '/students' do
+        halt(400) unless Auth.verify_admin(env)
+
         params = ResponseFormat.get_params(request.body.read)
 
         graduation_start_date = Date.parse(params[:graduationStart]) rescue nil
@@ -37,8 +39,7 @@ module Sinatra
 
       app.post '/students' do
         params = ResponseFormat.get_params(request.body.read)
-
-        Student.validate!(params)
+        Student.validate!(params, [:netid, :firstName, :lastName, :email, :gradYear, :degreeType, :jobType, :resume])
 
         student = (
           Student.first_or_create({
@@ -55,7 +56,7 @@ module Sinatra
             active: true
           })
         )
-          
+        
         successful_upload = AWS.upload_resume(params[:netid], params[:resume])
         return [400, "Error uploading resume to S3"] unless successful_upload
         
@@ -67,7 +68,10 @@ module Sinatra
       end
 
       app.put '/students/:netid/approve' do
+        halt(400) unless Auth.verify_admin(env)
+
         params = ResponseFormat.get_params(request.body.read)
+        Student.validate!(params, [:netid])
 
         student = Student.first(netid: params[:netid])
         return [400, "Student not found"] unless student
@@ -77,15 +81,18 @@ module Sinatra
 
       app.get '/students/:netid' do
         params = ResponseFormat.get_params(request.body.read)
+        Student.validate!(params, [:netid])
 
         student = Student.first(netid: params[:netid]) || halt(404)
         ResponseFormat.format_response(student, request.accept)
       end
 
       app.delete '/students/:netid' do
+        halt(400) unless Auth.verify_admin(env)
+        
         params = ResponseFormat.get_params(request.body.read)
-
-        student ||= Student.first(netid: params[:netid]) || halt(404)
+        Student.validate!(params, [:netid])
+        student = Student.first(netid: params[:netid]) || halt(404)
         
         AWS.delete_resume(student.netid)
         email = student.email # TODO send email to student before deleting

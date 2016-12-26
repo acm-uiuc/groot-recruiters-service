@@ -1,6 +1,6 @@
-#Groot User Service
+# Groot User Service
 
-##Installing MySQL
+## Installing MySQL
 ```sh
 brew install mysql
 ```
@@ -10,7 +10,7 @@ In `mysql`:
 CREATE DATABASE groot_recruiter_service
 ```
 
-##Migrate DB after model alteration (clears all data)
+## Migrate DB after model alteration (clears all data)
 ```
 rake db:migrate
 ```
@@ -23,70 +23,124 @@ cp secrets.yaml.template secrets.yaml
 
 Fill out username and password for email for ACM admin email.
 
-##Run Application
+## Run Application
 ```
 ruby app.rb
 ```
 
-##API Documentation
+## API Documentation
 
-Note: All routes require an access token from groot (set in https://github.com/acm-uiuc/groot/blob/master/services/recruiters.go#L21) to be authenticated.
+Note: All routes require an access token from groot (set in https://github.com/acm-uiuc/groot/blob/master/services/recruiters.go#L21) to be authenticated. This access token will be validated in `config/secrets.yaml` under the `access_token` key.
 
-Some routes also require a recruiter to be logged in.
+Some routes also require a recruiter to be logged in. This will be managed by the session.
+
+---
 
 ## Job Routes
 
-###GET /jobs
+### GET /jobs
 
 Returns all deferred jobs in descending order.
 
-```json
-[{"id":1,"posted_on":"2016-10-19T02:45:49-05:00","title":"Software Engineering Intern","company":"Apple","contact_name":"Steve Jobs","contact_email":"steve@apple.com","contact_phone":"11111111","job_type":"Full-time","description":"Free job"}]
-```
+**Required Params**
+- None
 
-###POST /jobs
+### POST /jobs
 
-Creates a new job.
+Creates a new job ad.
 
-###PUT /jobs/status
+**Required Params**
+- [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description]
 
-###DELETE /jobs
+### PUT /jobs/status
+
+**Required Params**
+- [:job_title, :organization, :status]
+
+### DELETE /jobs
+
+**Required Params**
+- [:job_title, :organization]
+
+---
 
 ## Recruiter Routes
 
-###GET /recruiters/login
+### GET /recruiters/login
 
-Validates recruiter credentials and stores them in the session.
+Verifies recruiter credentials and stores recruiter id in the session if login was successful.
 
-###POST /recruiters/new
+**Required Params**
+- [:email, :password]
+
+### POST /recruiters/new
 
 Creates a new recruiter and sends them an email with their credentials.
 
-###POST /recruiters/logout
+**Required Params**
+- [:company_name, :first_name, :last_name, :email, :type]
+
+### POST /recruiters/logout
 
 Logs recruiter out and clears session.
 
+**Required Params**
+- None
+
+### GET /recruiters/reset_password
+
+Resets a recruiter's password and sends them another one via email.
+
+**Required Params**
+- Required params[:email]
+
+### PUT /recruiters
+
+Updates a recruiter's password
+
+**Required Params**
+- [:email, :password, :new_password]
+
+---
+
 ## Student Routes
 
-###GET /students
+### GET /students
 
 Gets and filters students by their attributes.
 
-###POST /students
+**Optional Params**
+- [:graduationStart, :graduationEnd, :netid, :degree_type, :job_type, :approved_resumes]
+
+### POST /students
 
 Creates a new student and uploads their resume to S3. Anytime a student updates their resume, this endpoint will also be called.
 
-###PUT /students/approve
+**Required Params**
+- [:netid, :firstName, :lastName, :email, :gradYear, :degreeType, :jobType, :resume]
+
+### PUT /students/approve
 
 Approves a student's resume.
 
-###GET /student/:netid
+**Required Params**
+- [:netid]
+
+### GET /student/:netid
 
 Fetch a student's information by their netid.
 
-###DELETE /student/:netid
+**Required Params**
+- [:netid]
 
-Delete a student and their resume from S3.
+### DELETE /student/:netid
+
+Delete a student from the database and their resume from S3.
+
+**Required Params**
+- [:netid]
+
+---
 
 ## License
 

@@ -15,11 +15,12 @@ class Student
     property :last_name, String, required: true
     property :email, String, required: true
     property :graduation_date, Date, required: true
-    property :program, String, required: true
+    property :degree_type, String, required: true
     property :job_type, String, required: true
     property :netid, String, required: true, key: true, unique_index: true, length: 1...9
     property :date_joined, Date
     property :active, Boolean
+    property :resume_url, Text
     property :approved_resume, Boolean
 
     def self.is_valid?(first_name, last_name, netid)

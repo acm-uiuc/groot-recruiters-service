@@ -17,24 +17,23 @@ module Sinatra
             
             app.post '/jobs' do
                 # TODO protected, look for recruiter in session before continuing
-
               params = JSON.parse(request.body.read)
               
-              param :job_title, String, required: true
-              param :organization, String, required: true
-              param :contact_name, String, required: true
-              param :contact_email, String, required: true
-              param :contact_phone, String, required: true
-              param :job_type, String, required: true
-              param :description, String, required: true
+            #   param :job_title, String, required: true
+            #   param :organization, String, required: true
+            #   param :contact_name, String, required: true
+            #   param :contact_email, String, required: true
+            #   param :contact_phone, String, required: true
+            #   param :job_type, String, required: true
+            #   param :description, String, required: true
 
-            #   return [400, "Missing job title"] unless params["job_title"]
-            #   return [400, "Missing organization"] unless params["org"]
-            #   return [400, "Missing contact_name"] unless params["contact-name"]
-            #   return [400, "Missing contact email"] unless params["contact-email"]
-            #   return [400, "Missing contact phone"] unless params["contact-phone"]
-            #   return [400, "Missing job type"] unless params["job-type"]
-            #   return [400, "Missing description"] unless params["description"]
+              return [400, "Missing job title"] unless params["job_title"]
+              return [400, "Missing organization"] unless params["org"]
+              return [400, "Missing contact_name"] unless params["contact-name"]
+              return [400, "Missing contact email"] unless params["contact-email"]
+              return [400, "Missing contact phone"] unless params["contact-phone"]
+              return [400, "Missing job type"] unless params["job-type"]
+              return [400, "Missing description"] unless params["description"]
               
               job = (Job.first_or_create(
                 {

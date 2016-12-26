@@ -15,6 +15,14 @@ CREATE DATABASE groot_recruiter_service
 rake db:migrate
 ```
 
+## Create secrets.yaml
+
+```
+cp secrets.yaml.template secrets.yaml
+```
+
+Fill out username and password for email for ACM admin email.
+
 ##Run Application
 ```
 ruby app.rb
@@ -22,9 +30,15 @@ ruby app.rb
 
 ##API Documentation
 
+Note: All routes require an access token from groot (set in https://github.com/acm-uiuc/groot/blob/master/services/recruiters.go#L21) to be authenticated.
+
+Some routes also require a recruiter to be logged in.
+
+## Job Routes
+
 ###GET /jobs
 
-`curl -X GET http://localhost:4567/jobs`
+Returns all deferred jobs in descending order.
 
 ```json
 [{"id":1,"posted_on":"2016-10-19T02:45:49-05:00","title":"Software Engineering Intern","company":"Apple","contact_name":"Steve Jobs","contact_email":"steve@apple.com","contact_phone":"11111111","job_type":"Full-time","description":"Free job"}]
@@ -32,94 +46,47 @@ ruby app.rb
 
 ###POST /jobs
 
-`curl -X POST -d '{"job_title" => "Software Engineering Intern1", "org" => "Apple1", "contact-name" => "Steve Jobs", "contact-email" => "steve@apple.com", "contact-phone" => "11111111", "job-type" => "Full-time", "description" => "Free job"}' http://localhost:4567/jobs`
-
-```json
-{"id":2,"posted_on":"2016-10-19T16:57:43+00:00","title":"Software Engineering Intern1","company":"Apple1","contact_name":"Steve Jobs","contact_email":"steve@apple.com","contact_phone":"11111111","job_type":"Full-time","description":"Free job"}
-```
+Creates a new job.
 
 ###PUT /jobs/status
 
-`curl -X PUT -d '{"job_title" => "SWE", "org" => "Apple", "status" => "Defer/Approve/Reject"} http://localhost:4567/jobs/status`
-
-```json
-OK
-```
-
 ###DELETE /jobs
 
-`curl -X DELETE -d '{"job_title" => "SWE", "org" => "Apple"}' http://localhost:4567/jobs`
-
-```json
-OK
-```
+## Recruiter Routes
 
 ###GET /recruiters/login
 
-`curl -X GET -d '{"email"=>"sample@illinois.edu", "password"=>"wzthknbu"}' http://localhost:4567/recruiters/login`
-
-```json
-OK
-```
+Validates recruiter credentials and stores them in the session.
 
 ###POST /recruiters/new
 
-`curl -X POST -d '{"company_name"=>"Apple", "first_name" => "Steve", "last_name" => "Jobs", "email"=>"banana@apple.com", "type" => "Jobfair Company"}' http://localhost:4567/recruiters/new`
+Creates a new recruiter and sends them an email with their credentials.
 
-```json
-Created recruiter
-```
+###POST /recruiters/logout
 
-###GET /resumes/unapproved
+Logs recruiter out and clears session.
 
-`curl -X GET http://localhost:4567/resumes/unapproved`
+## Student Routes
 
-```json
-[
-  {
-    "firstName": "Sameet",
-    "lastName": "Sapra",
-    "netid": "ssapra2",
-    "dateJoined": "2016-10-20T01:30:03-05:00",
-    "resume": "AMAZON S3 URL"
-  }
-]
-```
+###GET /students
 
-###POST /resumes
+Gets and filters students by their attributes.
 
-`curl -X POST -d '{"firstName"=>"Sameet", "lastName"=>"Sapra", "netid"=>"ssapra2", "email"=>"ssapra2@illinois.edu", "gradYear"=>"May 2018", "degreeType"=>"Bachelors", "jobType"=>"Co-Op", "resume"=>"Base 64 PDF String"}' http://localhost:4567/resumes/`
+###POST /students
 
-```json
-{"id":1,"first_name":"Sameet","last_name":"Sapra","email":"ssapra2@illinois.edu","graduation_date":"2016-05-01T00:00:00+00:00","degree_type":"Bachelors","job_type":"Internship","netid":"ssapra2","date_joined":"2016-10-20T01:30:03+00:00","token":null,"admin":null,"active":null,"approved_resume":false}
-```
+Creates a new student and uploads their resume to S3. Anytime a student updates their resume, this endpoint will also be called.
 
-###PUT /resumes/approve
+###PUT /students/approve
 
-`curl -X PUT -d '{"netid"=>"ssapra2"}' http://localhost:4567/resumes/approve`
+Approves a student's resume.
 
-```json
-OK
-```
+###GET /student/:netid
 
-###DELETE /resumes
+Fetch a student's information by their netid.
 
-`curl -X DELETE -d '{"netid"=>"ssapra2"}' http://localhost:4567/resumes/`
+###DELETE /student/:netid
 
-```json
-OK
-```
-
-###GET /users/
-###GET /users/:netid
-###PUT /users/:netid
-###DELETE /users/:netid
-
-###GET /users/search
-
-`curl -X GET -d '{"graduation_start" => "2017-05-01"}' http://localhost:4567/users/search`
-
-`curl -X GET -d '{"job_type" => "Internship"}' http://localhost:4567/users/search`
+Delete a student and their resume from S3.
 
 ## License
 

@@ -6,6 +6,7 @@
 # Illinois/NCSA Open Source License. You should have received a copy of
 # this license in a file with the distribution.
 
-require_relative "students"
+require_relative "auth"
 require_relative "jobs"
 require_relative "recruiters"
+require_relative "students"

@@ -39,13 +39,13 @@ module Sinatra
               graduation_end_date = Date.parse(params[:graduationEnd]) rescue nil
               
               conditions = {}.tap do |conditions|
-                conditions[:netid] = params[:netid] unless params[:netid].empty?
+                conditions[:netid] = params[:netid] if params[:netid] && !params[:netid].empty?
                 conditions[:"graduation_date.gt"] = graduation_start_date if graduation_start_date
                 conditions[:"graduation_date.lt"] = graduation_end_date if graduation_end_date
-                conditions[:degree_type] = params[:degree_type] unless params[:degree_type].empty?
-                conditions[:job_type] = params[:job_type] unless params[:job_type].empty?
+                conditions[:degree_type] = params[:degree_type] if params[:degree_type] && !params[:degree_type].empty?
+                conditions[:job_type] = params[:job_type] if params[:job_type] && !params[:job_type].empty?
                 conditions[:active] = true
-                conditions[:approved_resume] = params[:approved_resumes] unless params[:approved_resumes].nil?
+                conditions[:approved_resume] = params[:approved_resumes] if params[:approved_resumes] && !params[:approved_resumes].nil?
               end
               
               matching_students = Student.all(conditions) # TODO store resume url
@@ -54,31 +54,33 @@ module Sinatra
             end
 
             app.post '/students' do
-                params = JSON.parse(request.body.read)
+                json_params = JSON.parse(request.body.read)
+                params = {}
+                json_params.each { |k, v| params[k.to_sym] = v }
 
-                param :firstName,         String, required: true
-                param :lastName,          String, required: true
-                param :netid,             String, required: true
-                param :email,             String, required: true
-                param :gradYear,          String, required: true # YYYY-MM-DD
-                param :degreeType,        String, required: true
-                param :jobType,           String, required: true
-                param :resume,            String, required: true
+                # param :firstName,         String, required: true
+                # param :lastName,          String, required: true
+                # param :netid,             String, required: true
+                # param :email,             String, required: true
+                # param :gradYear,          String, required: true # YYYY-MM-DD
+                # param :degreeType,        String, required: true
+                # param :jobType,           String, required: true
+                # param :resume,            String, required: true
                 
                 status = 403
                 if Student.is_valid?(params[:firstName], params[:lastName], params[:netid])
                   status = 200
                   student = (
                     Student.first_or_create({
-                      netid: netid
+                      netid: params[:netid]
                     }, {
-                      first_name: first_name.capitalize,
-                      last_name: last_name.capitalize,
-                      netid: netid,
-                      email: email,
-                      graduation_date: graduation_date,
-                      degree_type: degree_type,
-                      job_type: job_type,
+                      first_name: params[:firstName].capitalize,
+                      last_name: params[:lastName].capitalize,
+                      netid: params[:netid],
+                      email: params[:email],
+                      graduation_date: params[:gradYear],
+                      program: params[:degreeType],
+                      job_type: params[:jobType],
                       date_joined: Time.now.getutc,
                       active: true
                     })

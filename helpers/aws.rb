@@ -26,8 +26,9 @@ module AWS
         self.init_aws
         
         buffer = JSONBase64Decoder.decode(data)
-        resume = AWS::S3::S3Object.store(netid + ".pdf", Base64.decode64(buffer["data"]), RESUME_S3_LOCATION, content_type: 'application/pdf')
-        resume.url
+        
+        AWS::S3::S3Object.store(netid + ".pdf", Base64.decode64(buffer["data"]), RESUME_S3_LOCATION, content_type: 'application/pdf')
+        # TODO get url back
     end
     
     def self.fetch_resume(netid)

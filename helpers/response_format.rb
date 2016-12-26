@@ -18,4 +18,19 @@ module ResponseFormat
             return JSON.pretty_generate(data)
         end
     end
+
+    # Since groot encodes parameters as json, the request is in JSON and not stored in ruby's params.
+    # This method converts the keys to symbols and returns the formatted JSON as a Ruby Hash.
+    def self.get_params(raw_payload)
+        json_params = JSON.parse(raw_payload) rescue nil
+
+        params = {}
+        unless json_params.nil?
+            json_params.each { |k, v| params[k.to_sym] = v }
+        end
+
+        puts params
+
+        params
+    end
 end

@@ -18,4 +18,13 @@ class Job
     property :job_type, String
     property :description, String
     property :status, String
+
+    def self.is_valid?(params)
+      params.each do |attr, val|
+        return [400, "Missing #{attr}"] unless val
+        case attr
+        when :status
+          return [400, "Invalid status"] unless ["Approve", "Defer"].include? val
+      end
+    end
 end

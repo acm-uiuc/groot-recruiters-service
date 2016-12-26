@@ -10,14 +10,14 @@ module Sinatra
   module AuthsRoutes
     def self.registered(app)
       app.before do
-        halt(400) unless Auth.verify_token(env)
+        halt(400) unless true || Auth.verify_token(env) # TODO make sure this is not true ||
       end
 
       app.get '/status' do
         return [200, "OK"]
       end
 
-      # HANDLE CORS
+      # Handle CORS prefetching
       app.options "*" do
         response.headers["Allow"] = "HEAD,GET,PUT,POST,DELETE,OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept, Origin, Access-Control-Allow-Origin"

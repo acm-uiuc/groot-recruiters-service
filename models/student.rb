@@ -23,7 +23,19 @@ class Student
     property :resume_url, Text
     property :approved_resume, Boolean
 
-    def self.is_valid?(first_name, last_name, netid)
-      return !first_name.nil? && !last_name.nil? && netid.length <= 8
+    def self.validate!(params)
+      params.each do |attr, val|
+        return [400, "Missing #{attr}"] unless val
+        case attr
+        when :netid
+          return [400, "Invalid netid"] unless val.length <= 8
+        when :degree_type
+          options = ["Undergraduate", "Masters", "PhD"]
+          return [400, "Valid options are: #{options.to_s}"] unless options.include? val
+        when :job_type
+          options = ["Internship", "Full-time", "Co-Op"]
+          return [400, "Valid options are: #{options.to_s}"] unless options.include? val
+        end
+      end
     end
 end

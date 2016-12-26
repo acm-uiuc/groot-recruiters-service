@@ -11,11 +11,17 @@ class Recruiter
     include DataMapper::Resource
     
     property :id, Serial
-    property :encrypted_password, Text
+    property :encrypted_password, Text, required: true
     property :expires_at, DateTime
-    property :email, String
-    property :company_name, String
-    property :first_name, String
-    property :last_name, String
+    property :email, String, required: true
+    property :company_name, String, required: true
+    property :first_name, String, required: true
+    property :last_name, String, required: true
     property :type, String
+
+    def self.is_valid?(params)
+      params.each do |attr, val|
+        return [400, "Missing #{attr}"] unless val
+      end
+    end
 end

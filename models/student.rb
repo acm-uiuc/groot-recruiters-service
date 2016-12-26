@@ -7,7 +7,7 @@
 # this license in a file with the distribution.
 #models/user
 
-class User
+class Student
     include DataMapper::Resource
 
     property :id, Serial
@@ -22,7 +22,7 @@ class User
     property :active, Boolean
     property :approved_resume, Boolean
 
-    def self.is_valid_user?(first_name, last_name, netid)
+    def self.is_valid?(first_name, last_name, netid)
       return !first_name.nil? && !last_name.nil? && netid.length <= 8
     end
 end

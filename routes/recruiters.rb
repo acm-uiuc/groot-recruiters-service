@@ -10,7 +10,7 @@ require 'pry'
 require 'pony'
 
 module Sinatra
-  module RecruiterRoutes
+  module RecruitersRoutes
     def self.registered(app)
       app.get '/recruiters/login' do
         params = JSON.parse(request.body.read)
@@ -149,5 +149,5 @@ module Sinatra
       end
     end
   end
-  register RecruiterRoutes
+  register RecruitersRoutes
 end

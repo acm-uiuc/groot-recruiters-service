@@ -31,8 +31,9 @@ class GrootRecruiterService < Sinatra::Base
     helpers Config
     helpers JSONBase64Decoder
 
-    register Sinatra::ResumesRoutes
-    register Sinatra::UsersRoutes
+    register Sinatra::JobsRoutes
+    register Sinatra::RecruitersRoutes
+    register Sinatra::StudentsRoutes
     register Sinatra::CrossOrigin
     
     configure do

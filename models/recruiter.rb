@@ -17,13 +17,23 @@ class Recruiter
     property :company_name, String, required: true
     property :first_name, String, required: true
     property :last_name, String, required: true
-    property :type, String
 
-    def self.validate!(params, attributes)
+    def self.validate(params, attributes)
       attributes.each do |attr|
         return [400, "Missing #{attr}"] unless params[attr]
       end
 
       [200, nil]
+    end
+
+    def as_json
+      {
+        id: self.id,
+        expires_on: self.expires_on,
+        email: self.email,
+        company_name: self.company_name,
+        first_name: self.first_name,
+        last_name: self.last_name
+      }
     end
 end

@@ -16,4 +16,9 @@ module Encrypt
     password = ('A'..'z').to_a.sample(8).join
     return password, self.encrypt_password(password)
   end
+
+  def self.valid_password?(encrypted_password, raw_password)
+    password = BCrypt::Password.new(encrypted_password)
+    password == raw_password
+  end
 end

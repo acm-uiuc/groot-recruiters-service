@@ -31,14 +31,14 @@ module Sinatra
         
         matching_students = Student.all(conditions)
         
-        ResponseFormat.format_response(matching_students, request.accept)
+        ResponseFormat.success(matching_students)
       end
 
       app.post '/students' do
         params = ResponseFormat.get_params(request.body.read)
 
-        status, error = Student.validate!(params, [:netid, :firstName, :lastName, :email, :gradYear, :degreeType, :jobType, :resume])
-        return [status, error] if error
+        status, error = Student.validate(params, [:netid, :firstName, :lastName, :email, :gradYear, :degreeType, :jobType, :resume])
+        halt status, ResponseFormat.error(error) if error
 
         student = (
           Student.first_or_create({
@@ -57,30 +57,32 @@ module Sinatra
         )
         
         successful_upload = AWS.upload_resume(params[:netid], params[:resume])
-        return [400, "Error uploading resume to S3"] unless successful_upload
+        halt 400, ResponseFormat.error("Error uploading resume to S3") unless successful_upload
         
         student.resume_url = AWS.fetch_resume(params[:netid])
         student.approved_resume = false
         student.save!
         
-        return [200, ResponseFormat.format_response(student, request.accept)]
+        ResponseFormat.success(student)
       end
 
       app.put '/students/:netid/approve' do
         halt(400) unless Auth.verify_admin(env)
 
-        status, error = Student.validate!(params, [:netid])
-        return [status, error] if error
+        status, error = Student.validate(params, [:netid])
+        halt status, ResponseFormat.error(error) if error
 
         student = Student.first(netid: params[:netid])
-        return [400, "Student not found"] unless student
-        return [400, "Resume already approved"] if student.approved_resume
-        student.update(approved_resume: true) || halt(500)
+        halt 400, ResponseFormat.error("Student not found") unless student
+        halt 400, ResponseFormat.error("Resume already approved") if student.approved_resume
+        student.update(approved_resume: true) || halt(500, ResponseFormat.error("Error updating student."))
+
+        ResponseFormat.success(student)
       end
 
       app.get '/students/:netid' do
         student = Student.first(netid: params[:netid]) || halt(404)
-        ResponseFormat.format_response(student, request.accept)
+        ResponseFormat.success(student)
       end
 
       app.delete '/students/:netid' do
@@ -93,7 +95,7 @@ module Sinatra
         
         student.destroy!
 
-        [200, "Student removed"]
+        ResponseFormat.message("Student destroyed!")
       end
     end
   end

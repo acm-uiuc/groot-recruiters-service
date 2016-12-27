@@ -6,10 +6,10 @@ RSpec.describe Sinatra::StudentsRoutes do
 
   before :each do
     expect(Auth).to receive(:verify_token).and_return(true)
-    expect(Auth).to receive(:verify_admin).and_return(true)
+    allow(Auth).to receive(:verify_admin).and_return(true)
   end
 
-  context 'with no parameters' do
+  context 'without parameters' do
     let(:params) { nil }
 
     it 'should return a 200' do

@@ -23,7 +23,7 @@ class Student
     property :resume_url, Text
     property :approved_resume, Boolean
 
-    def self.validate!(params, attributes)
+    def self.validate(params, attributes)
       attributes.each do |attr|
         return [400, "Missing #{attr}"] unless params[attr]
         case attr
@@ -39,5 +39,9 @@ class Student
       end
 
       [200, nil]
+    end
+
+    def as_json
+      self.to_json
     end
 end

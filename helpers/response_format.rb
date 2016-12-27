@@ -19,6 +19,22 @@ module ResponseFormat
         end
     end
 
+    def self.error(error)
+        { error: error }.to_json
+    end
+
+    def self.success(data)
+        if data.is_a? Array
+          { error: nil, data: data.map { |e| e.as_json } }.to_json  
+        else
+          { error: nil, data: data.as_json }.to_json
+        end
+    end
+    
+    def self.message(msg)
+        { error: nil, data: {}, message: msg }.to_json
+    end
+
     # Since groot encodes parameters as json, the request is in JSON and not stored in ruby's params.
     # This method converts the keys to symbols and returns the formatted JSON as a Ruby Hash.
     def self.get_params(raw_payload)

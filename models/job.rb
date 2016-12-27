@@ -19,7 +19,7 @@ class Job
     property :description, String, required: true
     property :approved, Boolean
 
-    def self.validate!(params, attributes)
+    def self.validate(params, attributes)
       attributes.each do |attr|
         return [400, "Missing #{attr}"] unless params[attr]
         case attr
@@ -30,5 +30,9 @@ class Job
       end
 
       [200, nil]
+    end
+
+    def as_json
+      self.to_json
     end
 end

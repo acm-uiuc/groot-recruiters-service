@@ -77,7 +77,7 @@ Delete a job ad. *Requires admin privileges*.
 
 ## Recruiter Routes
 
-### GET /recruiters/login
+### POST /recruiters/login
 
 Verifies recruiter credentials if login was successful.
 

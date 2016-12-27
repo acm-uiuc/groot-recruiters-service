@@ -17,8 +17,8 @@ module Sinatra
       app.post '/jobs' do
         params = ResponseFormat.get_params(request.body.read)
 
-        status, error = Job.validate!(params, [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description])
-        return [status, error] if error
+        status, error = Job.validate(params, [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description])
+        halt status, ResponseFormat.error(error) if error
         
         job = (
           Job.first_or_create({
@@ -35,34 +35,34 @@ module Sinatra
           })
         )
       
-        return [200, ResponseFormat.format_response(job, request.accept)]
+        ResponseFormat.success(job)
       end
       
       app.put '/jobs/:job_id/approve' do
         halt(400) unless Auth.verify_admin(env)
 
-        status, error = Job.validate!(params, [:job_id])
-        return [status, error] if error
+        status, error = Job.validate(params, [:job_id])
+        halt status, ResponseFormat.error(error) if error
         
         job = Job.get(params[:job_id]) || halt(404)
-        return [400, "Job already approved"] if job.approved
+        halt 400, ResponseFormat.error("Job already approved") if job.approved
         
         job.approved = true
         job.save!
         
-        return [200, ResponseFormat.format_response(job, request.accept)]
+        ResponseFormat.success(job)
       end
       
       app.delete '/jobs/:job_id' do
         halt(400) unless Auth.verify_admin(env)
 
-        status, error = Job.validate!(params, [:job_id])
-        return [status, error] if error
+        status, error = Job.validate(params, [:job_id])
+        halt status, ResponseFormat.error(error) if error
         
         job = Job.get(params[:job_id]) || halt(400)
         job.destroy!
         
-        [200, "Job removed"]
+        ResponseFormat.message("Job destroyed!")
       end
     end
   end

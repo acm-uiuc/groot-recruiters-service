@@ -10,11 +10,11 @@ module Sinatra
   module AuthsRoutes
     def self.registered(app)
       app.before do
-        halt(400) unless Auth.verify_token(env)
+        halt(400) unless Auth.verify_session(env)
       end
 
       app.get '/status' do
-        return [200, "OK"]
+        ResponseFormat.message("OK")
       end
 
       # Handle CORS prefetching

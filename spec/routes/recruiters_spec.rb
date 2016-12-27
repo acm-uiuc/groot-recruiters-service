@@ -1,13 +1,11 @@
 require 'spec_helper'
 
 RSpec.describe Sinatra::RecruitersRoutes do
-  let(:access_token) { "FAKE ACCESS TOKEN" }
-  let(:netid) { "FAKE RANDOM ADMIN USER" }
   let(:email) { "someemail@gmail.com" }
   let(:password) { "foo" }
 
   before :each do
-    expect(Auth).to receive(:verify_token).and_return(true)
+    expect(Auth).to receive(:verify_session).and_return(true)
     allow(Auth).to receive(:verify_admin).and_return(true)
   end
 

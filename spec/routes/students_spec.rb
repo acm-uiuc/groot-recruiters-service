@@ -1,11 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Sinatra::StudentsRoutes do
-  let(:access_token) { "FAKE ACCESS TOKEN" }
-  let(:netid) { "FAKE RANDOM ADMIN USER" }
-
   before :each do
-    expect(Auth).to receive(:verify_token).and_return(true)
+    expect(Auth).to receive(:verify_session).and_return(true)
     allow(Auth).to receive(:verify_admin).and_return(true)
   end
 

@@ -1,125 +1,161 @@
-#Groot User Service
+# Groot Recruiter Service
 
-##Installing MySQL
+- The recruiter service serves as an API portal for recruiters to view resumes uploaded by students and interact with job ads.
+
+## Installing MySQL
 ```sh
 brew install mysql
 ```
+
+## Migrate DB after model alteration (clears all data)
+```
+rake db:migrate
+```
+
+## Create secrets.yaml and database.yaml
+
+```
+cp secrets.yaml.template secrets.yaml
+cp database.yaml.template database.yaml
+```
+
+Fill out the appropriate credentials in each of the yaml files. For example, fill in the correct email and password.
+
+## Create databases
+
+You need to login to `mysql`, and create the database names for your development and test environments and fill it in the `database.yaml`. For example,
 
 In `mysql`:
 ```
 CREATE DATABASE groot_recruiter_service
 ```
 
-##Migrate DB after model alteration (clears all data)
-```
-rake db:migrate
-```
-
-##Run Application
+## Run Application
 ```
 ruby app.rb
 ```
 
-##API Documentation
+## API Documentation
 
-###GET /jobs
+Note: All routes require an access token from groot (set in https://github.com/acm-uiuc/groot/blob/master/services/recruiters.go#L21) to be authenticated. This access token will be validated in `config/secrets.yaml` under the `access_token` key.
 
-`curl -X GET http://localhost:4567/jobs`
+Some routes also require a recruiter to be logged in. This will be managed by the session.
 
-```json
-[{"id":1,"posted_on":"2016-10-19T02:45:49-05:00","title":"Software Engineering Intern","company":"Apple","contact_name":"Steve Jobs","contact_email":"steve@apple.com","contact_phone":"11111111","job_type":"Full-time","description":"Free job"}]
-```
+---
 
-###POST /jobs
+## Job Routes
 
-`curl -X POST -d '{"job_title" => "Software Engineering Intern1", "org" => "Apple1", "contact-name" => "Steve Jobs", "contact-email" => "steve@apple.com", "contact-phone" => "11111111", "job-type" => "Full-time", "description" => "Free job"}' http://localhost:4567/jobs`
+### GET /jobs
 
-```json
-{"id":2,"posted_on":"2016-10-19T16:57:43+00:00","title":"Software Engineering Intern1","company":"Apple1","contact_name":"Steve Jobs","contact_email":"steve@apple.com","contact_phone":"11111111","job_type":"Full-time","description":"Free job"}
-```
+Returns all deferred (unapproved) jobs in descending order.
 
-###PUT /jobs/status
+**Required Params**
+- None
 
-`curl -X PUT -d '{"job_title" => "SWE", "org" => "Apple", "status" => "Defer/Approve/Reject"} http://localhost:4567/jobs/status`
+### POST /jobs
 
-```json
-OK
-```
+Creates a new job ad.
 
-###DELETE /jobs
+**Required Params**
+- [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description]
 
-`curl -X DELETE -d '{"job_title" => "SWE", "org" => "Apple"}' http://localhost:4567/jobs`
+### PUT /jobs/:job_id/approve
 
-```json
-OK
-```
+Approve a job ad. *Requires admin privileges*.
 
-###GET /recruiters/login
+**Required Params**
+- [:job_id]
 
-`curl -X GET -d '{"email"=>"sample@illinois.edu", "password"=>"wzthknbu"}' http://localhost:4567/recruiters/login`
+### DELETE /jobs/:job_id
 
-```json
-OK
-```
+Delete a job ad. *Requires admin privileges*.
 
-###POST /recruiters/new
+**Required Params**
+- [:job_id]
 
-`curl -X POST -d '{"company_name"=>"Apple", "first_name" => "Steve", "last_name" => "Jobs", "email"=>"banana@apple.com", "type" => "Jobfair Company"}' http://localhost:4567/recruiters/new`
+---
 
-```json
-Created recruiter
-```
+## Recruiter Routes
 
-###GET /resumes/unapproved
+### POST /recruiters/login
 
-`curl -X GET http://localhost:4567/resumes/unapproved`
+Verifies recruiter credentials if login was successful.
 
-```json
-[
-  {
-    "firstName": "Sameet",
-    "lastName": "Sapra",
-    "netid": "ssapra2",
-    "dateJoined": "2016-10-20T01:30:03-05:00",
-    "resume": "AMAZON S3 URL"
-  }
-]
-```
+**Required Params**
+- [:email, :password]
 
-###POST /resumes
+### POST /recruiters
 
-`curl -X POST -d '{"firstName"=>"Sameet", "lastName"=>"Sapra", "netid"=>"ssapra2", "email"=>"ssapra2@illinois.edu", "gradYear"=>"May 2018", "degreeType"=>"Bachelors", "jobType"=>"Co-Op", "resume"=>"Base 64 PDF String"}' http://localhost:4567/resumes/`
+Creates a new recruiter and sends them an email with their credentials.
 
-```json
-{"id":1,"first_name":"Sameet","last_name":"Sapra","email":"ssapra2@illinois.edu","graduation_date":"2016-05-01T00:00:00+00:00","degree_type":"Bachelors","job_type":"Internship","netid":"ssapra2","date_joined":"2016-10-20T01:30:03+00:00","token":null,"admin":null,"active":null,"approved_resume":false}
-```
+**Required Params**
+- [:company_name, :first_name, :last_name, :email]
 
-###PUT /resumes/approve
+ogs recruiter out and clears session.
 
-`curl -X PUT -d '{"netid"=>"ssapra2"}' http://localhost:4567/resumes/approve`
+**Required Params**
+- None
 
-```json
-OK
-```
+### GET /recruiters/:recruiter_id/reset_password
 
-###DELETE /resumes
+Resets a recruiter's password and sends them another one via email.
 
-`curl -X DELETE -d '{"netid"=>"ssapra2"}' http://localhost:4567/resumes/`
+**Required Params**
+- Required params[:email]
 
-```json
-OK
-```
+### PUT /recruiters/:recruiter_id/
 
-###GET /users/
-###GET /users/:netid
-###PUT /users/:netid
-###DELETE /users/:netid
+Updates a recruiter's password
 
-###GET /users/search
+**Required Params**
+- [:email, :password, :new_password]
 
-`curl -X GET -d '{"graduation_start" => "2017-05-01"}' http://localhost:4567/users/search`
+---
 
-`curl -X GET -d '{"job_type" => "Internship"}' http://localhost:4567/users/search`
+## Student Routes
+
+### GET /students
+
+Gets and filters students by their attributes.
+
+**Optional Params**
+- [:graduationStart, :graduationEnd, :netid, :degree_type, :job_type, :approved_resumes]
+
+### POST /students
+
+Creates a new student and uploads their resume to S3. Anytime a student updates their resume, this endpoint will also be called.
+
+**Required Params**
+- [:netid, :firstName, :lastName, :email, :gradYear, :degreeType, :jobType, :resume]
+
+### PUT /students/:netid/approve
+
+Approves a student's resume.
+
+**Required Params**
+- [:netid]
+
+### GET /students/:netid
+
+Fetch a student's information by their netid.
+
+**Required Params**
+- [:netid]
+
+### DELETE /students/:netid
+
+Delete a student from the database and their resume from S3.
+
+**Required Params**
+- [:netid]
+
+---
+
+## Running Tests
+
+- Every model, route, and helper *should* have an associated spec file.
+
+Run tests with `rake spec`.
 
 ## License
 

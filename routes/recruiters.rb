@@ -7,147 +7,96 @@
 # this license in a file with the distribution.
 # encoding: UTF-8
 require 'pry'
-require 'pony'
 
 module Sinatra
-  module RecruiterRoutes
+  module RecruitersRoutes
     def self.registered(app)
-      app.get '/recruiters/login' do
-        params = JSON.parse(request.body.read)
-
-        return [400, "Missing company login"] unless params['email']
-        return [400, "Missing password"] unless params['password']
-        
-        encryption_key = Config.load_config('encryption')
-        encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + params['password'])
-        
-        recruiter = Recruiter.first(email: params['email'], encrypted_password: encrypted_password)
-        
-        return [400, "Invalid credentials"] unless recruiter
-        return [400, "Account has expired!"] if recruiter.expires_at < Date.today
-        
-        return [200, "OK"]
-      end
+      app.post '/recruiters/login' do
+        params = ResponseFormat.get_params(request.body.read)
       
-      app.get '/recruiters/reset_password' do
-        params = JSON.parse(request.body.read)
+        status, error = Recruiter.validate(params, [:email, :password])
+        halt status, ResponseFormat.error(error) if error
 
-        return [400, "Missing email"] unless params['email']
-        return [400, "Missing first name"] unless params['first_name']
-        return [400, "Missing last name"] unless params['last_name']
-        recruiter = Recruiter.first(email: params['email'])
-        
-        return [400, "Recruiter with email and name combination not found"] unless recruiter
-        
-        # Generate new password
-        encryption = Config.load_config('encryption')
-        random_password = ('a'..'z').to_a.sample(8).join
-        recruiter.encrypted_password = Digest::MD5.hexdigest(encryption['secret'] + random_password)
-        
-        subject = '[Corporate-l] ACM@UIUC Resume Book: New Password Request'
-        html_body = erb :forgot_password_email, locals: { recruiter: recruiter, password: random_password }
+        recruiter = Recruiter.first(email: params[:email])
 
-        credentials = Config.load_config('email')
+        halt 400, ResponseFormat.error("Invalid credentials") unless recruiter
+
+        correct_credentials = Encrypt.valid_password?(recruiter.encrypted_password, params[:password])
+        halt 400, ResponseFormat.error("Invalid credentials") unless correct_credentials
+        halt 400, ResponseFormat.error("Account has expired!") if recruiter.expires_on < Date.today
         
-        Pony.options = {
-          subject: subject,
-          body: html_body,
-          via: :smtp,
-          via_options: {
-            address: 'smtp.gmail.com',
-            port: '587',
-            enable_starttls_auto: true,
-            user_name: credentials['username'],
-            password: credentials['password'],
-            authentication: :plain,
-            domain: 'localhost.localdomain'
-          }
-        }
-        Pony.mail(to: params["email"])
-        
-        recruiter.save
-        
-        return [200, "Sent recruiter email with new password"]
+        ResponseFormat.success(recruiter)
       end
-      
-      app.put '/recruiters/' do
-        params = JSON.parse(request.body.read)
 
-        return [400, "Missing email"] unless params['email']
-        return [400, "Missing password"] unless params['password']
-        return [400, "Missing password"] unless params['new_password']
-        
-        # Check that recruiter's password matches what's in the database
-        encryption_key = Config.load_config('encryption')
-        encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + params['password'])
-        
-        recruiter = Recruiter.first(email: params['email'], encrypted_password: encrypted_password)
-        
-        return [400, "Invalid email or password combination"] unless recruiter
-        
-        new_encrypted_password = Digest::MD5.hexdigest(encryption_key['secret'] + params['new_password'])
-        recruiter.encrypted_password = new_encrypted_password
-        recruiter.save
-        
-        return [200, "OK"]
-      end
-      
-      app.post '/recruiters/new' do
-        params = JSON.parse(request.body.read)
-        
-        return [400, "Missing company name"] unless params['company_name']
-        return [400, "Missing recruiter's first name"] unless params['first_name']
-        return [400, "Missing recruiter's last name"] unless params['last_name']
-        return [400, "Missing recruiter's email"] unless params['email']
-        return [400, "Missing type"] unless params['type']
-        
+      app.post '/recruiters' do
+        params = ResponseFormat.get_params(request.body.read)
+        status, error = Recruiter.validate(params, [:company_name, :first_name, :last_name, :email])
+        halt status, ResponseFormat.error(error) if error
+
         # Recruiter with these parameters should not exist already
-        recruiter = Recruiter.first(company_name: params['company_name'], first_name: params['first_name'], last_name: params['last_name'])
+        recruiter = Recruiter.first(company_name: params[:company_name], first_name: params[:first_name], last_name: params[:last_name])
 
-        return [400, 'Recruiter already exists'] if recruiter
+        halt 400, ResponseFormat.error("Recruiter already exists") if error
 
         r = Recruiter.new
-        
-        r.company_name = params['company_name']
-        r.first_name = params['first_name']
-        r.email = params['email']
-        r.last_name = params['last_name']
-        r.type = params['type']
-        
-        encryption = Config.load_config('encryption')
-
-        random_password = ('a'..'z').to_a.sample(8).join
-
-        r.encrypted_password = Digest::MD5.hexdigest(encryption['secret'] + random_password)
-        
-        r.expires_at = Date.today.next_year
+        r.company_name = params[:company_name]
+        r.first_name = params[:first_name]
+        r.last_name = params[:last_name]
+        r.email = params[:email]
+        random_password, encrypted = Encrypt.generate_encrypted_password
+        r.encrypted_password = encrypted
+        r.expires_on = Date.today.next_year
         
         subject = '[Corporate-l] ACM@UIUC Resume Book'
         html_body = erb :new_account_email, locals: { recruiter: r, password: random_password }
 
-        credentials = Config.load_config('email')
+        if Mailer.email(subject, html_body, params[:email])
+          r.save
+          ResponseFormat.message("Sent recruiter email with new password")
+        else
+          halt 400, ResponseFormat.error("Error sending recruiter email. Failed to save recruiter in db")
+        end
+      end
 
-        Pony.options = {
-          subject: subject,
-          body: html_body,
-          via: :smtp,
-          via_options: {
-            address: 'smtp.gmail.com',
-            port: '587',
-            enable_starttls_auto: true,
-            user_name: credentials['username'],
-            password: credentials['password'],
-            authentication: :plain,
-            domain: 'localhost.localdomain'
-          }
-        }
-        Pony.mail(to: params["email"])
-        # Save if the email sent
-        r.save
+      app.post '/recruiters/:recruiter_id/reset_password' do
+        status, error = Recruiter.validate(params, [:recruiter_id])
+        halt status, ResponseFormat.error(error) if error
+
+        recruiter = Recruiter.get(params[:recruiter_id])
+        halt 404, ResponseFormat.error("Recruiter doesn't exist") unless recruiter
+
+        # Generate new password
+        random_password, encrypted = Encrypt.generate_encrypted_password
+        recruiter.encrypted_password = encrypted
         
-        return [200, 'Created recruiter and sent registration email']
+        subject = '[Corporate-l] ACM@UIUC Resume Book: New Password Request'
+        html_body = erb :forgot_password_email, locals: { recruiter: recruiter, password: random_password }
+
+        if Mailer.email(subject, html_body, params[:email])
+          recruiter.save
+          ResponseFormat.message("Sent recruiter email with new password")
+        else
+          halt 400, ResponseFormat.error("Error sending recruiter email. Failed to save recruiter in db")
+        end
+      end
+      
+      app.put '/recruiters/:recruiter_id' do
+        params = ResponseFormat.get_params(request.body.read)
+        status, error = Recruiter.validate(params, [:recruiter_id, :email, :password, :new_password])
+        halt status, ResponseFormat.error(error) if error
+
+        recruiter = Recruiter.first(email: params[:email])
+        halt 400, ResponseFormat.error("Invalid credentials") unless recruiter        
+
+        correct_credentials = Encrypt.valid_password?(recruiter.encrypted_password, params[:password])
+        halt 400, ResponseFormat.error("Invalid credentials") unless correct_credentials
+
+        recruiter.encrypted_password = Encrypt.encrypt_password(params[:new_password])
+        recruiter.save
+        
+        ResponseFormat.message("Recruiter updated successfully")
       end
     end
   end
-  register RecruiterRoutes
+  register RecruitersRoutes
 end

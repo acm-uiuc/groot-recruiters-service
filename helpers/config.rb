@@ -9,7 +9,12 @@ require 'yaml'
 
 module Config
     def self.load_config(section)
-        config = YAML.load_file(__dir__ + "/../config/secrets.yaml")
-        return config[section]
+      config = YAML.load_file(__dir__ + "/../config/secrets.yaml")
+      config[section]
+    end
+
+    def self.load_db(section)
+      config = YAML.load_file(__dir__ + "/../config/database.yaml")
+      config[section]
     end
 end

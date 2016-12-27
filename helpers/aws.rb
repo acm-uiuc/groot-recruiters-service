@@ -12,6 +12,7 @@ require 'pry'
 module AWS
     BUCKET = 'groot-recruiters-service-fs'
     RESUME_S3_LOCATION = "#{BUCKET}/resumes"
+    
     def self.init_aws()
       aws = Config.load_config("aws")
       AWS::S3::Base.establish_connection!(
@@ -25,6 +26,7 @@ module AWS
         self.init_aws
         
         buffer = JSONBase64Decoder.decode(data)
+        
         AWS::S3::S3Object.store(netid + ".pdf", Base64.decode64(buffer["data"]), RESUME_S3_LOCATION, content_type: 'application/pdf')
     end
     
@@ -34,7 +36,7 @@ module AWS
         return false unless AWS::S3::S3Object.exists?(netid + ".pdf", RESUME_S3_LOCATION)
         
         resume = AWS::S3::S3Object.find("resumes/#{netid}.pdf", BUCKET)
-        return resume.url
+        resume.url
     end
     
     def self.delete_resume(netid)

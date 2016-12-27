@@ -5,69 +5,66 @@
 # The Groot Project is open source software, released under the University of
 # Illinois/NCSA Open Source License. You should have received a copy of
 # this license in a file with the distribution.
+require 'pry'
+
 module Sinatra
-    module JobsRoutes
-        def self.registered(app)
-            app.get '/jobs' do
-                ResponseFormat.format_response(Job.all(order: [ :posted_on.desc ], status: "Defer"), request.accept)
-            end
-            
-            app.post '/jobs' do
-              params = JSON.parse(request.body.read)
-              
-              return [400, "Missing job title"] unless params["job_title"]
-              return [400, "Missing organization"] unless params["org"]
-              return [400, "Missing contact_name"] unless params["contact-name"]
-              return [400, "Missing contact email"] unless params["contact-email"]
-              return [400, "Missing contact phone"] unless params["contact-phone"]
-              return [400, "Missing job type"] unless params["job-type"]
-              return [400, "Missing description"] unless params["description"]
-              
-              job = (Job.first_or_create(
-                  {
-                      title: params["job_title"],
-                      company: params["org"]
-                  }, {
-                      contact_name: params["contact-name"],
-                      contact_email: params["contact-email"],
-                      contact_phone: params["contact-phone"],
-                      job_type: params["job-type"],
-                      description: params["description"],
-                      posted_on: Time.now.getutc,
-                      status: "Defer"
-                  }
-              ))
-            
-              return [200, ResponseFormat.format_response(job, request.accept)]
-            end
-            
-            app.put '/jobs/status' do
-              params = JSON.parse(request.body.read)
-              
-              return [400, "Missing job title"] unless params["job_title"]
-              return [400, "Missing organization"] unless params["org"]
-              return [400, "Missing job status"] unless params["status"]
-              
-              if Job.is_valid_status(params["status"])
-                job ||= Job.first(title: params["job_title"], company: params["org"]) || halt(404)
-                
-                job.status = params["status"]
-                job.save!
-              else
-                return [400, "Invalid status #{params['status']}"]
-              end
-            end
-            
-            app.delete '/jobs' do
-              params = JSON.parse(request.body.read)
-              
-              return [400, "Missing job title"] unless params["job_title"]
-              return [400, "Missing organization"] unless params["org"]
-              
-              job ||= Job.first(title: params["job_title"], company: params["org"]) || halt(404)
-              halt 500 unless job.destroy
-            end
-        end
+  module JobsRoutes
+    def self.registered(app)
+      app.get '/jobs' do
+        ResponseFormat.success(Job.all(order: [ :posted_on.desc ], approved: false))
+      end
+      
+      app.post '/jobs' do
+        params = ResponseFormat.get_params(request.body.read)
+
+        status, error = Job.validate(params, [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description])
+        halt status, ResponseFormat.error(error) if error
+        
+        job = (
+          Job.first_or_create({
+            title: params[:job_title].capitalize,
+            company: params[:organization].capitalize
+          }, {
+            contact_name: params[:contact_name].capitalize,
+            contact_email: params[:contact_email],
+            contact_phone: params[:contact_phone],
+            job_type: params[:job_type],
+            description: params[:description],
+            posted_on: Date.today,
+            approved: false
+          })
+        )
+      
+        ResponseFormat.success(job)
+      end
+      
+      app.put '/jobs/:job_id/approve' do
+        halt(400) unless Auth.verify_admin(env)
+
+        status, error = Job.validate(params, [:job_id])
+        halt status, ResponseFormat.error(error) if error
+        
+        job = Job.get(params[:job_id]) || halt(404)
+        halt 400, ResponseFormat.error("Job already approved") if job.approved
+        
+        job.approved = true
+        job.save!
+        
+        ResponseFormat.success(job)
+      end
+      
+      app.delete '/jobs/:job_id' do
+        halt(400) unless Auth.verify_admin(env)
+
+        status, error = Job.validate(params, [:job_id])
+        halt status, ResponseFormat.error(error) if error
+        
+        job = Job.get(params[:job_id]) || halt(400)
+        job.destroy!
+        
+        ResponseFormat.message("Job destroyed!")
+      end
     end
-    register JobsRoutes
+  end
+  register JobsRoutes
 end

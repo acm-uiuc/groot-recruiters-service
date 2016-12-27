@@ -6,7 +6,11 @@
 # Illinois/NCSA Open Source License. You should have received a copy of
 # this license in a file with the distribution.
 # encoding: utf-8
+
+require_relative 'auth'
 require_relative 'aws'
 require_relative 'config'
+require_relative 'encrypt'
 require_relative 'json_base64_decoder'
+require_relative 'mailer'
 require_relative 'response_format'

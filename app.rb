@@ -17,8 +17,9 @@ require "dm_noisy_failures"
 require 'dm-core'
 require 'dm-timestamps'
 require 'dm-validations'
-require 'better_errors'
 require 'dm-mysql-adapter'
+require 'better_errors'
+
 require_relative 'helpers/init'
 require_relative 'routes/init'
 require_relative 'models/init'
@@ -31,33 +32,45 @@ class GrootRecruiterService < Sinatra::Base
     helpers Config
     helpers JSONBase64Decoder
 
-    register Sinatra::ResumesRoutes
-    register Sinatra::UsersRoutes
+    register Sinatra::AuthsRoutes
+    register Sinatra::JobsRoutes
+    register Sinatra::RecruitersRoutes
+    register Sinatra::StudentsRoutes
     register Sinatra::CrossOrigin
     
     configure do
       enable :cross_origin
     end
 
-    db = Config.load_config("db")    
     configure :development do
+        db = Config.load_db("development")    
         DataMapper::Logger.new($stdout, :debug)
         DataMapper.setup(
             :default,
             "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
         )
         use BetterErrors::Middleware
+        
         # you need to set the application root in order to abbreviate filenames
         # within the application:
         BetterErrors.application_root = File.expand_path('..', __FILE__)
         DataMapper.auto_upgrade!
     end
 
-    configure :production do
+    configure :test do
+        db = Config.load_db("test")
         DataMapper.setup(
             :default,
             "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
-      )
+        )
+    end
+
+    configure :production do
+        db = Config.load_db("production")
+        DataMapper.setup(
+            :default,
+            "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
+        )
     end
     DataMapper.finalize
 end

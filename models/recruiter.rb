@@ -11,11 +11,29 @@ class Recruiter
     include DataMapper::Resource
     
     property :id, Serial
-    property :encrypted_password, Text
-    property :expires_at, DateTime
-    property :email, String
-    property :company_name, String
-    property :first_name, String
-    property :last_name, String
-    property :type, String
+    property :encrypted_password, Text, required: true
+    property :expires_on, Date
+    property :email, String, required: true
+    property :company_name, String, required: true
+    property :first_name, String, required: true
+    property :last_name, String, required: true
+
+    def self.validate(params, attributes)
+      attributes.each do |attr|
+        return [400, "Missing #{attr}"] unless params[attr]
+      end
+
+      [200, nil]
+    end
+
+    def serialize
+      {
+        id: self.id,
+        expires_on: self.expires_on,
+        email: self.email,
+        company_name: self.company_name,
+        first_name: self.first_name,
+        last_name: self.last_name
+      }
+    end
 end

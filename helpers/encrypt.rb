@@ -9,7 +9,7 @@ require 'bcrypt'
 
 module Encrypt
   def self.encrypt_password(password)
-    BCrypt::Password.create(random_password)
+    BCrypt::Password.create(password)
   end
 
   def self.generate_encrypted_password

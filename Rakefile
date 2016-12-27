@@ -31,11 +31,6 @@ namespace :db do
 
     desc "Migrate and Seed database"
     task :funky => [ "db:migrate", "db:seed" ]
-
-    desc "Run all tests"
-    task :test do
-        Dir['./spec/**/*_spec.rb'].each { |f| load f }
-    end
 end
 
 

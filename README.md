@@ -7,23 +7,28 @@
 brew install mysql
 ```
 
-In `mysql`:
-```
-CREATE DATABASE groot_recruiter_service
-```
-
 ## Migrate DB after model alteration (clears all data)
 ```
 rake db:migrate
 ```
 
-## Create secrets.yaml
+## Create secrets.yaml and database.yaml
 
 ```
 cp secrets.yaml.template secrets.yaml
+cp database.yaml.template database.yaml
 ```
 
-Fill out username and password for email for ACM admin email.
+Fill out the appropriate credentials in each of the yaml files. For example, fill in the correct email and password.
+
+## Create databases
+
+You need to login to `mysql`, and create the database names for your development and test environments and fill it in the `database.yaml`. For example,
+
+In `mysql`:
+```
+CREATE DATABASE groot_recruiter_service
+```
 
 ## Run Application
 ```
@@ -42,7 +47,7 @@ Some routes also require a recruiter to be logged in. This will be managed by th
 
 ### GET /jobs
 
-Returns all deferred jobs in descending order.
+Returns all deferred (unapproved) jobs in descending order.
 
 **Required Params**
 - None
@@ -52,17 +57,21 @@ Returns all deferred jobs in descending order.
 Creates a new job ad.
 
 **Required Params**
-- [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description, :expires_at]
+- [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description]
 
-### PUT /jobs/status
+### PUT /jobs/:job_id/approve
 
-**Required Params**
-- [:job_title, :organization, :status]
-
-### DELETE /jobs
+Approve a job ad. *Requires admin privileges*.
 
 **Required Params**
-- [:job_title, :organization]
+- [:job_id]
+
+### DELETE /jobs/:job_id
+
+Delete a job ad. *Requires admin privileges*.
+
+**Required Params**
+- [:job_id]
 
 ---
 
@@ -70,33 +79,31 @@ Creates a new job ad.
 
 ### GET /recruiters/login
 
-Verifies recruiter credentials and stores recruiter id in the session if login was successful.
+Verifies recruiter credentials if login was successful.
 
 **Required Params**
 - [:email, :password]
 
-### POST /recruiters/new
+### POST /recruiters
 
 Creates a new recruiter and sends them an email with their credentials.
 
 **Required Params**
-- [:company_name, :first_name, :last_name, :email, :type]
+- [:company_name, :first_name, :last_name, :email]
 
-### POST /recruiters/logout
-
-Logs recruiter out and clears session.
+ogs recruiter out and clears session.
 
 **Required Params**
 - None
 
-### GET /recruiters/reset_password
+### GET /recruiters/:recruiter_id/reset_password
 
 Resets a recruiter's password and sends them another one via email.
 
 **Required Params**
 - Required params[:email]
 
-### PUT /recruiters
+### PUT /recruiters/:recruiter_id/
 
 Updates a recruiter's password
 
@@ -121,21 +128,21 @@ Creates a new student and uploads their resume to S3. Anytime a student updates 
 **Required Params**
 - [:netid, :firstName, :lastName, :email, :gradYear, :degreeType, :jobType, :resume]
 
-### PUT /students/approve
+### PUT /students/:netid/approve
 
 Approves a student's resume.
 
 **Required Params**
 - [:netid]
 
-### GET /student/:netid
+### GET /students/:netid
 
 Fetch a student's information by their netid.
 
 **Required Params**
 - [:netid]
 
-### DELETE /student/:netid
+### DELETE /students/:netid
 
 Delete a student from the database and their resume from S3.
 
@@ -143,6 +150,12 @@ Delete a student from the database and their resume from S3.
 - [:netid]
 
 ---
+
+## Running Tests
+
+- Every model, route, and helper *should* have an associated spec file.
+
+Run tests with `rake spec`.
 
 ## License
 

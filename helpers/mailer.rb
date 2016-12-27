@@ -11,7 +11,7 @@ module Mailer
 
     Pony.options = {
       subject: subject,
-      body: html_body,
+      body: body,
       via: :smtp,
       via_options: {
         address: 'smtp.gmail.com',

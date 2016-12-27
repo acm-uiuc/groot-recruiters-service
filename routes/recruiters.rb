@@ -23,9 +23,7 @@ module Sinatra
         return [400, "Invalid credentials"] unless recruiter
         return [400, "Account has expired!"] if recruiter.expires_on < Date.today
         
-        session[:recruiter] = recruiter.id
-
-        return [200, "OK"]
+        return [200, ResponseFormat.format_response(recruiter, request.accept)]
       end
 
       app.post '/recruiters' do
@@ -59,15 +57,12 @@ module Sinatra
         end
       end
 
-      app.get '/recruiters/reset_password' do
-        params = ResponseFormat.get_params(request.body.read)
-        status, error = Recruiter.validate!(params, [:email])
+      app.get '/recruiters/:recruiter_id/reset_password' do
+        status, error = Recruiter.validate!(params, [:recruiter_id])
         return [status, error] if error
 
-        recruiter = Recruiter.first(email: params[:email])
-        return [400, "Recruiter with email and name combination not found"] unless recruiter
-
-        halt(400) unless recruiter.id != session[:recruiter]
+        recruiter = Recruiter.get(params[:recruiter_id])
+        return [404, "Recruiter doesn't exist"] unless recruiter
 
         # Generate new password
         random_password, encrypted = Encrypt.generate_encrypted_password
@@ -84,28 +79,18 @@ module Sinatra
         end
       end
       
-      app.put '/recruiters' do
+      app.put '/recruiters/:recruiter_id' do
         params = ResponseFormat.get_params(request.body.read)
-        Recruiter.validate!(params, [:email, :password, :new_password])
+        Recruiter.validate!(params, [:recruiter_id, :email, :password, :new_password])
         
-        return [400, "Missing password"] unless params[:password]
-        return [400, "Missing new password"] unless params[:new_password]
-        
-        encrypted_passwod = Encrypt.encrypt_password(params[:password])
-        recruiter = Recruiter.first(email: params[:email], encrypted_password: encrypted_password)
+        encrypted_password = Encrypt.encrypt_password(params[:password])
+        recruiter = Recruiter.first(id: params[:recruiter_id], email: params[:email], encrypted_password: encrypted_password)
         
         return [400, "Invalid email or password combination"] unless recruiter
-        halt(400) unless recruiter.id != session[:recruiter]
 
         recruiter.encrypted_password = Encrypt.encrypt_password(params[:new_password])
         recruiter.save
         
-        return [200, "OK"]
-      end
-
-      app.post '/recruiters/logout' do        
-        session.clear
-
         return [200, "OK"]
       end
     end

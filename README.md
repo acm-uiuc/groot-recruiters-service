@@ -1,4 +1,6 @@
-# Groot User Service
+# Groot Recruiter Service
+
+- The recruiter service serves as an API portal for recruiters to view resumes uploaded by students and interact with job ads.
 
 ## Installing MySQL
 ```sh
@@ -50,7 +52,7 @@ Returns all deferred jobs in descending order.
 Creates a new job ad.
 
 **Required Params**
-- [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description]
+- [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description, :expires_at]
 
 ### PUT /jobs/status
 

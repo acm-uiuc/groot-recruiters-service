@@ -37,5 +37,7 @@ class Student
           return [400, "Valid options are: #{options.to_s}"] unless options.include? params[attr]
         end
       end
+
+      [200, nil]
     end
 end

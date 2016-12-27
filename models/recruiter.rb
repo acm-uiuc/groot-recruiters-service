@@ -12,7 +12,7 @@ class Recruiter
     
     property :id, Serial
     property :encrypted_password, Text, required: true
-    property :expires_at, DateTime
+    property :expires_on, Date
     property :email, String, required: true
     property :company_name, String, required: true
     property :first_name, String, required: true
@@ -23,5 +23,7 @@ class Recruiter
       attributes.each do |attr|
         return [400, "Missing #{attr}"] unless params[attr]
       end
+
+      [200, nil]
     end
 end

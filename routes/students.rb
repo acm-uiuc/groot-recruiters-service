@@ -9,7 +9,6 @@
 require 'date'
 require 'pry'
 require 'net/http'
-require 'sinatra/param'
 
 module Sinatra
   module StudentsRoutes
@@ -39,7 +38,8 @@ module Sinatra
 
       app.post '/students' do
         params = ResponseFormat.get_params(request.body.read)
-        Student.validate!(params, [:netid, :firstName, :lastName, :email, :gradYear, :degreeType, :jobType, :resume])
+        status, error = Student.validate!(params, [:netid, :firstName, :lastName, :email, :gradYear, :degreeType, :jobType, :resume])
+        return [status, error] if error
 
         student = (
           Student.first_or_create({
@@ -71,7 +71,8 @@ module Sinatra
         halt(400) unless Auth.verify_admin(env)
 
         params = ResponseFormat.get_params(request.body.read)
-        Student.validate!(params, [:netid])
+        status, error = Student.validate!(params, [:netid])
+        return [status, error] if error
 
         student = Student.first(netid: params[:netid])
         return [400, "Student not found"] unless student
@@ -91,7 +92,9 @@ module Sinatra
         halt(400) unless Auth.verify_admin(env)
         
         params = ResponseFormat.get_params(request.body.read)
-        Student.validate!(params, [:netid])
+        status, error = Student.validate!(params, [:netid])
+        return [status, error] if error
+
         student = Student.first(netid: params[:netid]) || halt(404)
         
         AWS.delete_resume(student.netid)

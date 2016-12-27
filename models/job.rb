@@ -9,7 +9,8 @@ class Job
     include DataMapper::Resource
 
     property :id, Serial
-    property :posted_on, DateTime
+    property :posted_on, Date
+    property :expires_on, Date
     property :title, String
     property :company, String
     property :contact_name, String
@@ -28,5 +29,7 @@ class Job
           return [400, "Invalid status. Valid statues are: #{options}"] unless options.include? params[attr]
         end
       end
+
+      [200, nil]
     end
 end

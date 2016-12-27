@@ -7,7 +7,6 @@
 # this license in a file with the distribution.
 # encoding: UTF-8
 require 'pry'
-require 'pony'
 
 module Sinatra
   module RecruitersRoutes
@@ -15,13 +14,14 @@ module Sinatra
       app.get '/recruiters/login' do
         params = JSON.parse(request.body.read)
 
-        Recruiter.validate!(params, [:email, :password])
-        
+        status, error = Recruiter.validate!(params, [:email, :password])
+        return [status, error] if error
+
         encrypted_password = Encrypt.encrypt_password(params[:password])
         recruiter = Recruiter.first(email: params[:email], encrypted_password: encrypted_password)
         
         return [400, "Invalid credentials"] unless recruiter
-        return [400, "Account has expired!"] if recruiter.expires_at < Date.today
+        return [400, "Account has expired!"] if recruiter.expires_on < Date.today
         
         session[:recruiter] = recruiter.id
 
@@ -30,7 +30,8 @@ module Sinatra
 
       app.post '/recruiters' do
         params = ResponseFormat.get_params(request.body.read)
-        Recruiter.validate!(params, [:company_name, :first_name, :last_name, :email, :type])
+        status, error = Recruiter.validate!(params, [:company_name, :first_name, :last_name, :email, :type])
+        return [status, error] if error
 
         # Recruiter with these parameters should not exist already
         recruiter = Recruiter.first(company_name: params[:company_name], first_name: params[:first_name], last_name: params[:last_name])
@@ -60,7 +61,8 @@ module Sinatra
 
       app.get '/recruiters/reset_password' do
         params = ResponseFormat.get_params(request.body.read)
-        Recruiter.validate!(params, [:email])
+        status, error = Recruiter.validate!(params, [:email])
+        return [status, error] if error
 
         recruiter = Recruiter.first(email: params[:email])
         return [400, "Recruiter with email and name combination not found"] unless recruiter

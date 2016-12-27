@@ -17,7 +17,7 @@ module Sinatra
         params = ResponseFormat.get_params(request.body.read)
         halt(400) unless Auth.verify_admin(env)
 
-        Job.validate!(params, [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description])
+        Job.validate!(params, [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description, :expires_on])
         
         job = (Job.first_or_create({
           title: params[:job_title],
@@ -28,7 +28,8 @@ module Sinatra
           contact_phone: params[:contact_phone],
           job_type: params[:job_type],
           description: params[:description],
-          posted_on: Time.now.getutc,
+          expires_on: params[:expires_on],
+          posted_on: Date.today,
           status: "Defer"
           })
         )

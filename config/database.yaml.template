@@ -1,0 +1,17 @@
+development:	
+  user: root
+  password: password
+  hostname: localhost
+  name: groot_recruiter_service_dev
+
+test:	
+  user: root
+  password: password
+  hostname: localhost
+  name: groot_recruiter_service_test
+
+production:	
+  user: root
+  password: password
+  hostname: localhost
+  name: groot_recruiter_service

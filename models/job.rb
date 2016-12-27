@@ -32,7 +32,16 @@ class Job
       [200, nil]
     end
 
-    def as_json
-      self.to_json
+    def serialize
+      {
+        title: self.title,
+        company: self.company,
+        contact_name: self.contact_name,
+        contact_email: self.contact_email,
+        contact_phone: self.contact_phone,
+        job_type: self.job_type,
+        description: self.description,
+        approved: self.approved
+      }
     end
 end

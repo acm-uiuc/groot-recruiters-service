@@ -32,6 +32,8 @@ GEM
       simplecov
     coderay (1.1.1)
     concurrent-ruby (1.0.3)
+    coolline (0.5.0)
+      unicode_utils (~> 1.4)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     data_mapper (1.2.0)
@@ -152,6 +154,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-coolline (0.2.5)
+      coolline (~> 0.5)
     public_suffix (2.0.4)
     rack (1.6.5)
     rack-protection (1.5.3)
@@ -219,6 +223,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
+    unicode_utils (1.4.0)
     uuidtools (2.1.5)
     webmock (2.3.1)
       addressable (>= 2.3.6)
@@ -253,6 +258,7 @@ DEPENDENCIES
   mysql
   pony
   pry
+  pry-coolline
   rack-test
   rake
   rb-readline

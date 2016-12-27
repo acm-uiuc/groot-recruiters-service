@@ -19,7 +19,7 @@ class Student
     property :job_type, String, required: true
     property :netid, String, required: true, key: true, unique_index: true, length: 1...9
     property :date_joined, Date
-    property :active, Boolean
+    property :active, Boolean, default: true
     property :resume_url, Text
     property :approved_resume, Boolean
 
@@ -41,7 +41,18 @@ class Student
       [200, nil]
     end
 
-    def as_json
-      self.to_json
+    def serialize
+      {
+        first_name: self.first_name,
+        last_name: self.last_name,
+        netid: self.netid,
+        email: self.email,
+        graduation_date: self.graduation_date,
+        degree_type: self.degree_type,
+        job_type: self.job_type,
+        active: self.active,
+        resume_url: self.resume_url,
+        approved_resume: self.approved_resume
+      }
     end
 end

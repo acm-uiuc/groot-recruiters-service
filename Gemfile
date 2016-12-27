@@ -45,6 +45,7 @@ end
 group :development, :test do
   gem 'pry'
   gem 'rb-readline'
+  gem 'pry-coolline'
   gem 'shotgun' # Auto-reload sinatra app on change.
   gem 'better_errors' # Show an awesome console in the browser on error.
   gem 'rest-client'

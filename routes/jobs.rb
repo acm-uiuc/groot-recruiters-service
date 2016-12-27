@@ -11,7 +11,7 @@ module Sinatra
   module JobsRoutes
     def self.registered(app)
       app.get '/jobs' do
-        ResponseFormat.format_response(Job.all(order: [ :posted_on.desc ], approved: false), request.accept)
+        ResponseFormat.success(Job.all(order: [ :posted_on.desc ], approved: false))
       end
       
       app.post '/jobs' do

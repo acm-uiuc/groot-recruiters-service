@@ -28,7 +28,7 @@ module Sinatra
           conditions[:active] = true
           conditions[:approved_resume] = params[:approved_resumes] if params[:approved_resumes] && !params[:approved_resumes].nil?
         end
-        
+
         matching_students = Student.all(conditions)
         
         ResponseFormat.success(matching_students)

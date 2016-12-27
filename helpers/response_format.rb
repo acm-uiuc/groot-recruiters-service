@@ -5,29 +5,19 @@
 # The Groot Project is open source software, released under the University of
 # Illinois/NCSA Open Source License. You should have received a copy of
 # this license in a file with the distribution.
-module ResponseFormat
-    def self.format_response(data, accept)
-        if data.nil?
-            data = {}
-        end
-        accept.each do |type|
-            return data.to_xml  if type.downcase.eql? 'text/xml'
-            return JSON.pretty_generate(data) if type.downcase.eql? 'application/json'
-            return data.to_yaml if type.downcase.eql? 'text/x-yaml'
-            return data.to_csv  if type.downcase.eql? 'text/csv'
-            return JSON.pretty_generate(data)
-        end
-    end
 
+require 'pry'
+
+module ResponseFormat
     def self.error(error)
         { error: error }.to_json
     end
 
     def self.success(data)
         if data.is_a? Array
-          { error: nil, data: data.map { |e| e.as_json } }.to_json  
+          { error: nil, data: data.map { |e| e.serialize } }.to_json  
         else
-          { error: nil, data: data.as_json }.to_json
+          { error: nil, data: data.serialize }.to_json
         end
     end
     

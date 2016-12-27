@@ -26,7 +26,7 @@ class Recruiter
       [200, nil]
     end
 
-    def as_json
+    def serialize
       {
         id: self.id,
         expires_on: self.expires_on,

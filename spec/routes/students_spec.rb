@@ -2,8 +2,8 @@ require 'spec_helper'
 
 RSpec.describe Sinatra::StudentsRoutes do
   before :each do
-    expect(Auth).to receive(:verify_session).and_return(true)
-    allow(Auth).to receive(:verify_admin).and_return(true)
+    expect(Auth).to receive(:verify_request).and_return(true)
+    allow(Auth).to receive(:verify_active_session).and_return(true)
   end
 
   context 'without parameters' do

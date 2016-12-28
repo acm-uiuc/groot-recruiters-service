@@ -14,32 +14,45 @@ module Auth
   VERIFY_ADMIN_URL = '/groups/committees/admin?isMember='
   VALIDATE_SESSION_URL = '/session/'
 
-  def self.verify_session(request)
+  # Verifies that the request originates from Groot
+  def self.verify_request(request)
     groot = Config.load_config("groot")
-    expected_token = groot["access_key"]
+    groot_access_key = groot["request_key"]
     
-    token = request['HTTP_SESSION_TOKEN']
+    token = request['HTTP_AUTHORIZATION']
 
-    uri = URI.parse("#{SERVICES_URL}#{VALIDATE_SESSION_URL}#{token}")
+    "Basic #{groot_access_key}" == token
+  end
+
+  # Verifies that an admin (defined by groups service) originated this request
+  def self.verify_admin(request)
+    groot_access_key = Config.load_config("groot")["access_key"]
+    netid = request['HTTP_NETID']
+    
+    uri = URI.parse("#{SERVICES_URL}#{VERIFY_ADMIN_URL}#{netid}")
     http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Post.new(uri.request_uri)
-    request['Authorization'] = expected_token
+    request = Net::HTTP::Get.new(uri.request_uri)
+    request['Authorization'] = groot_access_key
     response = http.request(request)
 
     JSON.parse(response.body)["isValid"] == "true"
   end
 
-  def self.verify_admin(request)
-    groot = Config.load_config("groot")
-    expected_token = groot["access_key"]
-    netid = request['HTTP_NETID']
+  # Verifies that the session (validated by users service) is active
+  def self.verify_session(request)
+    session_token = request['HTTP_SESSION_TOKEN']
+    groot_access_key = Config.load_config("groot")["access_key"]
 
-    uri = URI.parse("#{SERVICES_URL}#{VERIFY_ADMIN_URL}#{netid}")
+    uri = URI.parse("#{SERVICES_URL}#{VALIDATE_SESSION_URL}#{session_token}")
     http = Net::HTTP.new(uri.host, uri.port)
-    request = Net::HTTP::Get.new(uri.request_uri)
-    request['Authorization'] = expected_token
+    request = Net::HTTP::Post.new(uri.request_uri)
+    request['Authorization'] = groot_access_key
     response = http.request(request)
 
     JSON.parse(response.body)["isValid"] == "true"
+  end
+
+  def self.verify_active_session(request)
+    self.verify_admin(request) && self.verify_session(request)
   end
 end

@@ -38,6 +38,7 @@ module Sinatra
         params = ResponseFormat.get_params(request.body.read)
 
         status, error = Student.validate(params, [:netid, :firstName, :lastName, :email, :gradYear, :degreeType, :jobType, :resume])
+
         halt status, ResponseFormat.error(error) if error
 
         student = (
@@ -67,7 +68,7 @@ module Sinatra
       end
 
       app.put '/students/:netid/approve' do
-        halt(400) unless Auth.verify_admin(env)
+        halt(400) unless Auth.verify_active_session(env)
 
         status, error = Student.validate(params, [:netid])
         halt status, ResponseFormat.error(error) if error
@@ -86,7 +87,7 @@ module Sinatra
       end
 
       app.delete '/students/:netid' do
-        halt(400) unless Auth.verify_admin(env)
+        halt(400) unless Auth.verify_active_session(env)
 
         student = Student.first(netid: params[:netid]) || halt(404)
         

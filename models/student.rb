@@ -30,10 +30,10 @@ class Student
         when :netid
           return [400, "Invalid netid"] unless params[attr].length <= 8
         when :degreeType
-          options = ["Undergraduate", "Masters", "PhD"]
+          options = ["Bachelors", "Masters", "Ph.D"]
           return [400, "Valid options are: #{options.to_s}"] unless options.include? params[attr]
         when :jobType
-          options = ["Internship", "Full-time", "Co-Op"]
+          options = ["Internship", "Full-Time", "Co-Op"]
           return [400, "Valid options are: #{options.to_s}"] unless options.include? params[attr]
         end
       end

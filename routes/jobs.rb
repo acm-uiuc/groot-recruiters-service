@@ -39,7 +39,7 @@ module Sinatra
       end
       
       app.put '/jobs/:job_id/approve' do
-        halt(400) unless Auth.verify_admin(env)
+        halt(400) unless Auth.verify_active_session(env)
 
         status, error = Job.validate(params, [:job_id])
         halt status, ResponseFormat.error(error) if error
@@ -54,7 +54,7 @@ module Sinatra
       end
       
       app.delete '/jobs/:job_id' do
-        halt(400) unless Auth.verify_admin(env)
+        halt(400) unless Auth.verify_active_session(env)
 
         status, error = Job.validate(params, [:job_id])
         halt status, ResponseFormat.error(error) if error

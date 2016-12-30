@@ -25,7 +25,7 @@ class Student
 
     def self.validate(params, attributes)
       attributes.each do |attr|
-        return [400, "Missing #{attr}"] unless params[attr]
+        return [400, "Missing #{attr}"] unless params[attr] && !params[attr].empty?
         case attr
         when :netid
           return [400, "Invalid netid"] unless params[attr].length <= 8

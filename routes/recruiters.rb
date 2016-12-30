@@ -11,14 +11,18 @@ require 'pry'
 module Sinatra
   module RecruitersRoutes
     def self.registered(app)
+      app.get '/recruiters' do
+        ResponseFormat.success(Recruiter.all(order: [ :company_name.asc ]))
+      end
+
       app.post '/recruiters/login' do
         params = ResponseFormat.get_params(request.body.read)
-      
+
         status, error = Recruiter.validate(params, [:email, :password])
+
         halt status, ResponseFormat.error(error) if error
 
         recruiter = Recruiter.first(email: params[:email])
-
         halt 400, ResponseFormat.error("Invalid credentials") unless recruiter
 
         correct_credentials = Encrypt.valid_password?(recruiter.encrypted_password, params[:password])
@@ -30,7 +34,9 @@ module Sinatra
 
       app.post '/recruiters' do
         params = ResponseFormat.get_params(request.body.read)
+
         status, error = Recruiter.validate(params, [:company_name, :first_name, :last_name, :email])
+
         halt status, ResponseFormat.error(error) if error
 
         # Recruiter with these parameters should not exist already

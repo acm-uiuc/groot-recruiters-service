@@ -20,7 +20,7 @@ class Recruiter
 
     def self.validate(params, attributes)
       attributes.each do |attr|
-        return [400, "Missing #{attr}"] unless params[attr]
+        return [400, "Missing #{attr}"] unless params[attr] && !params[attr].empty?
       end
 
       [200, nil]

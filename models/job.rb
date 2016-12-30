@@ -21,7 +21,7 @@ class Job
 
     def self.validate(params, attributes)
       attributes.each do |attr|
-        return [400, "Missing #{attr}"] unless params[attr]
+        return [400, "Missing #{attr}"] unless params[attr] && !params[attr].empty?
         case attr
         when :job_type
           options = ["Full-Time", "Part-Time", "Intern"]

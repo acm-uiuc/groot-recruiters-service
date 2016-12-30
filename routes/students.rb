@@ -14,8 +14,6 @@ module Sinatra
   module StudentsRoutes
     def self.registered(app)
       app.get '/students' do
-        params = ResponseFormat.get_params(request.body.read)
-
         graduation_start_date = Date.parse(params[:graduationStart]) rescue nil
         graduation_end_date = Date.parse(params[:graduationEnd]) rescue nil
         

@@ -18,15 +18,15 @@ module Sinatra
         graduation_end_date = Date.parse(params[:graduationEnd]) rescue nil
         
         conditions = {}.tap do |conditions|
+          conditions[:first_name] = params[:name].split.first if params[:name] && !params[:name].empty?
           conditions[:netid] = params[:netid] if params[:netid] && !params[:netid].empty?
           conditions[:"graduation_date.gt"] = graduation_start_date if graduation_start_date
           conditions[:"graduation_date.lt"] = graduation_end_date if graduation_end_date
           conditions[:degree_type] = params[:degree_type] if params[:degree_type] && !params[:degree_type].empty?
           conditions[:job_type] = params[:job_type] if params[:job_type] && !params[:job_type].empty?
           conditions[:active] = true
-          conditions[:approved_resume] = params[:approved_resumes] if params[:approved_resumes] && !params[:approved_resumes].nil?
+          conditions[:approved_resume] = (params[:approved_resumes] && !params[:approved_resumes].nil?) ? params[:approved_resumes] : true # show approved resumes by default, but this is second to whatever was sent
         end
-
         matching_students = Student.all(conditions)
         
         ResponseFormat.success(matching_students)
@@ -66,7 +66,8 @@ module Sinatra
       end
 
       app.put '/students/:netid/approve' do
-        halt(400) unless Auth.verify_active_session(env)
+        halt(400, ResponseFormat.error("Active session was unable to be verified")) unless Auth.verify_active_session(env)
+        params = ResponseFormat.get_params(request.body.read)
 
         status, error = Student.validate(params, [:netid])
         halt status, ResponseFormat.error(error) if error
@@ -85,7 +86,7 @@ module Sinatra
       end
 
       app.delete '/students/:netid' do
-        halt(400) unless Auth.verify_active_session(env)
+        halt(400, ResponseFormat.error("Active session was unable to be verified")) unless Auth.verify_active_session(env)
 
         student = Student.first(netid: params[:netid]) || halt(404)
         

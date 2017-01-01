@@ -40,19 +40,26 @@ module Auth
 
   # Verifies that the session (validated by users service) is active
   def self.verify_session(request)
-    session_token = request['HTTP_SESSION_TOKEN']
+    session_token = request['HTTP_TOKEN']
     groot_access_key = Config.load_config("groot")["access_key"]
 
     uri = URI.parse("#{SERVICES_URL}#{VALIDATE_SESSION_URL}#{session_token}")
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
+    request.body = {
+      validationFactors: [{
+        value: "127.0.0.1",
+        name: "remote_address"
+      }]
+    }.to_json
     request['Authorization'] = groot_access_key
     response = http.request(request)
 
-    JSON.parse(response.body)["isValid"] == "true"
+    return false unless response.code == "200"
+    JSON.parse(response.body)["token"] == session_token
   end
 
   def self.verify_active_session(request)
-    self.verify_admin(request) && self.verify_session(request)
+    self.verify_session(request) && self.verify_admin(request)
   end
 end

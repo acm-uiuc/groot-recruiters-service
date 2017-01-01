@@ -34,6 +34,7 @@ class Job
 
     def serialize
       {
+        id: self.id,
         title: self.title,
         company: self.company,
         contact_name: self.contact_name,

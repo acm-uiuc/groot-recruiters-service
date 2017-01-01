@@ -39,7 +39,7 @@ module Sinatra
       end
       
       app.put '/jobs/:job_id/approve' do
-        halt(400) unless Auth.verify_active_session(env)
+        halt(400) unless Auth.verify_session(env)
 
         status, error = Job.validate(params, [:job_id])
         halt status, ResponseFormat.error(error) if error
@@ -50,11 +50,11 @@ module Sinatra
         job.approved = true
         job.save!
         
-        ResponseFormat.success(job)
+        ResponseFormat.success(Job.all(order: [ :posted_on.desc ], approved: false))
       end
       
       app.delete '/jobs/:job_id' do
-        halt(400) unless Auth.verify_active_session(env)
+        halt(400) unless Auth.verify_session(env)
 
         status, error = Job.validate(params, [:job_id])
         halt status, ResponseFormat.error(error) if error
@@ -62,7 +62,7 @@ module Sinatra
         job = Job.get(params[:job_id]) || halt(400)
         job.destroy!
         
-        ResponseFormat.message("Job destroyed!")
+        ResponseFormat.success(Job.all(order: [ :posted_on.desc ], approved: false))
       end
     end
   end

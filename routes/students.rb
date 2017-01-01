@@ -25,8 +25,9 @@ module Sinatra
           conditions[:degree_type] = params[:degree_type] if params[:degree_type] && !params[:degree_type].empty?
           conditions[:job_type] = params[:job_type] if params[:job_type] && !params[:job_type].empty?
           conditions[:active] = true
-          conditions[:approved_resume] = (params[:approved_resumes] && !params[:approved_resumes].nil?) ? params[:approved_resumes] : true # show approved resumes by default, but this is second to whatever was sent
+          conditions[:approved_resume] = (!params[:approved_resumes].nil?) ? params[:approved_resumes] : true # show approved resumes by default, but this is second to whatever was sent
         end
+
         matching_students = Student.all(conditions)
         
         ResponseFormat.success(matching_students)
@@ -66,8 +67,7 @@ module Sinatra
       end
 
       app.put '/students/:netid/approve' do
-        halt(400, ResponseFormat.error("Active session was unable to be verified")) unless Auth.verify_active_session(env)
-        params = ResponseFormat.get_params(request.body.read)
+        halt(400, ResponseFormat.error("Active session was unable to be verified")) unless Auth.verify_session(env)
 
         status, error = Student.validate(params, [:netid])
         halt status, ResponseFormat.error(error) if error
@@ -77,7 +77,8 @@ module Sinatra
         halt 400, ResponseFormat.error("Resume already approved") if student.approved_resume
         student.update(approved_resume: true) || halt(500, ResponseFormat.error("Error updating student."))
 
-        ResponseFormat.success(student)
+        # TODO send email to student?
+        ResponseFormat.success(Student.all(order: [ :date_joined.desc ], approved_resume: false))
       end
 
       app.get '/students/:netid' do
@@ -86,16 +87,15 @@ module Sinatra
       end
 
       app.delete '/students/:netid' do
-        halt(400, ResponseFormat.error("Active session was unable to be verified")) unless Auth.verify_active_session(env)
+        halt(400, ResponseFormat.error("Active session was unable to be verified")) unless Auth.verify_session(env)
 
         student = Student.first(netid: params[:netid]) || halt(404)
         
         AWS.delete_resume(student.netid)
-        email = student.email # TODO send email to student before deleting
-        
+        email = student.email
         student.destroy!
 
-        ResponseFormat.message("Student destroyed!")
+        ResponseFormat.success(Student.all(order: [ :date_joined.desc ], approved_resume: false))
       end
     end
   end

@@ -34,7 +34,6 @@ end
 
 
 namespace :generate do
-
     desc "Add new spec file"
     task :spec do
         unless ENV.has_key?('NAME')

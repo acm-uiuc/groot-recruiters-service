@@ -17,6 +17,16 @@ module Sinatra
         ResponseFormat.message("OK")
       end
 
+      app.get '/status/corporate' do
+        halt(405) unless Auth.verify_corporate(env)
+        ResponseFormat.message("OK")
+      end
+
+      app.get '/status/session' do
+        halt(405) unless Auth.verify_session(env)
+        ResponseFormat.message("OK")
+      end
+
       # Handle CORS prefetching
       app.options "*" do
         response.headers["Allow"] = "HEAD,GET,PUT,POST,DELETE,OPTIONS"

@@ -6,6 +6,7 @@
 # Illinois/NCSA Open Source License. You should have received a copy of
 # this license in a file with the distribution.
 #models/user
+require 'date'
 
 class Student
     include DataMapper::Resource
@@ -18,10 +19,10 @@ class Student
     property :degree_type, String, required: true
     property :job_type, String, required: true
     property :netid, String, required: true, key: true, unique_index: true, length: 1...9
-    property :date_joined, Date
+    property :date_joined, Date, default: Date.today
     property :active, Boolean, default: true
     property :resume_url, Text
-    property :approved_resume, Boolean
+    property :approved_resume, Boolean, default: false
 
     def self.validate(params, attributes)
       attributes.each do |attr|

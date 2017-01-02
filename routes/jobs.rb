@@ -22,10 +22,10 @@ module Sinatra
         
         job = (
           Job.first_or_create({
-            title: params[:job_title].capitalize,
-            company: params[:organization].capitalize
+            title: params[:job_title],
+            company: params[:organization]
           }, {
-            contact_name: params[:contact_name].capitalize,
+            contact_name: params[:contact_name],
             contact_email: params[:contact_email],
             contact_phone: params[:contact_phone],
             job_type: params[:job_type],

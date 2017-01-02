@@ -11,7 +11,7 @@ require 'pry'
 
 module Auth
   SERVICES_URL = 'http://localhost:8000'
-  VERIFY_ADMIN_URL = '/groups/committees/admin?isMember='
+  VERIFY_CORPORATE_URL = '/groups/committees/corporate?isMember='
   VALIDATE_SESSION_URL = '/session/'
 
   # Verifies that the request originates from Groot
@@ -25,16 +25,16 @@ module Auth
   end
 
   # Verifies that an admin (defined by groups service) originated this request
-  def self.verify_admin(request)
+  def self.verify_corporate(request)
     groot_access_key = Config.load_config("groot")["access_key"]
     netid = request['HTTP_NETID']
     
-    uri = URI.parse("#{SERVICES_URL}#{VERIFY_ADMIN_URL}#{netid}")
+    uri = URI.parse("#{SERVICES_URL}#{VERIFY_CORPORATE_URL}#{netid}")
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
     request['Authorization'] = groot_access_key
+    
     response = http.request(request)
-
     JSON.parse(response.body)["isValid"] == "true"
   end
 
@@ -59,7 +59,7 @@ module Auth
     JSON.parse(response.body)["token"] == session_token
   end
 
-  def self.verify_active_session(request)
-    self.verify_session(request) && self.verify_admin(request)
+  def self.verify_corporate_session(request)
+    self.verify_session(request) && self.verify_corporate(request)
   end
 end

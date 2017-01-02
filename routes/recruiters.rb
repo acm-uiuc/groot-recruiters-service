@@ -69,7 +69,7 @@ module Sinatra
         halt status, ResponseFormat.error(error) if error
 
         recruiter = Recruiter.get(params[:recruiter_id])
-        halt 404, ResponseFormat.error("Recruiter doesn't exist") unless recruiter
+        halt 404, ResponseFormat.error("Recruiter not found") unless recruiter
 
         # Generate new password
         random_password, encrypted = Encrypt.generate_encrypted_password
@@ -87,12 +87,15 @@ module Sinatra
       end
       
       app.put '/recruiters/:recruiter_id' do
+        recruiter_id = params[:recruiter_id]
         params = ResponseFormat.get_params(request.body.read)
+        params[:recruiter_id] = recruiter_id
+
         status, error = Recruiter.validate(params, [:recruiter_id, :email, :password, :new_password])
         halt status, ResponseFormat.error(error) if error
 
-        recruiter = Recruiter.first(email: params[:email])
-        halt 400, ResponseFormat.error("Invalid credentials") unless recruiter        
+        recruiter = Recruiter.get(params[:recruiter_id])
+        halt 400, ResponseFormat.error("Invalid credentials") unless recruiter && recruiter.email == params[:email]
 
         correct_credentials = Encrypt.valid_password?(recruiter.encrypted_password, params[:password])
         halt 400, ResponseFormat.error("Invalid credentials") unless correct_credentials
@@ -102,7 +105,16 @@ module Sinatra
         
         ResponseFormat.message("Recruiter updated successfully")
       end
+
+      app.put '/recruiters/:recruiter_id/renew' do
+        # TODO verify corporate user with active session
+      end
+
+      app.delete '/recruiters/:recruiter_id' do
+        # TODO verify corporate user with active session
+      end
     end
   end
+
   register RecruitersRoutes
 end

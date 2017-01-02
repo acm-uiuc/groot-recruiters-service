@@ -17,7 +17,7 @@ class Job
     property :contact_phone, String, required: true
     property :job_type, String
     property :description, Text, required: true
-    property :approved, Boolean
+    property :approved, Boolean, default: false
 
     def self.validate(params, attributes)
       attributes.each do |attr|

@@ -27,7 +27,6 @@ module Sinatra
           conditions[:active] = true
           conditions[:approved_resume] = (!params[:approved_resumes].nil?) ? params[:approved_resumes] : true # show approved resumes by default, but this is second to whatever was sent
         end
-
         matching_students = Student.all(conditions)
         
         ResponseFormat.success(matching_students)
@@ -75,6 +74,7 @@ module Sinatra
         student = Student.first(netid: params[:netid])
         halt 400, ResponseFormat.error("Student not found") unless student
         halt 400, ResponseFormat.error("Resume already approved") if student.approved_resume
+        
         student.update(approved_resume: true) || halt(500, ResponseFormat.error("Error updating student."))
 
         # TODO send email to student?
@@ -92,7 +92,6 @@ module Sinatra
         student = Student.first(netid: params[:netid]) || halt(404)
         
         AWS.delete_resume(student.netid)
-        email = student.email
         student.destroy!
 
         ResponseFormat.success(Student.all(order: [ :date_joined.desc ], approved_resume: false))

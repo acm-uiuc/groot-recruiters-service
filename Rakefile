@@ -26,11 +26,10 @@ namespace :db do
     desc "Populate the database with dummy data by running scripts/applicants.rb"
     task :seed do
         puts "Seeding database"
-        require './scripts/applicants.rb'
+        
+        DataMapper.auto_migrate!
+        require './scripts/seed.rb'
     end
-
-    desc "Migrate and Seed database"
-    task :funky => [ "db:migrate", "db:seed" ]
 end
 
 
@@ -72,7 +71,7 @@ namespace :routes do
                 item[1].each do |s|
                     source.sub!(/\(.+?\)/, ':'+s)
                 end
-                routes << source[1...-1]
+                routes << source[2...-2]
             end
             puts routes.sort.join("\n")
             puts "\n"

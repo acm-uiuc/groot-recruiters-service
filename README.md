@@ -41,6 +41,43 @@ Note: All routes require an access token from groot (set in https://github.com/a
 
 Some routes also require a recruiter to be logged in. This will be managed by the session.
 
+You can view routes by running `rake routes:show`. The shortened output will be printed first, followed by a description of each route.
+
+```
+:: GET ::
+/jobs
+/recruiters
+/status
+/students
+/students/:netid
+
+:: HEAD ::
+/jobs
+/recruiters
+/status
+/students
+/students/:netid
+
+:: OPTIONS ::
+:splat
+
+:: POST ::
+/jobs
+/recruiters
+/recruiters/:recruiter_id/reset_password
+/recruiters/login
+/students
+
+:: PUT ::
+/jobs/:job_id/approve
+/recruiters/:recruiter_id
+/students/:netid/approve
+
+:: DELETE ::
+/jobs/:job_id
+/students/:netid
+```
+
 ---
 
 ## Job Routes
@@ -90,11 +127,6 @@ Creates a new recruiter and sends them an email with their credentials.
 
 **Required Params**
 - [:company_name, :first_name, :last_name, :email]
-
-ogs recruiter out and clears session.
-
-**Required Params**
-- None
 
 ### GET /recruiters/:recruiter_id/reset_password
 

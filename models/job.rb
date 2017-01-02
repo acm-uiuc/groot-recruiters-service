@@ -16,7 +16,7 @@ class Job
     property :contact_email, String, required: true
     property :contact_phone, String, required: true
     property :job_type, String
-    property :description, String, required: true
+    property :description, Text, required: true
     property :approved, Boolean
 
     def self.validate(params, attributes)

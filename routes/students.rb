@@ -20,8 +20,8 @@ module Sinatra
         conditions = {}.tap do |conditions|
           conditions[:first_name] = params[:name].split.first if params[:name] && !params[:name].empty?
           conditions[:netid] = params[:netid] if params[:netid] && !params[:netid].empty?
-          conditions[:"graduation_date.gt"] = graduation_start_date if graduation_start_date
-          conditions[:"graduation_date.lt"] = graduation_end_date if graduation_end_date
+          conditions[:"graduation_date.gte"] = graduation_start_date if graduation_start_date
+          conditions[:"graduation_date.lte"] = graduation_end_date if graduation_end_date
           conditions[:degree_type] = params[:degree_type] if params[:degree_type] && !params[:degree_type].empty?
           conditions[:job_type] = params[:job_type] if params[:job_type] && !params[:job_type].empty?
           conditions[:active] = true

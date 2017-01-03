@@ -48,11 +48,13 @@ module Auth
     request = Net::HTTP::Post.new(uri.request_uri)
     request.body = {
       validationFactors: [{
-        value: "127.0.0.1",
-        name: "remote_address"
+        value: '127.0.0.1',
+        name: 'remote_address'
       }]
     }.to_json
     request['Authorization'] = groot_access_key
+    request['Accept'] = 'application/json'
+    request['Content-Type'] = 'application/json'
     response = http.request(request)
 
     return false unless response.code == "200"

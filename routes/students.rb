@@ -27,6 +27,8 @@ module Sinatra
           conditions[:active] = true
           conditions[:approved_resume] = (!params[:approved_resumes].nil?) ? params[:approved_resumes] : true # show approved resumes by default, but this is second to whatever was sent
         end
+        
+        conditions[:order] = [ :last_name.asc, :first_name.asc ]
         matching_students = Student.all(conditions)
         
         ResponseFormat.success(matching_students)

@@ -221,7 +221,6 @@ RSpec.describe Sinatra::StudentsRoutes do
     }
 
     it 'should approve a student whose resume has not already been approved' do
-      
       expect(student.approved_resume).to eq false
   
       put "/students/#{netid}/approve", {}.to_json

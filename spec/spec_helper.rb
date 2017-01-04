@@ -17,8 +17,15 @@ def app
   GrootRecruiterService
 end
 
+module TestHelpers
+  def expect_error(json_response, error_object)
+    expect(json_response['error']).to eq JSON.parse(error_object)['error']
+  end
+end
+
 RSpec.configure do |config|
   config.include Rack::Test::Methods
+  config.include TestHelpers
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction

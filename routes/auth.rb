@@ -10,7 +10,7 @@ module Sinatra
   module AuthsRoutes
     def self.registered(app)
       app.before do
-        halt(405) unless Auth.verify_request(env)
+        halt(401, Errors::VERIFY_GROOT) unless Auth.verify_request(env)
       end
 
       app.get '/status' do
@@ -18,12 +18,12 @@ module Sinatra
       end
 
       app.get '/status/corporate' do
-        halt(405) unless Auth.verify_corporate(env)
+        halt(403, Errors::VERIFY_CORPORATE_SESSION) unless Auth.verify_corporate(env)
         ResponseFormat.message("OK")
       end
 
       app.get '/status/session' do
-        halt(405) unless Auth.verify_session(env)
+        halt(403, Errors::VERIFY_CORPORATE_SESSION) unless Auth.verify_session(env)
         ResponseFormat.message("OK")
       end
 

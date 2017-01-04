@@ -23,11 +23,11 @@ module Sinatra
         halt status, ResponseFormat.error(error) if error
 
         recruiter = Recruiter.first(email: params[:email])
-        halt 400, ResponseFormat.error("Invalid credentials") unless recruiter
+        halt 400, Errors::INVALID_CREDENTIALS unless recruiter
 
         correct_credentials = Encrypt.valid_password?(recruiter.encrypted_password, params[:password])
-        halt 400, ResponseFormat.error("Invalid credentials") unless correct_credentials
-        halt 400, ResponseFormat.error("Account has expired!") if recruiter.expires_on < Date.today
+        halt 400, Errors::INVALID_CREDENTIALS unless correct_credentials
+        halt 400, Errors::ACCOUNT_EXPIRED if recruiter.expires_on < Date.today
         
         ResponseFormat.success(recruiter)
       end
@@ -42,7 +42,7 @@ module Sinatra
         # Recruiter with these parameters should not exist already
         recruiter = Recruiter.first(company_name: params[:company_name], first_name: params[:first_name], last_name: params[:last_name])
 
-        halt 400, ResponseFormat.error("Recruiter already exists") if error
+        halt 400, Errors::DUPLICATE_ACCOUNT if error
 
         r = Recruiter.new
         r.company_name = params[:company_name]
@@ -69,7 +69,7 @@ module Sinatra
         halt status, ResponseFormat.error(error) if error
 
         recruiter = Recruiter.get(params[:recruiter_id])
-        halt 404, ResponseFormat.error("Recruiter not found") unless recruiter
+        halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
 
         # Generate new password
         random_password, encrypted = Encrypt.generate_encrypted_password
@@ -93,12 +93,14 @@ module Sinatra
 
         status, error = Recruiter.validate(params, [:recruiter_id, :email, :password, :new_password])
         halt status, ResponseFormat.error(error) if error
-
+        
         recruiter = Recruiter.get(params[:recruiter_id])
-        halt 400, ResponseFormat.error("Invalid credentials") unless recruiter && recruiter.email == params[:email]
-
+        halt(400, Errors::INVALID_CREDENTIALS) unless recruiter && recruiter.email == params[:email] 
+        
         correct_credentials = Encrypt.valid_password?(recruiter.encrypted_password, params[:password])
-        halt 400, ResponseFormat.error("Invalid credentials") unless correct_credentials
+        halt(400, Errors::INVALID_CREDENTIALS) unless correct_credentials
+
+        # TODO depends on UI, but this could be a portal to update email and/or password. Currently this doesn't account for email.'
 
         recruiter.encrypted_password = Encrypt.encrypt_password(params[:new_password])
         recruiter.save
@@ -107,11 +109,25 @@ module Sinatra
       end
 
       app.put '/recruiters/:recruiter_id/renew' do
-        # TODO verify corporate user with active session
+        halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+
+        recruiter = Recruiter.get(params[:recruiter_id])
+        halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
+
+        recruiter.update(expires_on: recruiter.expires_on.next_year)
+
+        ResponseFormat.success(Recruiter.all(order: [ :company_name.asc ]))
       end
 
       app.delete '/recruiters/:recruiter_id' do
-        # TODO verify corporate user with active session
+        halt(400, Errors::VERIFY_CORPORATE_SESSION) unless Auth.verify_corporate_session(env)
+
+        recruiter = Recruiter.get(params[:recruiter_id])
+        halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
+
+        recruiter.destroy!
+
+        ResponseFormat.success(Recruiter.all(order: [ :company_name.asc ]))
       end
     end
   end

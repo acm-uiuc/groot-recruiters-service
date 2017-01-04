@@ -19,10 +19,9 @@ RSpec.describe Sinatra::RecruitersRoutes do
     )
   }
 
-
   before :each do
     expect(Auth).to receive(:verify_request).and_return(true)
-    allow(Auth).to receive(:verify_session).and_return(true)
+    allow(Auth).to receive(:verify_corporate_session).and_return(true)
 
     allow(Mailer).to receive(:email).and_return(true)
   end
@@ -106,7 +105,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
           expect(last_response.status).to eq(400)
           json_data = JSON.parse(last_response.body)
-          expect(json_data['error']).to eq("Account has expired!")
+          expect_error(json_data, Errors::ACCOUNT_EXPIRED)
         end
       end
     end
@@ -152,7 +151,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
-      expect(json_data['error']).to eq 'Recruiter not found'
+      expect_error(json_data, Errors::RECRUITER_NOT_FOUND)
     end
 
     it 'should generate a new password for the recruiter' do
@@ -188,7 +187,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
-      expect(json_data['error']).to eq 'Invalid credentials'
+      expect_error(json_data, Errors::INVALID_CREDENTIALS)
     end
 
     it 'should update the password with the new_password' do
@@ -206,8 +205,63 @@ RSpec.describe Sinatra::RecruitersRoutes do
   end
 
   describe "PUT /recruiters/:recruiter_id/renew" do
+    it 'should not allow a non-corporate user to access this route' do
+      allow(Auth).to receive(:verify_corporate_session).and_return(false)
+
+      put "/recruiters/#{recruiter.id}/renew", {}.to_json
+
+      expect(last_response).not_to be_ok
+      json_data = JSON.parse(last_response.body)
+      expect_error(json_data, Errors::VERIFY_CORPORATE_SESSION)
+    end
+
+    it 'should return an error if the recruiter does not exist' do
+      put "/recruiters/#{recruiter.id}1/renew", {}.to_json
+
+      expect(last_response).not_to be_ok
+      json_data = JSON.parse(last_response.body)
+      expect_error(json_data, Errors::RECRUITER_NOT_FOUND)
+    end
+
+    it 'should extend a recruiters expiration date by exactly one year from its current expiration date' do
+      current_expiration_date = recruiter.expires_on
+      expected_expiration_date = current_expiration_date.next_year
+
+      put "/recruiters/#{recruiter.id}/renew", {}.to_json
+      expect(last_response).to be_ok
+
+      expect(Recruiter.last.expires_on).to eq(expected_expiration_date)
+
+      json_data = JSON.parse(last_response.body)
+      expect(json_data['data'].count).to eq 1
+      match_recruiter(json_data['data'][0], recruiter)
+    end
   end
 
   describe "DELETE /recruiters/:recruiter_id" do
+    it 'should not allow a non-corporate user to access this route' do
+      allow(Auth).to receive(:verify_corporate_session).and_return(false)
+
+      delete "/recruiters/#{recruiter.id}", {}.to_json
+
+      expect(last_response).not_to be_ok
+      json_data = JSON.parse(last_response.body)
+      expect_error(json_data, Errors::VERIFY_CORPORATE_SESSION)
+    end
+
+    it 'should return an error if the recruiter does not exist' do
+      delete "/recruiters/#{recruiter.id}1", {}.to_json
+
+      expect(last_response).not_to be_ok
+      json_data = JSON.parse(last_response.body)
+      expect_error(json_data, Errors::RECRUITER_NOT_FOUND)
+    end
+
+    it 'should delete the recruiter successfully' do
+      delete "/recruiters/#{recruiter.id}", {}.to_json
+
+      expect(last_response).to be_ok
+      expect(Job.last).to be_nil
+    end
   end
-end   
+end

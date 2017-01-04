@@ -12,7 +12,7 @@ class Recruiter
     
     property :id, Serial
     property :encrypted_password, Text, required: true
-    property :expires_on, Date
+    property :expires_on, Date, default: Date.today.next_year
     property :email, String, required: true, unique: true
     property :company_name, String, required: true
     property :first_name, String, required: true

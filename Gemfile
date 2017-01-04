@@ -24,7 +24,6 @@ gem 'dm-validations'
 gem 'dm-noisy-failures', '~> 0.2.3'
 gem 'aws-s3'
 gem 'pony'
-gem 'faker'
 
 group :production do
   gem 'mysql'

@@ -30,6 +30,12 @@ namespace :db do
         DataMapper.auto_migrate!
         require './scripts/seed.rb'
     end
+
+    desc "Load the database with data from liquid"
+    task :liquid do
+        DataMapper.auto_migrate!
+        require './scripts/liquid.rb'
+    end
 end
 
 

@@ -20,6 +20,13 @@ module AWS
         secret_access_key: aws["secret_access_key"]
       )
     end
+
+    def self.upload_file(file_path, netid)
+        self.init_aws
+        
+        # Store if not already stored
+        AWS::S3::S3Object.store(netid + ".pdf", open(file_path), RESUME_S3_LOCATION) if self.fetch_resume(netid) == false
+    end
     
     def self.upload_resume(netid, data)
         return if data.nil?

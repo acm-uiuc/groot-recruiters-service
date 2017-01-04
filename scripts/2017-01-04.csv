@@ -1,0 +1,301 @@
+id,netid,first_name,last_name,graduation,level,seeking,created_at,updated_at,ldap_name,resume_uuid,resume_reminded_at,resume_reminder_subscribed
+3,labotz1,Reed,La Botz,12/1/12,u,f,9/7/12 14:13,8/28/16 15:18,,fc56acff-c040-4dc2-9852-b83f1e7ffe78,8/28/16 15:16,0
+13,vvishwa2,Vignesh,Vishwanathan,5/1/16,u,i,9/7/12 14:50,8/28/16 15:16,,8662c019-d579-4318-a42b-bab9fcb56ca7,8/28/16 15:16,1
+33,dkturne2,David,Turner,5/1/15,u,f,9/7/12 15:14,8/28/16 15:16,,df92162f-0140-4308-b0f9-13c4bbb47917,8/28/16 15:16,1
+63,dtli2,Denise,Li,5/1/16,u,i,9/7/12 15:42,8/28/16 15:16,,71cbeda8-f25b-4fd2-a0f3-7b43fd5c6331,8/28/16 15:16,1
+73,nicolay2,Sean,Nicolay,5/1/13,u,f,9/7/12 15:53,2/4/14 18:18,,01170771-8a2c-4015-96e5-23effca9120f,2/4/14 18:14,0
+83,irtefa1,Mohd,Irtefa,5/1/14,u,f,9/7/12 15:55,2/5/14 17:13,,d2a26412-e0a3-4240-b02c-33cf7fd898bf,2/4/14 18:14,0
+103,rmmrthy2,Raj,Ramamurthy,5/1/16,u,i,9/7/12 16:14,8/28/16 15:16,,006678ed-7b18-4f2c-9b2d-6192f34a8989,8/28/16 15:16,1
+133,cagleas2,Cole,Gleason,5/1/15,p,i,9/7/12 20:52,8/28/16 15:16,Cole Adams Gleason,08e5069f-f680-445f-afcd-15ac9ab22066,8/28/16 15:16,1
+163,marsan1,RJ,Marsan,5/1/13,m,f,9/7/12 22:36,8/28/16 15:16,Robert Joseph Marsan,b18c93b7-21cf-4099-8d9a-84a5d3454801,8/28/16 15:16,1
+173,wang220,Jicong,Wang,5/1/14,m,i,9/8/12 14:38,8/28/16 15:16,Jicong Wang,439a918f-44e0-461b-97f5-959c9cecd261,8/28/16 15:16,1
+203,cfcurti2,Clare,Curtis,5/1/15,u,f,9/8/12 17:41,8/28/16 15:16,Clare Frances Curtis,70c53ea6-242b-403d-a012-cbd9d054d783,8/28/16 15:16,1
+213,mirowit1,Lee,Mirowitz,5/1/14,u,i,9/8/12 22:56,8/28/16 15:16,Lee Mirowitz,ad40252e-7100-4b75-b458-c54997a9ab76,8/28/16 15:16,1
+223,menshch2,Fedor,Menshchikov,5/1/16,u,i,9/9/12 3:02,8/28/16 15:16,Fedor Menshchikov,45c2154d-2bba-46ea-b090-b05bb09a0be6,8/28/16 15:16,1
+233,kwon61,Jungho,Kwon,5/1/14,u,i,9/9/12 3:07,8/28/16 15:16,Jungho Kwon,fc1a88f3-f24b-4185-816f-9d5ca4fff1a7,8/28/16 15:16,1
+243,dryden2,Nikoli,Dryden,5/1/19,p,i,9/9/12 12:19,9/1/16 9:35,Nikoli Joseph Dryden,f4882a29-c3ef-4b5c-a248-c182e4c7b3cb,8/28/16 15:16,1
+263,wang103,Tianyi,Wang,5/1/13,m,f,9/10/12 1:50,2/4/14 19:02,Tianyi Wang,31bbf7a0-e674-4a2e-beb7-e9cd1edf2975,2/4/14 18:14,0
+323,knusbau2,Kurtis,Nusbaum,5/1/13,m,f,9/10/12 13:53,2/6/14 1:36,Kurtis Lee Nusbaum,4cd97b85-6d2b-4aa1-8e5e-f33a27c42b4f,2/4/14 18:14,0
+353,nandwan2,Rachit,Nandwani,5/1/15,u,f,9/10/12 14:19,8/28/16 15:16,Rachit Pravinkumar Nandwani,31a23340-9a6b-4a86-81f6-2966db09aa09,8/28/16 15:16,1
+363,vazque16,Marcell,Vazquez-Chanlatte,5/1/15,u,i,9/10/12 14:26,8/28/16 15:16,Marcell J Vazquez-Chanlatte,6b9363ba-4d38-4c9b-a613-53b39ed4a7d9,8/28/16 15:16,1
+383,rpieta2,Robert,Pieta,12/1/13,u,f,9/10/12 14:34,8/28/16 18:58,Robert Maciej Pieta,eab498f1-f4b1-4bc0-b0a8-04e1d8f11ffa,8/28/16 15:16,0
+403,weichen7,Wei,Chen,5/1/15,u,f,9/10/12 14:45,8/28/16 15:16,Wei Chen,322fc277-e6c8-400b-a0f9-1aa05eb593a0,8/28/16 15:16,1
+423,willing3,Michael,Willingham,5/1/14,u,i,9/10/12 14:45,8/28/16 15:16,Michael B Willingham,9d8e3c2c-5394-4928-9352-c458e7d439e2,8/28/16 15:16,1
+463,nayini1,Arjun,Nayini,5/1/13,u,f,9/10/12 15:15,8/28/16 15:16,Arjun A Nayini,098fd39c-a16e-464b-a926-acc594d154cb,8/28/16 15:16,1
+503,osacky1,Nelson,Osacky,5/1/14,u,f,9/10/12 16:24,8/28/16 15:16,Nelson L Osacky,19bee8ef-38c4-406b-8c75-efdba24f1689,8/28/16 15:16,1
+513,smwalto2,Shawn,Walton,5/1/16,u,i,9/10/12 16:30,8/28/16 15:16,Shawn M Walton,b110ff6d-6291-4012-adec-b61ab2b7fd97,8/28/16 15:16,1
+523,cowart2,Christopher,Cowart,5/1/15,u,i,9/10/12 16:33,8/28/16 15:16,Christopher J Cowart,89b4674a-a09a-43cb-910f-1cd8018095e7,8/28/16 15:16,1
+563,souffra2,Corbin,Souffrant,5/1/14,u,i,9/10/12 20:36,8/28/16 15:16,Corbin A Souffrant,18f94b37-f343-40b6-899e-70ad9b77f67d,8/28/16 15:16,1
+573,hsingh23,Harsh,Singh,5/1/15,u,i,9/10/12 22:01,8/28/16 15:16,Harsh Singh,bfe35d3b-02d2-477d-8576-d30f9f4377b5,8/28/16 15:16,1
+593,sgrand2,Steve,Granda,5/1/12,u,f,9/11/12 1:28,8/28/16 15:16,Steve Jovani Granda,320ad105-2036-4640-b326-17b4a61050a3,8/28/16 15:16,1
+603,mdierke2,Matthew,Dierker,5/1/15,u,f,9/11/12 11:19,8/28/16 15:16,Matthew V Dierker,a67fadfb-9f77-4d03-ae98-28a065fa7cd3,8/28/16 15:16,1
+613,owens12,Gavin,Owens,5/1/13,u,f,9/11/12 12:49,8/28/16 15:16,Gavin D Owens,97b9c552-acbc-4ab0-a0b0-9eed0c49f7c0,8/28/16 15:16,1
+693,bchapman,Briana,Chapman,5/1/16,u,i,9/12/12 16:45,8/28/16 15:16,Briana Celeste Chapman,09a48ec0-7771-4833-9456-8f4c26e58c38,8/28/16 15:16,1
+703,zmick2,David,Zmick,5/1/16,u,i,9/12/12 16:50,8/29/16 22:11,David P Zmick,12a8ac84-6450-409d-b1c8-4c77db9e1c53,8/28/16 15:16,0
+723,ginsbur3,Joshua,Ginsburg,5/1/14,u,i,9/12/12 18:54,8/28/16 15:16,Josha Nathan Ginsburg,2c573f37-abd3-49fb-aa3d-65dff169ce9d,8/28/16 15:16,1
+733,puchner2,Luke,Puchner-Hardman,5/1/16,u,i,9/12/12 23:34,8/28/16 15:16,Luke V Puchner-Hardman,bfddab6b-0a6d-41b9-840d-310d87bdc5b9,8/28/16 15:16,1
+773,horn5,Caroline,Horn,12/1/13,u,i,9/14/12 13:04,8/28/16 15:16,Caroline Frances Horn,362bda3e-5473-47ac-a27c-355ff5527cfc,8/28/16 15:16,1
+793,maxwang3,Maximilian,Wang,5/1/16,u,i,9/14/12 14:01,8/28/16 15:16,Maximilian Minglei Wang,cbe061a3-1d0a-435e-9eee-4e456ec9c8ef,8/28/16 15:16,1
+823,bjryan2,Brendan,Ryan,12/1/14,u,f,9/14/12 14:22,8/28/16 15:16,Brendan J Ryan,0d3f1678-dd50-4c5e-9f31-37cccf0f4eb7,8/28/16 15:16,1
+853,vasamse2,Sri,Vasamsetti,5/1/16,u,f,9/16/12 14:46,8/28/16 15:16,Sri Srujana Vasamsetti,cab4e1de-4f9f-4242-ad25-487d422af731,8/28/16 15:16,1
+903,deveras2,Diego Tomas Romario,Deveras,5/1/16,u,i,9/17/12 11:46,8/28/16 15:16,Diego Tomas Romario Concio Deveras,a71ac4d1-5683-453d-8e84-e9ed3090cfe2,8/28/16 15:16,1
+923,schopra2,Samarth,Chopra,5/1/15,u,i,9/17/12 12:25,8/28/16 15:16,Samarth K Chopra,8b3d1498-3616-4ffd-98f8-b46bf1dbbdb6,8/28/16 15:16,1
+933,katz12,Andy,Katz,5/1/13,u,f,9/17/12 12:30,8/28/16 15:16,Andrew C Katz,44c262ee-3bd1-4b5e-8e54-e7a467e2e759,8/28/16 15:16,1
+943,hadiwij2,Alexander,Hadiwijaya,5/1/14,u,f,9/17/12 12:48,8/28/16 15:16,Alexander Daniel Hadiwijaya,1c5479d3-bebe-41e1-b5cf-8fb72c5c44b3,8/28/16 15:16,1
+953,maguire7,James,Maguire,5/1/14,u,i,9/17/12 13:05,8/28/16 15:16,J Michael Maguire,227a1d88-c2c1-4199-a3ae-1954558b3a60,8/28/16 15:16,1
+1013,awni1,Hani,Awni,5/1/17,u,i,9/17/12 13:52,8/28/16 15:16,Hani Walid Awni,5f86616c-bcaf-4fa4-9208-9cbfefb5548c,8/28/16 15:16,1
+1043,yoon50,Hyemin ,Yoon,5/1/14,u,i,9/17/12 14:46,8/28/16 15:16,Hyemin Yoon,35e02d34-166f-479c-b847-db26116e8f04,8/28/16 15:16,1
+1063,wang213,Chen,Wang,12/1/12,u,f,9/17/12 14:53,8/28/16 15:16,Chen Wang,7e128aa4-fd89-4f4a-bdb7-ad62ba12e79a,8/28/16 15:16,1
+1073,rlarson2,R. Cory,Larson,5/1/16,u,i,9/17/12 15:08,8/28/16 15:16,Robert C Larson,6f36cc04-596c-41ae-b5da-d3cb390ef389,8/28/16 15:16,1
+1103,rdatta2,Rahul,Datta,5/1/15,u,f,9/17/12 16:07,8/28/16 15:16,Rahul S Datta,2f34c916-afdc-4d27-a600-b4f3376dbe65,8/28/16 15:16,1
+1113,selcik2,Can,Selcik,5/1/15,u,i,9/17/12 16:20,8/28/16 15:16,Can Selcik,1a1f2cdf-a34f-4cb5-a343-37be3b3dade8,8/28/16 15:16,1
+1143,jcespin2,John,Espinosa,5/1/15,u,f,9/17/12 18:27,8/28/16 15:16,John C Espinosa,7ed4fe9d-9029-4e93-928c-afdf7af4ed96,8/28/16 15:16,1
+1193,erikluo2,Erik,Luo,5/1/16,u,i,9/17/12 19:50,8/28/16 15:29,Erik S Luo,1d26241f-95ab-497e-b342-d8d8b3731802,8/28/16 15:16,0
+1223,sharaba2,Islam,Sharabash,5/1/13,u,i,9/17/12 21:09,8/28/16 15:16,Islam Mohamed Sharabash,ea5e4a06-0e36-4ca9-aab0-9e7aad982337,8/28/16 15:16,1
+1263,sud2,Paras,Sud,5/1/14,u,i,9/18/12 0:09,8/28/16 15:16,Paras Sud,d4b3f67e-279d-4a62-8f91-082ac875e54a,8/28/16 15:16,1
+1273,sbhadur2,Siddharth ,Bhaduri,12/1/17,m,i,9/18/12 0:24,8/28/16 15:24,Siddharth Bhaduri,237447f5-458c-4bb5-93a1-95fdb29fa6cd,8/28/16 15:16,1
+1283,varshav2,Kirill,Varshavskiy,5/1/15,u,i,9/18/12 2:22,8/28/16 15:16,Kirill Varshavskiy,97691cc4-6505-4c41-bee2-9c15443b8269,8/28/16 15:16,1
+1313,schweik1,Daniel,Schweikert,5/1/14,u,i,9/18/12 13:48,8/28/16 15:16,Daniel Paul Schweikert,f4ea1826-d0f2-432d-b4fc-18e0e6c43cf0,8/28/16 15:16,1
+1383,balagop2,Anirudh,Balagopal,5/1/16,u,i,9/19/12 19:34,8/28/16 15:16,Anirudh Balagopal,729b03b6-a1bf-4b84-bc26-b0faa9247021,8/28/16 15:16,1
+1393,staszel1,Michael,Staszel,5/1/14,u,f,9/19/12 19:35,8/28/16 15:16,Michael Karol Staszel,3465a92f-16cc-4cdf-8702-67d1aeccb7cc,8/28/16 15:16,1
+1473,rlee46,Richard,Lee,5/1/16,u,i,9/19/12 23:23,8/28/16 16:09,Richard Zhi Yang Lee,41f4b520-a8e8-4543-b153-4905d19de07e,8/28/16 15:16,0
+1533,ymeng7,Yalan,Meng,5/1/15,u,f,9/20/12 20:38,7/24/14 15:22,Yalan Meng,97597f8f-69a9-4f4c-bb0d-5d219cf89f73,7/23/14 2:56,0
+1553,jchen121,James,Chen,5/1/16,u,i,9/20/12 21:23,8/28/16 15:16,James Chen,013cbdab-dcb6-4148-9bfd-90367212394c,8/28/16 15:16,1
+1663,fairban5,Taylor,Fairbank,5/1/14,u,i,9/22/12 20:58,8/28/16 15:16,John T Fairbank,73a8efec-ce42-465d-9415-6f8cb49a1492,8/28/16 15:16,1
+1703,jcheng26,Johnny,Cheng,5/1/14,u,f,9/23/12 19:04,8/28/16 15:16,Johnny Cheng,19d7f13e-56ee-42dd-86d2-b65bbfab6de8,8/28/16 15:16,1
+1713,rjrusse2,Rashad,Russell,5/1/16,u,i,9/24/12 4:02,8/28/16 15:16,Rashad Jaray Russell,7d52cbeb-8cda-4af6-8aa0-86cb1a0cd1af,8/28/16 15:16,1
+1733,amhendr2,Alex,Hendrix,12/1/13,u,i,9/24/12 16:29,8/28/16 15:16,Alex Michael Hendrix,e4369dbd-66db-4627-9f57-cb656fc2d5d6,8/28/16 15:16,1
+1743,metro1,Jessica,Metro,5/1/13,u,f,9/24/12 17:27,8/28/16 15:16,Jessica Frances Metro,8facee1c-a974-46cf-8fa0-b6ad36caee1a,8/28/16 15:16,1
+1833,pang9,Daniel,Pang,5/1/14,u,i,9/24/12 17:34,8/28/16 15:16,Daniel Jinwoo Pang,ebd94b16-0cfc-4a80-baad-cfb6813faf99,8/28/16 15:16,1
+1843,akapoor5,Akash,Kapoor,12/1/15,u,i,9/24/12 17:35,8/28/16 15:16,Akash Kapoor,88f3c193-1445-41a9-bffb-8fe0631147ce,8/28/16 15:16,1
+1933,ltripu2,Litin,Tripuraneni,12/1/13,u,i,9/24/12 19:07,8/28/16 15:16,Litin Chowdary Tripuraneni,245496df-1630-4cef-95c4-bd84f06b1b9c,8/28/16 15:16,1
+1943,hann2,Philip,Hann,5/1/15,u,i,9/24/12 19:21,8/28/16 15:16,Philip Joseph Hann,0ea72eeb-94ff-4a70-bafc-42df911082c4,8/28/16 15:16,1
+1953,hibner1,Nathan,Hibner,5/1/14,u,i,9/24/12 19:26,8/28/16 15:16,Nathan C Hibner,c4da814c-d3ac-431f-8df4-1d97f4ba6fe7,8/28/16 15:16,1
+1983,birman1,Brianna,Birman,5/1/13,u,f,9/24/12 21:23,8/28/16 15:16,Brianna Valentine Birman,603f8a67-2174-4b84-9943-8b774fca29ae,8/28/16 15:16,1
+1993,proctor4,Ciara,Proctor,5/1/13,u,f,9/24/12 21:31,8/28/16 15:16,Ciara Sarah Proctor,c2885aa8-fd30-4e93-9cac-6a4f5d445f5f,8/28/16 15:16,1
+2003,sivaram2,Aswin,Sivaraman,5/1/15,u,i,9/24/12 21:45,8/28/16 15:16,Aswin Sivaraman,f7197fe7-5081-442f-87ad-1d1a8e38d18f,8/28/16 15:16,1
+2013,sanbhad2,Rohit,Sanbhadti,5/1/16,u,i,9/24/12 22:12,8/28/16 15:16,Rohit N Sanbhadti,709c0ef8-2c06-4de4-921e-6f776f198463,8/28/16 15:16,1
+2043,hebein1,Adam,Hebein,5/1/14,u,i,9/25/12 17:15,8/28/16 15:16,Adam J Hebein,49c43bea-1a5c-4fd3-9f2a-be3809522857,8/28/16 15:16,1
+2163,graf5,Matthew,Graf,5/1/14,u,i,9/28/12 9:08,2/4/14 20:56,Matthew M Graf,12f62a69-2c31-48c7-a82c-6516b06df6ab,2/4/14 18:14,0
+2203,lima6,Li,Ma,5/1/14,u,i,9/28/12 16:15,7/23/14 8:12,Li Ma,84228743-965b-41c5-8e05-532d6689f42e,7/23/14 2:57,0
+2353,rkapoor6,Rohan,Kapoor,5/1/16,u,i,10/1/12 0:38,8/28/16 15:16,Rohan Kapoor,4f1401c8-8af6-46b9-9053-02fe8c2c60f0,8/28/16 15:16,1
+2363,hsingh10,Harjas,Singh,5/1/15,u,i,10/1/12 1:25,8/29/16 19:10,Harjas Singh,eb9a1a94-8d15-4b9a-a4bf-718818c85f13,8/28/16 15:16,0
+2373,joyner1,Eric,Joyner,5/1/13,u,f,10/1/12 12:11,8/28/16 15:16,Eric Robert Joyner,fc1148fb-e283-4a3d-a9b7-eaf8745de7aa,8/28/16 15:16,1
+2403,marner2,Joshua,Marner,5/1/14,u,i,10/1/12 21:16,8/28/16 15:16,Joshua V Marner,abade603-7974-4fc8-9cca-a2feb87583ee,8/28/16 15:16,1
+2453,znichol2,Zane,Nicholson,5/1/15,u,f,10/3/12 1:35,8/28/16 15:16,Zane A Nicholson,2b04cf5d-5be5-4e74-961b-22cc6f1b3984,8/28/16 15:16,1
+2553,jdtran2,Joseph,Tran,5/1/15,u,i,10/4/12 13:44,8/28/16 15:16,Joseph Dung Tran,c7844969-9626-4fa7-bf43-5bea5b4d18f3,8/28/16 15:16,1
+2593,sha11,Weiyu,Sha,5/1/14,u,f,10/4/12 18:34,8/28/16 15:16,Weiyu Sha,f7415a0a-55d8-424e-b822-1928345462bd,8/28/16 15:16,1
+2603,sobh2,Yusuf,Sobh,5/1/15,u,f,10/4/12 18:39,8/28/16 15:16,Yusuf Nahil Sobh,0d90eadf-ae4f-4983-bc32-f8a21f53e23c,8/28/16 15:16,1
+2643,aenelso2,Abigail,Steitz,5/1/15,u,f,10/4/12 21:20,8/28/16 15:16,Abigail Elizabeth Nelson,f74573b0-2d84-4880-992b-200738574013,8/28/16 15:16,1
+2693,chrzano1,Katelyn,Chrzanowski,12/1/14,u,f,10/4/12 23:44,8/28/16 15:17,Katelyn E Chrzanowski,ae6ffeab-26be-4103-84dd-f7c790adfb58,8/28/16 15:17,1
+2813,link3,Grace,Link,5/1/13,u,f,10/5/12 9:50,8/28/16 15:17,Grace Erin Link,ec7ff3e4-cd3c-4b93-a3a9-ea5a914f98b9,8/28/16 15:17,1
+2873,rao21,Sohan,Rao,5/1/14,u,i,10/5/12 10:30,8/28/16 15:17,Sohan Rao,4106c626-02f6-4ac0-b408-97efc7ce802a,8/28/16 15:17,1
+2953,nhandle2,Nathan,Handler,5/1/15,u,f,10/5/12 11:18,8/28/16 15:17,,acb44fb9-6378-4dcf-9bbb-3f06432c17cc,8/28/16 15:17,1
+2963,zhang349,Xiaodan,Zhang,5/1/14,u,i,10/5/12 11:30,8/29/16 16:04,Xiaodan Zhang,dc6af745-7324-4755-a054-2bf400d7a5b7,8/28/16 15:17,0
+3023,osacky2,Jonathan,Osacky,5/1/16,u,i,10/5/12 12:24,8/28/16 15:17,,435f51f6-49ae-4e27-80b8-6bae33e80429,8/28/16 15:17,1
+3093,paul23,Alexander,Paul,5/1/14,u,i,10/5/12 12:56,8/28/16 15:17,,02d85c54-592b-4bf3-960a-fc105611ec9a,8/28/16 15:17,1
+3113,sahgal2,Praneet,Sahgal,5/1/15,u,i,10/5/12 13:06,8/28/16 15:17,Praneet K Sahgal,b9bdaa88-b20b-446b-ac1a-8174f539b34c,8/28/16 15:17,1
+3133,rustagi1,Anshu,Rustagi,5/1/13,u,f,10/5/12 13:13,8/28/16 15:17,,7c493579-aa8f-4de4-b21e-3ee127e0d652,8/28/16 15:17,1
+3193,khattar2,Bhuwan,Khattar,12/1/14,u,f,10/5/12 13:33,8/28/16 15:17,,33f27250-0427-421e-9142-5402a4b0e8f5,8/28/16 15:17,1
+3243,alisakr1,Ali ,Sakr,12/1/13,u,i,10/5/12 13:47,8/28/16 15:17,,e541c2e7-586a-4b82-9ffd-67849c8ee4a3,8/28/16 15:17,1
+3273,daferna2,Daniel,Fernandes,5/1/16,u,i,10/5/12 13:56,8/28/16 15:17,Daniel A Fernandes,d0d42d7c-6e31-4c62-b5a2-f676f8688ce2,8/28/16 15:17,1
+3293,nayudu2,Nishant,Nayudu,5/1/15,u,i,10/5/12 14:31,8/28/16 15:17,Nishant Gonela Nayudu,b72979d1-35c8-4b52-8d59-43e058a2965c,8/28/16 15:17,1
+3313,byun24,Kyungwha,Byun,5/1/14,u,i,10/5/12 14:37,8/28/16 15:17,,0d312649-22ac-47bd-ad24-30d97c9f495e,8/28/16 15:17,1
+3353,rosnbrg2,Martin,Rosenberg,5/1/13,u,f,10/5/12 14:56,8/28/16 15:17,,477895f5-ab2a-49c6-bec2-092fd562680c,8/28/16 15:17,1
+3373,pandey5,Jatin,Pandey,5/1/14,u,i,10/5/12 14:59,8/28/16 15:17,,dd7c64b4-8960-4de6-92c0-aafedc34e42e,8/28/16 15:17,1
+3423,weinstn2,Jack,Weinstein,5/1/15,u,f,10/5/12 15:08,8/28/16 15:17,,49d7956b-15d5-4b5c-ae83-c4baae50ca73,8/28/16 15:17,1
+3483,liao24,Feiyin,Liao,5/1/13,u,f,10/5/12 15:28,8/28/16 15:17,,10b139fb-c05f-4b91-b324-ce5a90e8cd60,8/28/16 15:17,1
+3493,maliped1,Abhimanyu,Malipeddi,12/1/13,u,i,10/5/12 15:58,8/28/16 15:17,Abhimanyu Malipeddi,bee1bf82-046e-4902-b21e-8655d60acb67,8/28/16 15:17,1
+3573,jren4,Jia Chen,Ren,5/1/14,u,i,10/6/12 2:43,8/28/16 15:17,Jia Chen Ren,c7f1940f-fa9a-4636-97a0-28277a0a89f9,8/28/16 15:17,1
+3593,yizhou4,Yi,Zhou,5/1/15,u,f,10/6/12 10:14,8/28/16 15:17,Yi Zhou,45d4edde-75e9-4e2e-b9f9-e658d6d0b737,8/28/16 15:17,1
+3643,echuber2,Eric,Huber,12/1/14,u,i,10/6/12 14:08,8/28/16 15:17,Eric C Huber,70f8b607-3c53-41da-b4e2-0a951ad61882,8/28/16 15:17,1
+3653,lzhu14,linhai,zhu,12/1/13,u,f,10/6/12 14:40,8/28/16 15:18,Linhai Zhu,5248814c-c406-48b2-9a2a-f997d848f949,8/28/16 15:17,0
+3783,canaday1,Ian,Canaday,5/1/15,u,i,1/21/13 19:11,7/23/14 9:32,Ian M Canaday,5b8d67a8-1065-4478-a455-9a1d000c7ebc,7/23/14 2:57,0
+3793,marya2,Rishabh,Marya,5/1/15,u,f,1/28/13 2:36,8/28/16 15:17,Rishabh Kumar Marya,2e0dc5ec-97ef-4abe-8aef-793165440b72,8/28/16 15:17,1
+3813,halstea2,Joshua,Halstead,12/1/14,u,f,1/29/13 22:00,8/28/16 15:17,Joshua W Halstead,d9c329a6-0ea9-4467-9b13-7cd9d599ffed,8/28/16 15:17,1
+3823,mrosens2,Michael,Rosenston,5/1/16,u,i,1/29/13 22:21,8/28/16 15:17,Michael F Rosenston,7601c9b9-aaab-48d4-b202-5db2be19c132,8/28/16 15:17,1
+3843,brill2,Aaron,Brill,5/1/14,u,f,2/19/13 14:49,8/28/16 15:17,Aaron Joseph Brill,0c36664a-f6ea-4c22-bde8-5a627007c032,8/28/16 15:17,1
+3873,zyang36,Zhengqi,Yang,5/1/16,u,i,4/1/13 19:46,8/28/16 15:17,Zhengqi Yang,73a5536b-0f15-4388-a76d-0af9980c052f,8/28/16 15:17,1
+3883,awalte9,Austin,Walters,5/1/15,u,f,9/2/13 19:52,8/28/16 15:17,Austin G Walters,c36e51a5-b567-4aeb-9542-8e4123574d2c,8/28/16 15:17,1
+3893,njeffre2,Nicholas,Jeffrey,5/1/15,u,i,9/2/13 23:18,8/28/16 15:17,Nicholas Larry Jeffrey,e68cec98-c23d-475b-913b-e0a382348297,8/28/16 15:17,1
+3913,jankaus2,Thomas,Jankauski,5/1/15,u,f,9/4/13 15:37,8/28/16 15:17,Thomas P Jankauski,349367b9-771a-40c3-b8ce-3e5e7124a359,8/28/16 15:17,1
+3923,zaytsev2,Andrey,Zaytsev,12/1/17,m,i,9/5/13 16:56,8/29/16 20:43,Andrey Zaytsev,a064b9ea-e804-4f6f-857d-2661ffe4f7ff,8/28/16 15:17,1
+3943,ggao2,Guangzhe,Gao,5/1/15,u,i,9/6/13 16:16,8/28/16 15:17,Guangzhe Gao,106e7a6d-1126-4c13-b113-1851489ff877,8/28/16 15:17,1
+4013,xugao1,Xu,Gao,12/1/13,u,f,9/9/13 0:19,8/28/16 15:17,Xu Gao,ef06e4dd-c11b-431e-84f7-a359cb61f4fc,8/28/16 15:17,1
+4023,gandhi23,Manan,Gandhi,5/1/14,u,f,9/9/13 11:02,8/28/16 15:17,Manan R Gandhi,c5e496d5-d7fc-48a6-a49d-5086cbf0b567,8/28/16 15:17,1
+4153,rbhatia5,Rahul,Bhatia,5/1/15,u,i,9/9/13 17:30,8/28/16 15:17,,0cfa1348-53fc-4e1f-a4f8-33825365e633,8/28/16 15:17,1
+4163,bwang19,Bernard,Wang,5/1/17,u,i,9/9/13 17:31,9/7/16 23:29,,9d95aaeb-76f3-4c75-a46a-d3c16608f5be,8/28/16 15:17,0
+4293,jtmilla2,Joseph,Milla,12/1/15,u,i,9/9/13 17:45,8/28/16 15:17,,e746a8a5-64f3-4b89-8ce7-669c4b74029c,8/28/16 15:17,1
+4403,raberns2,Richard,Bernstein,5/1/17,u,i,9/9/13 17:56,8/28/16 15:17,,2be233a8-4a50-4433-a1f8-4a649934a955,8/28/16 15:17,1
+4523,eshih3,Eva,Shih,5/1/14,u,f,9/9/13 18:20,8/28/16 15:17,,419c5242-5fd5-4631-942b-6c33e9e718d7,8/28/16 15:17,1
+4623,xuezou3,Xue,Zou,5/1/16,u,i,9/9/13 18:35,8/28/16 15:17,,cef57674-e0f2-496e-a376-6b46641c008f,8/28/16 15:17,1
+4693,amithir2,Chamila,Amithirigala,5/1/17,m,f,9/9/13 18:45,8/28/16 15:26,,b708fb5f-01bc-4b44-86de-cd134b88435d,8/28/16 15:17,1
+4793,tcolson2,Tom,Olson,5/1/15,u,f,9/9/13 19:14,8/29/16 4:34,,7ae85017-4a5f-49ea-8d9f-b40925002fbd,8/28/16 15:17,0
+4823,nmccord2,Nathan,McCord,5/1/17,u,i,9/9/13 19:21,8/28/16 15:17,,3b324795-1aa3-492b-9c34-cb2eda8330b6,8/28/16 15:17,1
+4883,klwang3,Kevin,Wang,5/1/17,u,i,9/9/13 19:32,8/28/16 15:17,,ce68e0a3-14d2-4a5b-9ae2-b8c79d56bacd,8/28/16 15:17,1
+4983,wahi2,Nikhil,Wahi,5/1/17,u,i,9/10/13 21:00,8/28/16 15:17,Nikhil Wahi,b8c8fdc3-6e7d-41bc-8018-66f2aaf9c28a,8/28/16 15:17,1
+5003,aagrawl3,Ashish,Agrawal,12/1/16,m,f,9/10/13 22:21,8/28/16 17:18,Ashish Agrawal,bbd7c5aa-0fbe-4e8e-98f6-02fab9a3885b,7/23/14 2:57,0
+5013,luber2,Jordan,Luber,5/1/16,m,i,9/11/13 0:44,8/28/16 15:17,Jordan C Luber,50a7aba3-72d7-4a93-ae48-23487e8272fa,8/28/16 15:17,1
+5033,chubin2,Margie,Chubin,5/1/17,u,f,9/12/13 16:53,8/28/16 15:21,Margie B Chubin,4531444f-1db0-4f2a-a505-6ced865757b7,8/28/16 15:17,1
+5053,schen79,Shuotian,Chen,12/1/14,u,f,9/16/13 20:24,8/28/16 15:17,Shuotian Chen,b87ce2ce-79e0-496e-a05d-a98a09736bb8,8/28/16 15:17,1
+5083,mlliu2,Michael,Liu,5/1/17,u,i,9/25/13 2:33,8/28/16 15:17,Michael L Liu,c29d0cd0-6b81-4ca0-a23d-59b38d4912c1,8/28/16 15:17,1
+5153,nunni2,Nikhil,Unni,12/1/16,u,f,10/8/13 20:35,8/29/16 10:53,Nikhil Unni,35cc8ed9-1966-4fec-83f2-18d35a40d699,8/28/16 15:17,1
+5163,laane2,Sam,Laane,5/1/15,u,i,10/9/13 17:58,8/28/16 15:17,Samuel H Laane,23d4ca83-c37c-4994-bda7-82afca1e2205,8/28/16 15:17,1
+5173,nassri2,Aessa,Nassri,5/1/16,u,f,10/9/13 21:38,8/28/16 15:17,,59579c03-38cc-4306-b53e-939f8207b3f4,8/28/16 15:17,1
+5233,ssfu2,Shunhua,Fu,5/1/17,u,i,10/12/13 15:36,8/28/16 15:17,Shunhua S Fu,d8d326cc-c209-4b2a-99ae-33ee8e2c04d8,8/28/16 15:17,1
+5353,jbbaile2,Jacob,Bailey,5/1/18,u,i,2/4/14 19:27,8/28/16 15:18,Jacob B Bailey,a893e2b5-3f5c-481c-9cd5-582c9f5262aa,8/28/16 15:17,1
+5363,kaweror2,Aaron,Kawer,12/1/17,u,i,2/4/14 23:41,8/29/16 10:16,Aaron Kawer Oreamuno,7a536a82-c545-4abd-8ce8-9c205160668d,8/28/16 15:17,1
+5413,pkowalc2,Peter,Kowalczyk,5/1/16,u,f,2/18/14 0:44,8/28/16 15:17,Piotr Kowalczyk,3af699d0-6611-4b4a-9bcc-de69dbbffba6,8/28/16 15:17,1
+5433,kortend2,Nicholas,Kortendick,5/1/17,u,f,2/18/14 13:21,8/28/16 15:21,Nicholas Daniel Kortendick,1eccfc73-1035-4185-97c8-528bf2e868ef,8/28/16 15:17,1
+5463,liolios2,Spencer,Liolios,5/1/14,u,f,2/18/14 13:32,8/28/16 15:17,Spencer Riley Liolios,e2ba11bc-d64f-4ac5-a22e-54a98c9a8b01,8/28/16 15:17,1
+5493,lung3,Li-Hsing,Lung,5/1/14,u,f,2/18/14 13:50,8/28/16 15:17,Li-Hsing Lung,76c87a39-dcb5-43b8-bf4b-c99e93b3e0bb,8/28/16 15:17,1
+5503,festekj2,Alek,Festekjian,5/1/17,u,i,2/18/14 13:57,8/28/16 15:17,Alek R Festekjian,aca309c9-977d-4efe-a692-7ab08d45d0bf,8/28/16 15:17,1
+5513,yiboguo2,Yibo,Guo,5/1/15,u,i,2/18/14 14:35,8/28/16 15:17,Yibo Guo,e31a7814-12d6-45a5-8591-d3ef4c1852e8,8/28/16 15:17,1
+5523,lseller2,Lily,Sellers,5/1/16,u,i,2/18/14 15:31,8/28/16 15:17,Lily G Sellers,b56135cf-0b2f-4eea-8f22-7afda2e13145,8/28/16 15:17,1
+5543,zbrewer2,Zach,Brewer,5/1/17,u,f,2/18/14 19:50,8/29/16 2:26,Zachary Robert Brewer,610f41e4-75c5-4a2c-a343-34c1a5cd1cd4,8/28/16 15:17,1
+5553,srghnth2,Sachin,Raghunathan,5/1/15,u,f,2/18/14 20:24,8/28/16 15:17,Sachin Raghunathan,4f82295f-ce81-44e0-af57-4c96553f18ee,8/28/16 15:17,1
+5603,mdasgup2,Milan,Dasgupta,12/1/15,u,f,2/19/14 0:44,8/28/16 15:17,Milan Dasgupta,2189ced1-d4e7-4619-b1fc-a6f37244ee1d,8/28/16 15:17,1
+5673,chizhou3,Chi,Zhou,5/1/15,u,i,2/20/14 18:35,8/28/16 15:17,Chi Zhou,0c8b85c5-58a3-4f0b-8516-439132daeef4,8/28/16 15:17,1
+5683,amyao2,Allen,Yao,5/1/14,u,f,2/25/14 14:51,8/30/16 21:52,Allen Mitchell Yao,bdc0222c-fc13-42f6-80b8-4ccfeb2bbed8,8/28/16 15:17,0
+5733,mallava2,Akhil,Mallavarapu,5/1/16,u,i,7/29/14 18:03,8/28/16 15:17,#NAME?,2c57d58d-3c2d-41dc-8507-938318f53018,8/28/16 15:17,1
+5753,rseth2,Rohan,Seth,12/1/16,u,i,8/9/14 17:13,8/28/16 15:17,Rohan Seth,b013983e-b0cd-4301-9e79-89ddd686036c,8/28/16 15:17,1
+5773,shin14,Yosub,Shin,12/1/15,u,i,8/10/14 11:49,8/28/16 15:17,Yosub Shin,ba34674b-f78f-4d0a-86c5-a17583183f8e,8/28/16 15:17,1
+5803,akleinr2,Allen,Kleiner,5/1/16,u,f,8/16/14 12:08,8/28/16 15:17,Allen C Kleiner,868ffb0d-feb6-4704-890b-e484cc353884,8/28/16 15:17,1
+5813,pinkert2,Stephen,Pinkerton,5/1/18,u,i,8/17/14 3:06,8/28/16 15:17,Stephen M Pinkerton,2ba85a47-f240-446c-8bff-fc4d389b9a6e,8/28/16 15:17,1
+5833,fuss1,Jacob,Fuss,12/1/14,u,f,8/27/14 13:03,8/28/16 15:17,Jacob D Fuss,0c8694a1-c81c-4200-b5f4-4802bedbdd4b,8/28/16 15:17,1
+5853,trueb2,Jacob,Trueb,5/1/18,u,i,8/27/14 13:33,8/28/16 15:17,Jacob Walker Trueb,7088bf77-e76b-4398-9877-20184b02c07d,8/28/16 15:17,1
+5863,sundrsn2,Aravind,Sundaresan,5/1/18,u,i,8/27/14 13:47,8/28/16 15:17,Aravind Sundaresan,c1ca0f8e-1028-49cf-a77d-b92698187d81,8/28/16 15:17,1
+5883,kbala2,Karthik,Bala,12/1/17,m,i,8/27/14 14:12,8/28/16 15:32,Karthik M Bala,cc39a80e-be16-47de-aa10-469c901bd2b9,8/28/16 15:17,1
+5903,bdelapor,Benjamin,Delaporte,5/1/17,u,f,8/27/14 15:49,8/30/16 21:14,Benjamin W Delaporte,3de58e9a-9844-4029-8597-e9fc1d4aa4f6,8/28/16 15:17,1
+5913,rmathur2,Rohan,Mathur,5/1/17,u,i,8/27/14 16:07,8/29/16 14:53,Rohan Santosh Mathur,f5541013-6767-426f-b461-02d9a2aea29f,8/28/16 15:17,1
+5943,yanzhan2,Yan,Zhan,5/1/18,u,i,8/28/14 16:52,8/28/16 15:17,Yan Zhan,f57fd987-c3fc-4877-bd04-a0aea70c3f3e,8/28/16 15:17,1
+5953,bensal2,Jay,Bensal,5/1/16,u,i,8/29/14 13:04,8/28/16 15:17,Jay R Bensal,4cc9d7a2-ca28-4cbf-bdb2-877f5c2f5c6a,8/28/16 15:17,1
+5963,ehicko2,Eli,Hickox,5/1/16,u,i,9/1/14 13:36,8/28/16 15:17,Eli Spencer Hickox,7414c55b-c922-4369-a9a9-9b70a242da67,8/28/16 15:17,1
+5973,bluo4,Bihao,Luo,5/1/17,u,i,9/1/14 20:21,8/28/16 15:17,Bihao Luo,5705c257-c1af-4b30-81fc-6faf2d3f7c66,8/28/16 15:17,1
+5983,faler2,Marrissa,Hellesen,5/1/15,u,f,9/2/14 15:04,8/28/16 15:20,Marrissa Marie Hellesen,cf1cf20f-e5a4-4d9c-9f3e-5365aadbdf23,8/28/16 15:17,0
+5993,ashokku2,Sathvika,Ashokkumar,5/1/17,u,f,9/2/14 15:06,9/28/16 12:33,Sathvika Ashokkumar,90a19325-a1b7-4833-9b8b-f45dce5b4145,8/28/16 15:17,1
+6003,vndrbch2,Victoria,Vanderbach,5/1/17,u,f,9/2/14 15:14,8/30/16 14:39,Victoria G Vanderbach,688043c5-eb63-4d89-a05d-33a948777781,8/28/16 15:17,1
+6023,ayang14,Andrew,Yang,5/1/18,u,i,9/4/14 18:43,8/28/16 15:31,Andrew Yang,c4b76d23-2df9-4f16-bf6c-796473f68ad1,8/28/16 15:17,1
+6033,mliu56,Matthew,Liu,5/1/17,u,i,9/4/14 19:48,8/28/16 15:17,Matthew Liu,29dcd8fb-5604-4ffc-aa0f-33f74c77a5f1,8/28/16 15:17,1
+6053,ong20,Timothy,Ong,5/1/17,u,f,9/4/14 20:08,8/28/16 16:14,Timothy Ong,9d8ff070-5093-443a-b687-39bac2fb87b8,8/28/16 15:17,1
+6063,perreux2,Michael,Perreux,5/1/16,u,i,9/6/14 15:50,8/28/16 15:17,Michael John Perreux,638e4d9d-f1f7-4a73-a25f-17558393569c,8/28/16 15:17,1
+6073,hanchen2,Han,Chen,12/1/16,u,i,9/6/14 15:52,8/28/16 15:17,Han Yang Chen,259ef553-129b-441b-8cee-c07b6d6b5bee,8/28/16 15:17,1
+6083,khandek2,Sujay,Khandekar,5/1/18,m,i,9/6/14 19:14,8/28/16 15:17,Sujay S Khandekar,ffa1ce47-905c-4b97-bdbe-ebc09d87a8fd,8/28/16 15:17,1
+6113,kimberg2,Zach,Kimberg,5/1/18,u,i,9/8/14 14:12,9/8/16 23:33,Zachary G Kimberg,a822209f-3ac6-4760-9a60-d127a56dbb28,8/28/16 15:17,1
+6133,simonov2,Pavle,Simonovic,5/1/18,u,i,9/9/14 23:11,8/28/16 15:17,Pavle Simonovic,3abf61b8-9dd9-4614-a336-b62527bcffee,8/28/16 15:17,1
+6163,ptgibbo2,Paul,Gibbons,12/1/16,u,i,9/15/14 16:35,8/28/16 21:31,Paul T Gibbons,3b6f7225-db0d-496d-827f-da198fd5a91c,8/28/16 15:17,1
+6173,kothuri2,Radhir,Kothuri,5/1/18,u,i,9/15/14 23:18,8/29/16 16:45,Radhir Kothuri,f4ae1bae-1717-43ec-869d-88d97575e218,8/28/16 15:17,1
+6203,schundi2,Sairam Sasank,Chundi,5/1/15,u,f,9/18/14 14:29,8/28/16 15:17,Sairam Sasank Chundi,0571a1c3-7237-45b5-b390-20269ea5cd5a,8/28/16 15:17,1
+6215,laffrty2,Noah,Lafferty,5/1/16,u,i,9/22/14 19:37,8/28/16 15:17,Noah J Lafferty,6bb23fab-c302-421a-9094-e066f49bb9b5,8/28/16 15:17,1
+6217,qtan4,Quansheng,Tan,5/1/17,u,i,9/23/14 20:19,8/28/16 15:17,Quansheng Tan,2a81fb9f-67c2-4138-8b23-0372f1480eb5,8/28/16 15:17,1
+6219,spratle2,Jessica,Spratley,5/1/17,u,f,9/24/14 15:28,9/6/16 12:59,Jessica A Spratley,ac5116f8-cfbd-47b8-a4d7-dfea1592b8c2,8/28/16 15:17,1
+6222,lhumphr2,Lawrence,Humphrey,12/1/16,u,f,10/1/14 9:54,8/28/16 15:20,"Lawrence Steven-Bradley Humphrey, IV",7742abf7-3c6a-4214-a076-70a4cb169e05,8/28/16 15:17,1
+6224,dalmia3,Kashev,Dalmia,5/1/16,m,i,10/1/14 10:02,8/28/16 15:17,Kashev Dalmia,82a76838-faaf-4846-a95d-b0ff43c5f9fd,8/28/16 15:17,1
+6230,johri3,Abhishek,Johri,5/1/18,u,i,10/1/14 10:50,9/6/16 15:10,Abhishek Johri,0c002f38-ef1f-4078-b710-7b30a949fddb,8/28/16 15:17,1
+6234,ssaxen4,Shashank,Saxena,5/1/18,u,i,10/1/14 11:25,8/28/16 19:11,Shashank Saxena,c010c0c9-fbad-410d-a6d9-e00c4cf865ad,8/28/16 15:17,1
+6235,roth15,Andrew,Roth,5/1/14,u,f,10/1/14 11:34,8/28/16 15:17,Andrew R Roth,65eec112-c03f-488c-ab43-a712011f5572,8/28/16 15:17,1
+6237,ngupta18,Narender,Gupta,5/1/16,m,f,10/1/14 12:46,8/28/16 15:17,Narender Gupta,2d15b825-a965-420f-a14f-9d835d219e69,8/28/16 15:17,1
+6244,desberg2,David,Desberg,5/1/18,u,i,10/1/14 13:38,8/28/16 15:17,David Simon Desberg,e3fa164b-2cbd-467b-85d4-f07cd9f110e5,8/28/16 15:17,1
+6245,akmodi2,Abhishek,Modi,5/1/16,u,f,10/1/14 13:42,8/28/16 17:09,Abhishek Kishore Modi,b2de61a6-b01f-4537-bccb-b393fcf873c3,8/28/16 15:17,1
+6247,cfan12,Connie,Fan,5/1/18,u,i,10/1/14 14:17,8/28/16 15:17,Connie Fan,e27de26c-06f1-42e3-8aeb-a3cd907333ec,8/28/16 15:17,1
+6248,zmmille2,Zach,Miller,5/1/16,u,i,10/1/14 14:30,8/28/16 15:17,Zachary M Miller,457d8aa7-3c3e-4ad4-b7b8-1380fbd7e760,8/28/16 15:17,1
+6249,sivagna2,Naren,Dasan,5/1/18,u,i,10/1/14 14:42,8/28/16 15:17,Naren Sivagnanadasan,9046433f-e87f-41c8-84d6-b2d454a99540,8/28/16 15:17,1
+6252,sksulli2,Stephen,Sullivan,5/1/17,u,i,10/1/14 15:37,8/28/16 15:17,Stephen K Sullivan,bd2d126a-05ab-47a2-b592-d3cd64b8fd26,8/28/16 15:17,1
+6253,dshin9,Dong Min,Shin,5/1/15,u,f,10/1/14 15:42,8/28/16 15:17,Dong Min Shin,a108e1a7-97ed-4390-902e-02528327250d,8/28/16 15:17,1
+6258,hkumar5,Harshit,Kumar,5/1/18,u,i,10/1/14 22:12,9/6/16 10:22,Harshit Kumar,eb5df083-fec0-4cc1-bc2e-298c5a236824,8/28/16 15:17,1
+6259,cshang4,Charles,Shang,5/1/17,u,i,10/1/14 22:15,8/28/16 15:17,Charles Shang,db8d9cd5-0016-4d0e-885e-c26108fe60b5,8/28/16 15:17,1
+6262,akgul1,Sara,Akgul,5/1/16,u,i,10/2/14 9:38,8/28/16 15:17,Sara Ezgi Akgul,3d3a3658-b5bb-4dde-94c3-0e2f5a234c50,8/28/16 15:17,1
+6263,tagarwl2,Tushar,Agarwal,5/1/18,u,i,10/2/14 15:10,9/7/16 8:25,Tushar Agarwal,ad764332-0b1d-4e9b-b8ad-3ff0c5119b2b,8/28/16 15:17,1
+6275,ajkrame2,Austin,Kramer,5/1/16,u,i,10/4/14 11:19,8/28/16 15:17,Austin J Kramer,aa13cb10-b8f3-4811-921a-b1b0f90f4f5a,8/28/16 15:17,1
+6277,mlhyder2,Matthew,Hyder,5/1/17,u,f,10/4/14 11:30,9/1/16 19:29,Matthew Lee Hyder,f1ce6618-f503-4c5c-bb50-36b86c02c31a,8/28/16 15:17,0
+6282,raguram2,Dhashrathg,Raguraman,5/1/15,m,f,10/4/14 11:37,8/28/16 15:17,Dhashrath Raguraman,0d16521a-e1de-4b5d-9b6b-34905cd58f73,8/28/16 15:17,1
+6290,cbhatia2,Curran,Bhatia,5/1/18,u,i,10/4/14 11:52,9/12/16 2:57,Curran Karan Bhatia,47eeccd6-e695-4039-89f9-3fa17fc1b48a,8/28/16 15:17,1
+6301,dyue2,Dingcheng,Yue,5/1/17,u,i,10/4/14 12:09,8/28/16 15:17,Dingcheng Yue,2a5c3a76-2c49-46f7-9076-efbf38693e40,8/28/16 15:17,1
+6317,dplecki2,Dylan,Plecki,5/1/18,u,i,10/4/14 12:36,8/28/16 15:17,Dylan John Plecki,fa400605-676b-475c-9d4c-bec73df113a9,8/28/16 15:17,1
+6320,dshin11,Daeyvn,Shin,5/1/15,u,i,10/4/14 12:39,8/28/16 15:17,DaeYun Shin,bee0cf11-8025-46f2-9656-ca67a532b24f,8/28/16 15:17,1
+6322,zding5,Ziqiao,Ding,5/1/17,u,f,10/4/14 12:40,8/29/16 21:54,Ziqiao Ding,ad6dc9b2-086a-486e-97b2-4bfbf9408c25,8/28/16 15:17,1
+6324,xyang46,Xinxin,Yang,12/1/15,u,i,10/7/14 20:00,8/30/16 0:12,Xinxin Yang,9c901055-c2b1-476e-9f3c-807755cf2c90,8/28/16 15:17,0
+6327,kedanli2,Kedan,Li,12/1/17,u,i,10/28/14 13:23,8/28/16 15:17,Kedan Li,071196af-3e0d-4e15-9496-bbbf9bcb1391,8/28/16 15:17,1
+6328,margosi2,Daniel,Margosian,5/1/18,u,i,11/5/14 18:13,8/28/16 15:17,Daniel Tristan Margosian,caa3e390-7d42-4554-8b23-9a2ddf2f6305,8/28/16 15:17,1
+6333,llicari2,Laura,Licari,5/1/16,u,f,2/2/15 18:29,8/28/16 15:17,Laura Ann Licari,92e90aa4-2eab-42f1-9464-f90c786ccde1,8/28/16 15:17,1
+6334,xyan18,Xueting,Yan,5/1/16,u,i,2/24/15 19:28,9/7/16 0:41,Xueting Yan,a8468dc7-8922-4cac-8175-8bb7dd27c894,8/28/16 15:17,1
+6335,hagarwa3,Harshit,Agarwal,5/1/18,u,i,3/3/15 14:03,8/28/16 15:20,Harshit Agarwal,3836199a-16e1-48d0-89ac-f5ed6b34cfff,8/28/16 15:17,1
+6336,lovrich2,Ian,Lovrich,12/1/15,u,i,3/26/15 18:32,8/28/16 15:17,Ian Jordan Lovrich,b813fc89-514f-479e-ae44-eec6dc944dd2,8/28/16 15:17,1
+6337,mohanla2,Sonia,Mohanlal,5/1/16,u,i,4/11/15 16:07,8/28/16 15:17,Sonia Mohanlal,ee770bfc-124f-42c4-8b80-eac2b76816e1,8/28/16 15:17,1
+6338,npant3,Niraj,Pant,5/1/19,u,i,7/18/15 21:07,8/28/16 15:18,Niraj Pant,077338aa-f66e-4e1b-b0b0-17912b700656,8/28/16 15:17,1
+6339,mfeinbe2,Maxwell,Feinberg,5/1/18,u,i,8/24/15 14:46,9/5/16 23:20,Maxwell Austin Feinberg,319c16c1-95f6-4c57-a36e-0205f0ffe114,8/28/16 15:17,1
+6340,haus2,Mylene,Haus,5/1/17,u,i,8/26/15 14:16,8/28/16 17:27,Mylene J Haus,ceeae60a-def0-44d8-9111-b2303f37f5d3,8/28/16 15:17,0
+6342,ssapra2,Sameet,Sapra,5/1/19,u,i,8/27/15 10:05,8/29/16 11:22,Sameet Sapra,768323bd-8416-4c6d-b9ee-7e1748252d3f,8/28/16 15:17,1
+6343,deverex2,James,Devereux,5/1/19,u,i,8/31/15 15:59,8/28/16 15:17,James Peter Devereux,1fa3ef27-3ded-4b88-8ae8-7b69bcc2c2f0,8/28/16 15:17,1
+6344,wrobbin2,Will,Robbins,5/1/19,u,i,8/31/15 18:21,8/28/16 15:17,William H Robbins,3df5bc69-dec0-4898-9954-493d4e2bb6c0,8/28/16 15:17,1
+6345,sopkin2,Amanda,Sopkin,5/1/17,u,i,9/1/15 19:46,8/28/16 16:08,Amanda M Sopkin,ab19a7c6-a6ad-44d4-927d-07f5f63b1807,8/28/16 15:17,1
+6346,nsharma5,Neha,Sharma,5/1/17,u,i,9/6/15 22:49,8/28/16 15:17,Neha Sharma,f43ab718-65ec-4691-b701-1d1a0e3abcc9,8/28/16 15:17,1
+6347,arkalgu2,Sharan,Arkalgud,5/1/19,u,i,9/8/15 12:44,8/28/16 18:40,Sharan N Arkalgud,73d9c556-7ae1-4899-816d-243ac5d7db10,8/28/16 15:17,1
+6349,ghelsel2,Genevieve,Helsel,5/1/19,u,i,9/9/15 13:57,10/6/16 1:04,Genevieve A Helsel,9997fc89-9575-4d98-a2d5-2d296fdca765,8/28/16 15:17,1
+6350,kherndo2,Kyle,Herndon,5/1/18,u,i,9/10/15 17:40,8/28/16 15:17,Kyle W Herndon,2e295691-10f6-4599-8fe1-49ac81ab8c34,8/28/16 15:17,1
+6354,jxu57,Jiarui,Xu,5/1/16,u,f,9/10/15 17:52,8/28/16 15:17,Jiarui Xu,a738da5b-e809-42c0-8fdd-3512da4e216f,8/28/16 15:17,1
+6355,dberli2,Daniel,Berliner,5/1/16,u,f,9/10/15 17:53,8/28/16 15:17,Daniel Berliner,80d53097-2f42-4a5f-b629-d94ec8ae91ee,8/28/16 15:17,1
+6358,hrshah4,Harshay,Shah,5/1/18,u,i,9/10/15 18:19,8/28/16 15:17,Harshay Rajendra Shah,00a60736-e302-4d2c-915c-91689553f207,8/28/16 15:17,1
+6359,cjsmith7,Christian,Smith,5/1/16,u,f,9/10/15 18:21,8/28/16 16:07,Christian Joel Smith,37c721c8-c5d6-4718-8784-b72dd54b0e0d,8/28/16 15:17,1
+6360,pkordas2,Paige,Kordas,5/1/18,u,i,9/10/15 18:21,8/28/16 17:34,Paige Mackenzie Kordas,2f27501a-dab7-45cd-b9a2-d4cccc2fcc2f,8/28/16 15:17,1
+6362,yshih8,Yen-Ching,Shih,5/1/19,u,i,9/10/15 18:31,8/28/16 15:17,Yen-Ching Shih,388f4348-4c68-4351-94b7-5d69698227c0,8/28/16 15:17,1
+6364,pmsmith2,Porter,Smith,5/1/17,u,i,9/10/15 18:37,8/28/16 15:17,Porter M Smith,49888ce6-3b22-4ea4-b4ae-b43a9cc16bd1,8/28/16 15:17,1
+6369,zzhao36,Zixuan,Zhao,5/1/18,u,i,9/10/15 18:42,8/28/16 15:17,Zixuan Zhao,c7a6b384-0eb8-4605-b828-fd79195c60e6,8/28/16 15:17,1
+6370,jhuang61,Jeffrey,Huang,5/1/17,u,i,9/10/15 18:43,8/28/16 15:17,Jeffrey Huang,259c994b-e367-48bf-97ea-9624af36d885,8/28/16 15:17,1
+6371,karumbu2,Sriram,Karumbunathan,5/1/19,u,i,9/10/15 18:43,8/28/16 15:17,Sriram Karumbunathan,e4ca5b45-86e4-4687-910e-7f7159b60ed0,8/28/16 15:17,1
+6373,ncwells2,Nicolette,Wells,5/1/17,u,i,9/10/15 18:46,8/28/16 15:17,Nicolette C Wells,679d8eb6-fbdf-409d-86bd-49f3773eab40,8/28/16 15:17,1
+6375,schandn2,Shivansh,Chandnani,5/1/18,u,i,9/10/15 18:48,8/28/16 15:19,Shivansh Chandnani,04d3f8fc-167d-42f9-99fb-def3f604d126,8/28/16 15:17,1
+6379,rwking2,Robert,King,5/1/16,m,f,9/10/15 18:55,8/28/16 15:17,Robert William King,79220bff-db02-4573-87d0-d9b73d6f5a39,8/28/16 15:17,1
+6380,nfortma2,Noel,Fortman,5/1/17,u,f,9/10/15 19:07,8/28/16 15:17,Noel Alexander Fortman,1a035f66-f369-4ae3-9c61-c91a37820ff8,8/28/16 15:17,1
+6390,tdubey3,Tanishq,Dubey,12/1/17,u,i,9/10/15 19:35,8/28/16 15:17,Tanishq Dubey,b6c4fd63-7475-409a-9f04-e4d80c2f4782,8/28/16 15:17,1
+6393,psingha2,Parth,Singhal,5/1/17,u,i,9/10/15 19:47,8/28/16 15:17,Parth Singhal,6965d325-861e-409b-abed-6f18d07298c3,8/28/16 15:17,1
+6398,gpasari2,Gaurav,Pasari,12/1/17,u,i,9/10/15 19:57,8/28/16 21:18,Gaurav Pasari,29f578d7-eda3-4ed9-ac2b-e3dd8f748762,8/28/16 15:17,1
+6399,wnewber2,Wyatt,Newberry,5/1/19,u,i,9/10/15 20:04,8/29/16 16:48,Wyatt A Newberry,84d1d87c-b43e-4dce-9444-adccfb658a7b,8/28/16 15:17,1
+6401,scribnr2,Cory,Scribner,5/1/15,u,f,9/10/15 20:14,8/28/16 15:17,Cory Lee Scribner,9f6dba82-38a9-4851-bb06-096be56ac327,8/28/16 15:17,1
+6404,chhan2,Hyeok Chan,Han,5/1/17,u,i,9/10/15 20:25,8/28/16 15:17,Hyeok Chan Han,ca26d045-94ee-47b5-9d1c-e79f304cb8fc,8/28/16 15:17,1
+6405,mkumar10,Maghav,Kumar,5/1/17,u,f,9/10/15 20:26,8/28/16 16:28,Maghav Kumar,53f266a3-c0aa-4de7-93e1-2ad0fd1cbad7,8/28/16 15:17,1
+6408,tdfisch2,Thomas,Fischer,5/1/18,u,i,9/10/15 20:53,8/28/16 15:21,Thomas David Fischer,2fd03d97-7169-403a-9b1c-1500f945845e,8/28/16 15:17,1
+6411,ylin70,Yu-Ting,Lin,5/1/16,u,f,9/10/15 21:10,8/28/16 15:17,Yu-Ting Lin,71934cae-d48d-492f-8b86-b44607402d02,8/28/16 15:17,1
+6421,ptwrdhn2,Sujay,Patwardhan,5/1/19,u,i,9/10/15 22:20,8/28/16 15:18,Sujay Patwardhan,163a120f-e7e2-4bfb-9693-c2a1de454398,8/28/16 15:17,1
+6424,makkar2,Aashna,Makkar,5/1/18,u,i,9/10/15 23:31,8/28/16 15:17,Aashna Makkar,11a8495e-c06d-47f9-9106-9b229cfb3107,8/28/16 15:17,1
+6430,regolds2,Remy,Goldschmidt,5/1/17,u,i,9/11/15 12:09,8/28/16 15:17,Remy Elijah Goldschmidt,a48623d0-693d-456e-9011-6067c68f169d,8/28/16 15:17,1
+6431,rjatia2,Rishi,Jatia,5/1/19,u,i,9/11/15 12:34,8/28/16 15:17,Rishi Jatia,c82059e4-8fc3-4741-865c-3ece8389f43d,8/28/16 15:17,1
+6433,vjaros2,Victor,Jarosiewicz,5/1/19,u,i,9/11/15 12:40,8/28/16 15:17,Victor Jarosiewicz,ebb7a60d-50ba-4d83-b7bb-fe62e37cf9e9,8/28/16 15:17,1
+6434,masand2,Krish,Masand,5/1/17,u,i,9/11/15 16:01,8/28/16 15:17,Krish Peswani Masand,7f04f141-60bf-42a9-a8bb-44fb204bce46,8/28/16 15:17,1
+6435,papushn2,Sergey,Papushin,5/1/19,u,i,9/11/15 18:29,8/28/16 15:21,Sergey K Papushin,43e11b15-a34b-453f-a17c-020380416597,8/28/16 15:17,1
+6440,bxie6,Berwin,Xie,5/1/17,u,i,9/12/15 14:50,8/28/16 15:17,Berwin Xie,22e54c98-4ef0-42ca-b1a0-2a35ad83b2c2,8/28/16 15:17,1
+6443,ehnoh2,Emilee,Noh,5/1/18,u,i,9/19/15 20:18,8/28/16 15:17,Emilee Hope Noh,57200572-24b1-4523-95ea-e7fd74c55b00,8/28/16 15:17,1
+6446,wortman2,Mitchell,Wortman,12/1/16,u,f,9/22/15 23:14,9/8/16 14:04,Mitchell R Wortman,a222955d-99f5-41bd-b9e9-754e427e78cd,8/28/16 15:17,1
+6447,bpmoria2,Brendan,Moriarty,5/1/17,u,f,9/23/15 22:26,8/28/16 15:18,Brendan P Moriarty,71bb28b2-86a8-4bc0-9b40-6de5325c9a65,8/28/16 15:17,1
+6449,mkong8,Matthew,Ong,5/1/19,u,i,9/24/15 19:13,8/28/16 15:17,Matthew K Ong,735bd6c7-97a2-45ec-812e-c9c37ef1eb44,8/28/16 15:17,1
+6451,iordano2,Peter,Iordanov,5/1/17,u,i,9/30/15 14:18,8/28/16 15:17,Peter Iordanov,1aa7f39f-ec00-4cba-a2f8-5b06f36b2255,8/28/16 15:17,1
+6453,jbchuan2,Julius,Chuang,12/1/16,u,f,10/5/15 17:20,8/28/16 15:17,Julius B Chuang,deeb2499-29ae-400e-9330-5c093a2cd39e,8/28/16 15:17,1
+6454,chanthr2,Kumaran,Chanthrakumar,5/1/18,u,i,1/25/16 13:12,8/28/16 15:17,Kumaran Chanthrakumar,e6254203-9471-4416-ac87-f25f26a4bef4,8/28/16 15:17,1
+6460,bcongdo2,Benjamin,Congdon,5/1/20,u,i,2/3/16 12:36,8/28/16 15:17,Benjamin Robert Congdon,0275932d-c896-4335-acf0-70eece805592,8/28/16 15:17,1
+6461,wright53,Ronald,Wright,5/1/17,p,i,2/3/16 13:14,8/28/16 15:17,Ronald Joseph Wright,ebcc2a00-08e2-47b2-938d-98f2233ff47b,8/28/16 15:17,1
+6464,nmakhij2,Naman,Makhija,12/1/18,u,i,2/3/16 13:58,8/28/16 15:17,Naman Makhija,855d8c0c-970a-41d5-b912-12ca3cb78d0e,8/28/16 15:17,1
+6465,agoel9,Akash,Goel,5/1/19,u,i,2/3/16 14:19,8/28/16 15:17,Akash Goel,2e3c679e-fec9-49d1-928e-32df3e0f92fa,8/28/16 15:17,1
+6466,askapur2,Aashish,Kapur,5/1/19,u,i,2/3/16 16:19,8/28/16 21:06,Aashish Sagar Kapur,57ad0606-410a-46de-981a-737871c8b114,8/28/16 15:17,1
+6469,shlu2,Simon,Lu,5/1/18,u,i,2/5/16 1:27,8/29/16 11:17,Simon H Lu,6f13c65f-439d-4985-b975-fed0e1a110a9,8/28/16 15:17,1
+6470,hding13,Harrison,Ding,5/1/19,u,i,2/7/16 23:37,8/28/16 15:17,Harrison Ding,f4bc57e9-ea18-4574-a37b-bac88b78b37c,8/28/16 15:17,1
+6473,rhchen2,Ryan,Chen,5/1/19,u,i,3/1/16 10:27,8/28/16 15:17,Ryan Hao Chen,bf055685-e35e-46cd-990d-14e1112bbb65,8/28/16 15:17,1
+6474,bcorrel2,Ben,Correll,5/1/19,u,i,3/1/16 10:39,8/28/16 15:17,Benjamin Earl Franklin Correll,c295a986-565c-4c95-891c-898db56fbe3b,8/28/16 15:17,1
+6475,tkim139,Tyler,Kim,12/1/18,u,i,5/23/16 14:16,12/27/16 8:40,Taeyoung Kim,ecb167ba-6852-44b6-b29b-c03aaa71c29e,8/28/16 15:17,1
+6484,bniu2,Victor,Niu,5/1/18,u,i,8/28/16 15:31,8/28/16 15:31,Borui Niu,793972db-ad4d-443c-9b7d-e67aa6d1abac,7/26/16 20:00,1
+6485,cleetus2,Ananya,Cleetus,5/1/19,u,i,8/28/16 15:34,8/28/16 15:34,Ananya W Cleetus,9df340b1-9eaf-469c-b8a5-a0506779f8c4,7/26/16 19:39,1
+6488,mostofi2,Yasha,Mostofi,5/1/18,u,i,8/28/16 16:06,10/3/16 20:13,Yasha Mostofi-Ashtiani,a05b9cd4-f567-4f02-a2a2-67d6b05da3af,7/26/16 19:39,1
+6489,pgpraka2,Pranay,Prakash,5/1/19,u,i,8/28/16 16:28,8/28/16 16:28,Pranay Garuda Prakash,8c260b94-ba89-4b07-bfee-41bc36e9a67f,7/26/16 19:39,1
+6495,nklvchm2,Dana,Nikolaeva Chambourova,5/1/17,u,f,8/29/16 9:00,8/29/16 9:00,Dana Nikolaeva Chambourova,9c97b9e6-ca17-4b1c-8318-1d5b8e77c335,7/26/16 19:39,1
+6501,jhan51,Jinda,Han,5/1/21,p,i,8/30/16 1:00,8/30/16 1:00,Jinda Han,9387eeb0-94b9-4a43-a3fe-6e7849aa8edc,7/26/16 19:39,1
+6502,nagarka2,Devashri,Nagarkar,5/1/19,u,i,8/30/16 7:32,8/30/16 7:32,Devashri Nagarkar,9bb1cbc3-ddcf-4c22-8879-567448ac725c,7/26/16 19:39,1
+6505,bsun10,Bryan,Sun,5/1/19,u,i,8/31/16 12:26,8/31/16 12:26,Bryan Sun,23462f1d-8350-4d1c-9b22-6be09165a87f,7/26/16 19:39,1
+6510,vlchang2,Vincent,Chang,5/1/18,u,i,9/4/16 14:41,9/4/16 14:41,Vincent Li Chang,4f6fdfbe-bb18-44b4-aee2-631853c91df5,7/26/16 19:39,1
+6512,tulshib2,Shantanu,Tulshibagwale,5/1/19,u,i,9/5/16 23:42,9/5/16 23:42,Shantanu Tulshibagwale,02b6716c-beb5-43d0-b22d-8eb445eb9013,7/26/16 19:39,1
+6514,hlai10,Haoming,Lai,5/1/17,u,i,9/8/16 12:04,9/8/16 12:04,Haoming Lai,8491ea44-aa5c-4c37-bf78-b280ecdca533,7/26/16 19:39,1
+6518,gyang14,James,Yang,5/1/19,u,i,9/13/16 15:30,9/19/16 13:37,Guanyunbo Yang,3d5e8904-50ee-42a4-afdc-4c3018629478,7/26/16 19:39,1
+6519,yhung119,YiChia,Huang,5/1/18,u,i,9/14/16 16:34,9/14/16 16:34,Yichia Huang,32d8a01f-aca7-4354-8723-9268031f4b97,7/26/16 19:39,1
+6520,sahilb2,Sahil,Bhatt,5/1/20,u,i,9/19/16 17:09,9/19/16 17:09,Sahil Bhatt,432043f1-ba6b-432c-8525-2c08d03f128b,7/26/16 19:39,1
+6522,rchnbrg2,Michael,Rechenberg,5/1/19,u,i,9/21/16 12:12,9/21/16 12:12,Michael David Rechenberg,b3620b1a-4042-43b2-9327-3f9d5a043ac4,7/26/16 19:39,1
+6523,ajzhang2,Adam,Zhang,5/1/19,u,i,9/21/16 19:15,9/21/16 19:15,Adam Ji Zhang,66c29a40-3897-40fe-8309-858654316023,7/26/16 19:39,1
+6526,kabirm2,Kabir,Manghnani,5/1/19,u,i,10/11/16 11:23,10/11/16 11:23,Kabir Manghnani,0a4b7e2c-15bd-463a-a19f-fdd70a582160,7/26/16 19:39,1
+6527,aihoque2,Ammar,Hoque,5/1/20,u,i,10/12/16 19:21,10/12/16 19:21,Ammar Ismail Hoque,990b9351-9e9f-4748-9965-b10614a9a606,7/26/16 19:39,1

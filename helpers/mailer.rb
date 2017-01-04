@@ -9,7 +9,7 @@
 require 'pony'
 
 module Mailer
-  def self.email(subject, body, sender)
+  def self.email(subject, body, sender, attachment=nil)
     credentials = Config.load_config('email')
 
     Pony.options = {
@@ -26,6 +26,16 @@ module Mailer
         domain: 'localhost.localdomain'
       }
     }
-    Pony.mail(to: sender)
+
+    if attachment
+      Pony.mail(
+        to: sender,
+        attachments: {
+          attachment[:file_name] => attachment[:file_content]
+        }
+      )
+    else
+      Pony.mail(to: sender)
+    end
   end
 end

@@ -9,6 +9,7 @@
 require 'date'
 require 'pry'
 require 'net/http'
+require 'open-uri'
 
 module Sinatra
   module StudentsRoutes
@@ -16,12 +17,14 @@ module Sinatra
       app.get '/students' do
         graduation_start_date = Date.parse(params[:graduationStart]) rescue nil
         graduation_end_date = Date.parse(params[:graduationEnd]) rescue nil
-        
+        last_updated_at = Date.parse(params[:last_updated_at]) rescue nil
+
         conditions = {}.tap do |conditions|
           conditions[:first_name] = params[:name].split.first if params[:name] && !params[:name].empty?
           conditions[:netid] = params[:netid] if params[:netid] && !params[:netid].empty?
           conditions[:"graduation_date.gte"] = graduation_start_date if graduation_start_date
           conditions[:"graduation_date.lte"] = graduation_end_date if graduation_end_date
+          conditions[:"updated_on.lte"] = last_updated_at if last_updated_at
           conditions[:degree_type] = params[:degree_type] if params[:degree_type] && !params[:degree_type].empty?
           conditions[:job_type] = params[:job_type] if params[:job_type] && !params[:job_type].empty?
           conditions[:active] = true
@@ -68,7 +71,7 @@ module Sinatra
       end
 
       app.put '/students/:netid/approve' do
-        halt(400, ResponseFormat.error("Active session was unable to be verified")) unless Auth.verify_session(env)
+        halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
 
         status, error = Student.validate(params, [:netid])
         halt status, ResponseFormat.error(error) if error
@@ -89,7 +92,7 @@ module Sinatra
       end
 
       app.delete '/students/:netid' do
-        halt(400, ResponseFormat.error("Active session was unable to be verified")) unless Auth.verify_session(env)
+        halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
 
         student = Student.first(netid: params[:netid]) || halt(404)
         
@@ -97,6 +100,30 @@ module Sinatra
         student.destroy!
 
         ResponseFormat.success(Student.all(order: [ :date_joined.desc ], approved_resume: false))
+      end
+
+      app.put '/students/remind' do
+        halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        params = ResponseFormat.get_params(request.body.read)
+
+        status, error = Student.validate(params, [:last_updated_at])
+        halt status, ResponseFormat.error(error) if error
+
+        last_updated_at = Date.parse(params[:last_updated_at]) rescue nil
+
+        reminded_students = Student.all({:"updated_at.lte" => last_updated_at})
+        reminded_students.each do |student|
+          subject = '[Corporate-l] ACM@UIUC Resume Book'
+          html_body = erb :update_resume_email, locals: { student: student }
+          
+          attachment = {
+            file_name: "#{student.netid}.pdf",
+            file_content: open(student.resume_url).read
+          }
+          Mailer.email(subject, html_body, student.email, attachment)
+        end
+
+        ResponseFormat.message("Emailed #{reminded_students.count} students.")
       end
     end
   end

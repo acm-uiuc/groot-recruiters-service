@@ -10,7 +10,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
   let(:password) { "foo" }
   let!(:recruiter) {
-    Recruiter.create!(
+    Recruiter.create(
       first_name: "Steve",
       last_name: "Jobs",
       email: "steve@apple.com",

@@ -13,15 +13,14 @@ RSpec.describe Sinatra::JobsRoutes do
   end
   
   let(:job) {
-    Job.create!(
+    Job.create(
       title: "Software Engineer",
       company: "Apple",
       contact_name: "Steve Jobs",
       contact_email: "banana@apple.com",
       contact_phone: "111-111-1111",
       job_type: "Full-Time",
-      description: "You work at Apple.",
-      posted_on: Date.today
+      description: "You work at Apple."
     )
   }
 
@@ -32,7 +31,7 @@ RSpec.describe Sinatra::JobsRoutes do
     end
 
     it 'should return all unapproved jobs' do
-      job1 = Job.create!(
+      job1 = Job.create(
         title: "Software Engineer",
         company: "Apple",
         contact_name: "Steve Jobs",
@@ -40,19 +39,17 @@ RSpec.describe Sinatra::JobsRoutes do
         contact_phone: "111-111-1111",
         job_type: "Full-Time",
         description: "You work at Apple.",
-        posted_on: Date.today,
         approved: true
       )
 
-      job2 = Job.create!(
+      job2 = Job.create(
         title: "Fake Software Engineer",
         company: "Apple",
         contact_name: "Steve Jobs",
         contact_email: "banana@apple.com",
         contact_phone: "111-111-1111",
         job_type: "Internship",
-        description: "You work at Apple.",
-        posted_on: Date.today
+        description: "You work at Apple."
       )
 
       get "/jobs"
@@ -73,8 +70,7 @@ RSpec.describe Sinatra::JobsRoutes do
         contact_email: "banana@apple.com",
         contact_phone: "111-111-1111",
         job_type: "Full-Time",
-        description: "You work at Apple.",
-        posted_on: Date.today
+        description: "You work at Apple."
       }
     end
 

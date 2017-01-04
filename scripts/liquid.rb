@@ -36,7 +36,7 @@ puts "Importing students from #{STUDENT_FILE_PATH}"
 CSV.foreach(Dir.pwd + STUDENT_FILE_PATH, headers: true) do |row|
   # next if Date.strptime(row['graduation'], '%m/%d/%y') < Date.today # uncomment if we only want active users
   s = get_student(row)
-  s.save!
+  s.save
 end
 puts "Added #{Student.all.count} students"
 

@@ -28,10 +28,6 @@ class GrootRecruiterService < Sinatra::Base
 
     enable :sessions
 
-    helpers ResponseFormat
-    helpers Config
-    helpers JSONBase64Decoder
-
     register Sinatra::AuthsRoutes
     register Sinatra::JobsRoutes
     register Sinatra::RecruitersRoutes
@@ -63,6 +59,7 @@ class GrootRecruiterService < Sinatra::Base
             :default,
             "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
         )
+        DataMapper.auto_upgrade!
     end
 
     configure :production do
@@ -72,5 +69,6 @@ class GrootRecruiterService < Sinatra::Base
             "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
         )
     end
+
     DataMapper.finalize
 end

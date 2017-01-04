@@ -9,12 +9,12 @@ RSpec.describe Sinatra::StudentsRoutes do
 
   before :each do
     expect(Auth).to receive(:verify_request).and_return(true)
-    allow(Auth).to receive(:verify_session).and_return(true)
+    allow(Auth).to receive(:verify_corporate_session).and_return(true)
   end
 
   let!(:netid) { "jsmith2" }
   let!(:student) {
-    Student.create!(
+    Student.create(
       first_name: "John",
       last_name: "Smith",
       netid: netid,
@@ -42,7 +42,7 @@ RSpec.describe Sinatra::StudentsRoutes do
         first_name = "Jake"
         last_name = "Smith"
         netid3 = "jsmith3" 
-        approved_student = Student.create!(
+        approved_student = Student.create(
           first_name: first_name,
           last_name: last_name,
           email: "jakesmith@gmail.com",
@@ -69,7 +69,7 @@ RSpec.describe Sinatra::StudentsRoutes do
       let(:netid2) { "acm32" }
 
       let!(:student1) {
-        Student.create!(
+        Student.create(
           first_name: first_name,
           last_name: last_name,
           email: "#{netid1}@gmail.com",
@@ -82,7 +82,7 @@ RSpec.describe Sinatra::StudentsRoutes do
       }
 
       let!(:student2) {
-        Student.create!(
+        Student.create(
           first_name: first_name,
           last_name: last_name,
           email: "#{netid2}@gmail.com",
@@ -209,7 +209,7 @@ RSpec.describe Sinatra::StudentsRoutes do
   describe "PUT /students/:netid/approve" do
     let!(:netid) { "jsmith2" }
     let!(:student) {
-      Student.create!(
+      Student.create(
         first_name: "John",
         last_name: "Smith",
         netid: netid,

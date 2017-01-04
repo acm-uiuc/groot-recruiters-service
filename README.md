@@ -186,8 +186,9 @@ Delete a student from the database and their resume from S3.
 ## Running Tests
 
 - Every model, route, and helper *should* have an associated spec file.
+- Make sure your test database has been created/migrated with `RACK_ENV=test rake db:migrate`.
 
-Run tests with `rake spec`.
+Run tests with `rake spec`, or more simply, `rspec`.
 
 ## License
 

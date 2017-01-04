@@ -7,6 +7,8 @@
 # this license in a file with the distribution.
 #models/user
 require 'date'
+require 'dm-validations'
+require 'dm-timestamps'
 
 class Student
     include DataMapper::Resource
@@ -23,6 +25,10 @@ class Student
     property :active, Boolean, default: true
     property :resume_url, Text
     property :approved_resume, Boolean, default: false
+
+    property :created_on, Date
+    property :updated_on, Date
+    property :updated_at, DateTime
 
     def self.validate(params, attributes)
       attributes.each do |attr|
@@ -53,7 +59,9 @@ class Student
         job_type: self.job_type,
         active: self.active,
         resume_url: self.resume_url,
-        approved_resume: self.approved_resume
+        approved_resume: self.approved_resume,
+        created_on: self.created_on,
+        updated_at: self.updated_at
       }
     end
 end

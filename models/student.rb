@@ -58,6 +58,7 @@ class Student
         degree_type: self.degree_type,
         job_type: self.job_type,
         active: self.active,
+        date_joined: self.date_joined,
         resume_url: self.resume_url,
         approved_resume: self.approved_resume,
         created_on: self.created_on,

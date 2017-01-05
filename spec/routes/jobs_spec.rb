@@ -93,8 +93,6 @@ RSpec.describe Sinatra::JobsRoutes do
         post '/jobs', @valid_params.to_json
 
         expect(last_response).to be_ok
-        json_data = JSON.parse(last_response.body)
-        match_job(json_data['data'], Job.last)
       end
     end
   end

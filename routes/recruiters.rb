@@ -64,12 +64,14 @@ module Sinatra
         end
       end
 
-      app.post '/recruiters/:recruiter_id/reset_password' do
-        status, error = Recruiter.validate(params, [:recruiter_id])
+      app.post '/recruiters/reset_password' do
+        params = ResponseFormat.get_params(request.body.read)
+
+        status, error = Recruiter.validate(params, [:first_name, :last_name, :email])
         halt status, ResponseFormat.error(error) if error
 
-        recruiter = Recruiter.get(params[:recruiter_id])
-        halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
+        recruiter = Recruiter.first(first_name: params[:first_name], last_name: params[:last_name], email: params[:email])
+        halt 404, Errors::INCORRECT_RESET_CREDENTIALS unless recruiter
 
         # Generate new password
         random_password, encrypted = Encrypt.generate_encrypted_password
@@ -80,9 +82,9 @@ module Sinatra
 
         if Mailer.email(subject, html_body, params[:email])
           recruiter.save
-          ResponseFormat.message("Sent recruiter email with new password")
+          ResponseFormat.message("We have verified your account details. Check your email for a new password.")
         else
-          halt 400, ResponseFormat.error("Error sending recruiter email. Failed to save recruiter in db")
+          halt 400, ERRORS::EMAIL_ERROR
         end
       end
       
@@ -101,7 +103,6 @@ module Sinatra
         halt(400, Errors::INVALID_CREDENTIALS) unless correct_credentials
 
         # TODO depends on UI, but this could be a portal to update email and/or password. Currently this doesn't account for email.'
-
         recruiter.encrypted_password = Encrypt.encrypt_password(params[:new_password])
         recruiter.save
         

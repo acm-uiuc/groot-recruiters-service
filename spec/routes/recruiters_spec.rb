@@ -145,13 +145,22 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
   end
 
-  describe "POST /recruiters/:recruiter_id/reset_password" do
+  describe "POST /recruiters/reset_password" do
+    let(:valid_params) {
+      {
+        first_name: recruiter.first_name,
+        last_name: recruiter.last_name,
+        email: recruiter.email
+      }
+    }
+
     it 'should return an error if the recruiter does not exist' do
-      post "/recruiters/#{recruiter.id}1/reset_password"
+      valid_params[:first_name] = "Invalid"
+      post "/recruiters/reset_password", valid_params.to_json
 
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
-      expect_error(json_data, Errors::RECRUITER_NOT_FOUND)
+      expect_error(json_data, Errors::INCORRECT_RESET_CREDENTIALS)
     end
 
     it 'should generate a new password for the recruiter' do
@@ -160,7 +169,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
         .to receive(:generate_encrypted_password)
         .and_return([new_encrypted_password, new_encrypted_password])
 
-      post "/recruiters/#{recruiter.id}/reset_password"
+      post "/recruiters/reset_password", valid_params.to_json
 
       expect(Recruiter.last.encrypted_password).to eq new_encrypted_password
     end
@@ -168,7 +177,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
     it 'should send an email to the recruiter' do
       expect(Mailer).to receive(:email)
 
-      post "/recruiters/#{recruiter.id}/reset_password"
+      post "/recruiters/reset_password", valid_params.to_json
     end
   end
 
@@ -258,10 +267,13 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
 
     it 'should delete the recruiter successfully' do
+      # Ensure the recruiter is in the database before, and not after
+      expect(Recruiter.last).to eq recruiter
+
       delete "/recruiters/#{recruiter.id}", {}.to_json
 
       expect(last_response).to be_ok
-      expect(Job.last).to be_nil
+      expect(Recruiter.last).to be_nil
     end
   end
 end

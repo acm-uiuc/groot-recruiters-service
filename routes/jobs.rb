@@ -34,7 +34,7 @@ module Sinatra
           })
         )
       
-        ResponseFormat.success(job)
+        ResponseFormat.message("Job uploaded successfully!")
       end
       
       app.put '/jobs/:job_id/approve' do

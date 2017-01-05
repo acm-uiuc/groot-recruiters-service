@@ -12,7 +12,7 @@ def get_student(row)
   
   s.degree_type = case row['level']
       when 'u'
-        'Undergraduate'
+        'Bachelors'
       when 'm'
         'Masters'
       when 'p'
@@ -24,6 +24,8 @@ def get_student(row)
           'Full-Time'
       when 'i'
           'Internship'
+      when 'c'
+          'Co-Op'
       end
 
   s.active = true

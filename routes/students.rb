@@ -102,7 +102,7 @@ module Sinatra
         ResponseFormat.success(Student.all(order: [ :date_joined.desc ], approved_resume: false))
       end
 
-      app.put '/students/remind' do
+      app.get '/students/remind' do
         halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
         params = ResponseFormat.get_params(request.body.read)
 

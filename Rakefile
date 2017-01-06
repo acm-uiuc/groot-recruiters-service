@@ -14,12 +14,6 @@ namespace :db do
     desc "Migrate the database"
     task :migrate do
         puts "Migrating database"
-        DataMapper.auto_migrate!
-    end
-
-    desc "Upgrade the database"
-    task :upgrade do
-        puts "Upgrading the database"
         DataMapper.auto_upgrade!
     end
 
@@ -27,12 +21,15 @@ namespace :db do
     task :seed do
         puts "Seeding database"
         
+        # Delete data and load from schema
         DataMapper.auto_migrate!
         require './scripts/seed.rb'
     end
 
     desc "Load the database with data from liquid"
     task :liquid do
+        
+        # Delete data and load from schema
         DataMapper.auto_migrate!
         require './scripts/liquid.rb'
     end

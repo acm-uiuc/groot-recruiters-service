@@ -30,12 +30,16 @@ module Mailer
     if attachment
       Pony.mail(
         to: sender,
+        cc: credentials['username'],
         attachments: {
           attachment[:file_name] => attachment[:file_content]
         }
       )
     else
-      Pony.mail(to: sender)
+      Pony.mail(
+        to: sender,
+        cc: credentials['username']
+      )
     end
   end
 end

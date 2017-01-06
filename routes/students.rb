@@ -36,7 +36,7 @@ module Sinatra
         conditions[:order] = [ :last_name.asc, :first_name.asc ]
         matching_students = Student.all(conditions)
         
-        ResponseFormat.success(matching_students)
+        ResponseFormat.data(matching_students)
       end
 
       app.post '/students' do
@@ -85,12 +85,12 @@ module Sinatra
         student.update(approved_resume: true) || halt(500, ResponseFormat.error("Error updating student."))
 
         # TODO send email to student?
-        ResponseFormat.success(Student.all(order: [ :date_joined.desc ], approved_resume: false))
+        ResponseFormat.data(Student.all(order: [ :date_joined.desc ], approved_resume: false))
       end
 
       app.get '/students/:netid' do
         student = Student.first(netid: params[:netid]) || halt(404)
-        ResponseFormat.success(student)
+        ResponseFormat.data(student)
       end
 
       app.delete '/students/:netid' do
@@ -101,7 +101,7 @@ module Sinatra
         AWS.delete_resume(student.netid)
         student.destroy!
 
-        ResponseFormat.success(Student.all(order: [ :date_joined.desc ], approved_resume: false))
+        ResponseFormat.data(Student.all(order: [ :date_joined.desc ], approved_resume: false))
       end
 
       app.post '/students/remind' do
@@ -118,7 +118,7 @@ module Sinatra
         reminded_students = Student.all({:"updated_at.lte" => last_updated_at})
 
         reminded_students.each do |student|
-          subject = '[Corporate-l] ACM@UIUC Resume Book'
+          subject = '[Corporate-l] ACM@UIUC Resume Update Reminder'
           html_body = erb :update_resume_email, locals: { student: student }
           
           attachment = {

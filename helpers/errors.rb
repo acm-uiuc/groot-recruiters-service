@@ -3,7 +3,7 @@ require_relative 'response_format'
 module Errors
   INVALID_CREDENTIALS = ResponseFormat.error "Invalid credentials"
   RECRUITER_NOT_FOUND = ResponseFormat.error"Recruiter not found"
-  USER_NOT_FOUND = ResponseFormat.error "User not found"
+  STUDENT_NOT_FOUND = ResponseFormat.error "We could not find your resume or other information in our database."
   JOB_NOT_FOUND = ResponseFormat.error "Job not found"
   JOB_APPROVED = ResponseFormat.error "Job already approved"
   STUDENT_APPROVED = ResponseFormat.error "Student already approved"

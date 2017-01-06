@@ -11,7 +11,7 @@ module Sinatra
   module JobsRoutes
     def self.registered(app)
       app.get '/jobs' do
-        ResponseFormat.data(Job.all(order: [ :created_on.desc ], approved: false))
+        ResponseFormat.data(Job.all(order: [ :created_on.desc ], approved: params[:approved] || false))
       end
       
       app.post '/jobs' do
@@ -45,7 +45,6 @@ module Sinatra
         
         job = Job.get(params[:job_id]) || halt(404, Errors::JOB_NOT_FOUND)
         halt(400, Errors::JOB_APPROVED) if job.approved
-        
         job.update(approved: true)
         
         ResponseFormat.data(Job.all(order: [ :created_on.desc ], approved: false))

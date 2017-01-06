@@ -35,7 +35,7 @@ module Sinatra
         
         conditions[:order] = [ :last_name.asc, :first_name.asc ]
         matching_students = Student.all(conditions)
-        
+
         ResponseFormat.data(matching_students)
       end
 
@@ -73,7 +73,7 @@ module Sinatra
       end
 
       app.put '/students/:netid/approve' do
-        halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
 
         status, error = Student.validate(params, [:netid])
         halt status, ResponseFormat.error(error) if error
@@ -89,14 +89,14 @@ module Sinatra
       end
 
       app.get '/students/:netid' do
-        student = Student.first(netid: params[:netid]) || halt(404)
+        student = Student.first(netid: params[:netid]) || halt(500, Errors::STUDENT_NOT_FOUND)
         ResponseFormat.data(student)
       end
 
       app.delete '/students/:netid' do
-        halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
 
-        student = Student.first(netid: params[:netid]) || halt(404)
+        student = Student.first(netid: params[:netid]) || halt(500, Errors::STUDENT_NOT_FOUND)
         
         AWS.delete_resume(student.netid)
         student.destroy!
@@ -105,7 +105,7 @@ module Sinatra
       end
 
       app.post '/students/remind' do
-        halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
         params = ResponseFormat.get_params(request.body.read)
 
         status, error = Student.validate(params, [:last_updated_at])
@@ -125,7 +125,7 @@ module Sinatra
             file_name: "#{student.netid}.pdf",
             file_content: open(student.resume_url).read
           }
-          # Mailer.email(subject, html_body, student.email, attachment)
+          Mailer.email(subject, html_body, student.email, attachment)
         end
 
         ResponseFormat.message("Emailed #{reminded_students.count} students.")

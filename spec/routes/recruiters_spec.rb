@@ -6,6 +6,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
     expect(recruiter.last_name).to eq datum['last_name']
     expect(recruiter.email).to eq datum['email']
     expect(recruiter.company_name).to eq datum['company_name']
+    expect(recruiter.type).to eq datum['type']
   end
 
   let(:password) { "foo" }
@@ -15,7 +16,8 @@ RSpec.describe Sinatra::RecruitersRoutes do
       last_name: "Jobs",
       email: "steve@apple.com",
       company_name: "Apple",
-      encrypted_password: Encrypt.encrypt_password(password)
+      encrypted_password: Encrypt.encrypt_password(password),
+      type: "Outreach"
     )
   }
 
@@ -82,7 +84,8 @@ RSpec.describe Sinatra::RecruitersRoutes do
           company_name: company_name,
           email: email,
           encrypted_password: Encrypt.encrypt_password(password),
-          expires_on: Date.today.next_year
+          expires_on: Date.today.next_year,
+          type: "Outreach"
         )
       end
 
@@ -118,11 +121,12 @@ RSpec.describe Sinatra::RecruitersRoutes do
         last_name: "Wozniak",
         email: "wozniak@fake.com",
         company_name: "Apple",
+        type: "Outreach"
       }
     end
     
     context 'with invalid params' do
-      [:first_name, :last_name, :company_name, :email].each do |key|
+      [:first_name, :last_name, :company_name, :email, :type].each do |key|
         it "should not create the recruiter and return an error when #{key} is missing" do
           @valid_params.delete(key)
 
@@ -133,14 +137,48 @@ RSpec.describe Sinatra::RecruitersRoutes do
           expect(json_data['error']).to eq "Missing #{key}"
         end
       end
+
+      it 'should not create the recruiter if type is invalid' do
+        @valid_params[:type] = "Invalid type"
+
+        post '/recruiters', @valid_params.to_json
+        expect(last_response).not_to be_ok
+      end
     end
 
     context 'with valid params' do
-      it 'should create the recruiter' do
-        post '/recruiters', @valid_params.to_json
+      context 'for a non-sponsor recruiter' do
+        it 'should create the recruiter' do
+          post '/recruiters', @valid_params.to_json
+          
+          expect(last_response).to be_ok
+          match_recruiter(JSON.parse(@valid_params.to_json), Recruiter.last)
+        end
+
+        it 'should not send the email' do
+          expect(Mailer).not_to receive(:email)
+
+          post '/recruiters', @valid_params.to_json
+        end
+      end
+
+      context 'for a sponsor recruiter' do
+        before do
+          @valid_params[:type] = "Sponsor"
+        end
         
-        expect(last_response).to be_ok
-        match_recruiter(JSON.parse(@valid_params.to_json), Recruiter.last)
+        it 'should create the recruiter' do
+          post '/recruiters', @valid_params.to_json
+          
+          expect(last_response).to be_ok
+          match_recruiter(JSON.parse(@valid_params.to_json), Recruiter.last)
+        end
+
+        it 'should send the email' do
+          expect(Mailer).to receive(:email)
+
+          post '/recruiters', @valid_params.to_json
+        end
       end
     end
   end
@@ -163,31 +201,47 @@ RSpec.describe Sinatra::RecruitersRoutes do
       expect_error(json_data, Errors::INCORRECT_RESET_CREDENTIALS)
     end
 
-    it 'should generate a new password for the recruiter' do
-      new_encrypted_password = "new_encrypted_password"
-      expect(Encrypt)
-        .to receive(:generate_encrypted_password)
-        .and_return([new_encrypted_password, new_encrypted_password])
-
-      post "/recruiters/reset_password", valid_params.to_json
-
-      expect(Recruiter.last.encrypted_password).to eq new_encrypted_password
+    context 'for a non-sponsor recruiter' do
+      it 'should return an error' do
+        post "/recruiters/reset_password", valid_params.to_json
+        
+        expect(last_response).not_to be_ok
+      end
     end
 
-    it 'should send an email to the recruiter' do
-      expect(Mailer).to receive(:email)
+    context 'for a sponsor recruiter' do
+      before do
+        recruiter.update(type: "Sponsor")
+      end
 
-      post "/recruiters/reset_password", valid_params.to_json
+      it 'should generate a new password' do
+        new_encrypted_password = "new_encrypted_password"
+        expect(Encrypt)
+          .to receive(:generate_encrypted_password)
+          .and_return([new_encrypted_password, new_encrypted_password])
+        
+        post "/recruiters/reset_password", valid_params.to_json
+
+        expect(Recruiter.last.encrypted_password).to eq new_encrypted_password
+      end
+
+      it 'should send an email to the recruiter' do
+        expect(Mailer).to receive(:email)
+
+        post "/recruiters/reset_password", valid_params.to_json
+      end
     end
   end
 
   describe "PUT /recruiters/:recruiter_id" do
+    let(:new_first_name) { "new first name" }
     let(:payload) {
       {
         id: recruiter.id,
+        first_name: new_first_name,
+        last_name: recruiter.last_name,
         email: recruiter.email,
-        password: password,
-        new_password: "foobar"
+        type: recruiter.type
       }
     }
 
@@ -196,20 +250,13 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
-      expect_error(json_data, Errors::INVALID_CREDENTIALS)
+      expect_error(json_data, Errors::RECRUITER_NOT_FOUND)
     end
 
-    it 'should update the password with the new_password' do
-      expect(Encrypt)
-        .to receive(:encrypt_password)
-        .with(payload[:new_password])
-        .and_return("encrypted foobar")
-      
+    it 'should update the recruiters information' do
       put "/recruiters/#{recruiter.id}", payload.to_json
-
       expect(last_response).to be_ok
-
-      expect(Recruiter.last.encrypted_password).to eq "encrypted foobar"
+      expect(Recruiter.last.first_name).to eq new_first_name
     end
   end
 

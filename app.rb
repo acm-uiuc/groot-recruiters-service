@@ -25,9 +25,6 @@ require_relative 'routes/init'
 require_relative 'models/init'
 
 class GrootRecruiterService < Sinatra::Base
-
-    enable :sessions
-
     register Sinatra::AuthsRoutes
     register Sinatra::JobsRoutes
     register Sinatra::RecruitersRoutes

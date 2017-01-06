@@ -12,11 +12,10 @@ require "erb"
 class Invitation
   attr_reader :html
 
-  def initialize(recruiter)
+  def initialize(recruiter, username)
     @recruiter = recruiter
 
-    # TODO get username from UI somehow
-    @username = "ENTER USERNAME"
+    @username = username
     case @recruiter.type
     when "Jobfair"
       @subject = "Invitation to ACM@UIUC Career Week"
@@ -28,10 +27,6 @@ class Invitation
       @subject = "#{@recruiter.company_name} ACM@UIUC"
       @html = ERB.new(File.read(Dir.pwd + '/views/outreach_invitation.erb')).result(binding)
     end
-  end
-
-  def send
-    Mailer.mail(@subject, @html_body, @recruiter.email)
   end
 
   def serialize

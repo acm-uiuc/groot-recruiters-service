@@ -14,6 +14,12 @@ namespace :db do
     desc "Migrate the database"
     task :migrate do
         puts "Migrating database"
+        DataMapper.auto_migrate!
+    end
+
+    desc "Upgrade the database"
+    task :upgrade do
+        puts "Upgrading the database"
         DataMapper.auto_upgrade!
     end
 

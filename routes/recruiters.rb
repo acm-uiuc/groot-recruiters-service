@@ -41,7 +41,7 @@ module Sinatra
         token = JWT.encode recruiter.serialize, jwt_secret, 'HS256'
         
         response = JSON.parse(ResponseFormat.data(recruiter))
-        response["token"] = token
+        response["data"]["token"] = token
         response.to_json
       end
 
@@ -82,7 +82,7 @@ module Sinatra
       app.get '/recruiters/:recruiter_id' do
         halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
         
-        recruiter = Recruiter.get(params[:recruiter_id]) || halt(404)
+        recruiter = Recruiter.get(params[:recruiter_id]) || halt(404, Errors::RECRUITER_NOT_FOUND)
         ResponseFormat.data(recruiter)
       end
       
@@ -167,13 +167,15 @@ module Sinatra
       app.post '/recruiters/:recruiter_id/invite' do
         halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
 
-        recruiter = Recruiter.get(params[:recruiter_id])
-        halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
-        halt 400, ResponseFormat.error("Recruiter was already invited") if recruiter.invited
-
+        recruiter_id = params[:recruiter_id]
         params = ResponseFormat.get_params(request.body.read)
         status, error = Recruiter.validate(params, [:to, :subject, :body])
         halt status, ResponseFormat.error(error) if error
+        params[:recruiter_id] = recruiter_id
+
+        recruiter = Recruiter.get(params[:recruiter_id])
+        halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
+        halt 400, ResponseFormat.error("Recruiter was already invited") if recruiter.invited
 
         if Mailer.email(params[:subject], params[:body], params[:to])
           recruiter.update(invited: true)
@@ -181,14 +183,6 @@ module Sinatra
         else
           halt 500, ResponseFormat.error("Failed to send email to #{params[:to]}")
         end
-      end
-
-      app.post '/recruiters/reset' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
-
-        Recruiter.update(invited: false)
-
-        ResponseFormat.message("Reset all recruiter invitations. You can now invite recruiters to job fairs")
       end
 
       app.put '/recruiters/:recruiter_id/renew' do
@@ -200,6 +194,14 @@ module Sinatra
         recruiter.update(expires_on: recruiter.expires_on.next_year)
 
         ResponseFormat.data(Recruiter.all(order: [ :company_name.asc ]))
+      end
+
+      app.post '/recruiters/reset' do
+        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+
+        Recruiter.update(invited: false)
+
+        ResponseFormat.message("Reset all recruiter invitations. You can now invite recruiters to job fairs")
       end
 
       app.delete '/recruiters/:recruiter_id' do

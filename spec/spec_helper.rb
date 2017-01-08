@@ -19,7 +19,32 @@ end
 
 module TestHelpers
   def expect_error(json_response, error_object)
-    expect(json_response['error']).to eq JSON.parse(error_object)['error']
+    expect(json_response.to_json).to eq error_object
+  end
+end
+
+RSpec.shared_examples "invalid parameters" do |parameters, url, method|
+  payload = {}
+  parameters.each do |key|
+    payload[key] = key.to_s
+  end
+  
+  parameters.each do |key|
+    it "should not create the recruiter and return an error when #{key} is missing" do
+      old_value = payload.delete(key)
+      
+      if method == "post"
+        post url, payload.to_json
+      elsif method == "put"
+        put url, payload.to_json
+      end
+
+      expect(last_response).not_to be_ok
+      json_data = JSON.parse(last_response.body)
+      expect(json_data['error']).to eq "Missing #{key}"
+      
+      payload[key] = old_value
+    end
   end
 end
 

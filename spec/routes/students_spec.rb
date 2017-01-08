@@ -27,6 +27,35 @@ RSpec.describe Sinatra::StudentsRoutes do
 
   # Since this is a get request, the params are encoded in the url, so groot doesn't send it as json, but it automatically gets called as a ruby hash
   describe 'GET /students' do
+    context 'for invalid authentication' do
+      it 'should not allow a non-corporate user to access this route' do
+        allow(Auth).to receive(:verify_corporate_session).and_return(false)
+
+        get "/students", {}.to_json
+
+        expect(last_response).not_to be_ok
+        json_data = JSON.parse(last_response.body)
+        expect_error(json_data, Errors::VERIFY_CORPORATE_SESSION)
+      end
+    end
+
+    context 'for valid recruiter authentication' do
+      it 'should return a 200' do
+        allow(JWTAuth).to receive(:decode).and_return({
+          id: 1,
+          code: 200,
+          first_name: "Recruiter First Name",
+          last_name: "Recruiter Last Name"
+        })
+
+        get "/students", {}.to_json
+
+        expect(last_response).to be_ok
+        json_data = JSON.parse(last_response.body)
+        expect(json_data['data']).to eq([])
+      end
+    end
+
     context 'without students' do
       it 'should return a 200' do
         get "/students", {}

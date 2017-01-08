@@ -15,6 +15,9 @@ module Sinatra
   module StudentsRoutes
     def self.registered(app)
       app.get '/students' do
+        payload = JWTAuth.decode(env)
+        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env) || (payload[:code] == 200)
+
         graduation_start_date = Date.parse(params[:graduationStart]) rescue nil
         graduation_end_date = Date.parse(params[:graduationEnd]) rescue nil
         

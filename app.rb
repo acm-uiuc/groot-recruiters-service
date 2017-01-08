@@ -19,6 +19,8 @@ require 'dm-timestamps'
 require 'dm-validations'
 require 'dm-mysql-adapter'
 require 'better_errors'
+require 'json'
+require 'jwt'
 
 require_relative 'helpers/init'
 require_relative 'routes/init'

@@ -37,7 +37,12 @@ module Sinatra
         halt 400, Errors::INVALID_CREDENTIALS unless correct_credentials
         halt 400, Errors::ACCOUNT_EXPIRED if recruiter.expires_on < Date.today
         
-        ResponseFormat.data(recruiter)
+        jwt_secret = Config.load_config("jwt")["secret"]
+        token = JWT.encode recruiter.serialize, jwt_secret, 'HS256'
+        
+        response = JSON.parse(ResponseFormat.data(recruiter))
+        response["token"] = token
+        response.to_json
       end
 
       app.post '/recruiters' do
@@ -49,7 +54,7 @@ module Sinatra
         halt status, ResponseFormat.error(error) if error
 
         # Recruiter with these parameters should not exist already
-        existing_recruiter = Recruiter.first(company_name: params[:company_name], first_name: params[:first_name], last_name: params[:last_name])
+        existing_recruiter = Recruiter.first(email: params[:email])
         halt 400, Errors::DUPLICATE_ACCOUNT if existing_recruiter
 
         r = Recruiter.new

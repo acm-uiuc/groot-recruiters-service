@@ -13,7 +13,7 @@ class Recruiter
     include DataMapper::Resource
     
     property :id, Serial
-    property :encrypted_password, BCryptHash, default: Encrypt.encrypt_password("")
+    property :encrypted_password, BCryptHash
     property :expires_on, Date, default: Date.today.next_year
     property :email, String, required: true, unique: true
     property :company_name, String, required: true

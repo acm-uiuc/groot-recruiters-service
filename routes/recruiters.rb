@@ -33,7 +33,10 @@ module Sinatra
         recruiter = Recruiter.first(email: params[:email])
         halt 400, Errors::INVALID_CREDENTIALS unless recruiter
 
-        correct_credentials = Encrypt.valid_password?(recruiter.encrypted_password, params[:password])
+        encrypted_password = recruiter.encrypted_password
+        halt 400, ResponseFormat.error("Your account is not eligible to login and view the resume book. If you would like access, please contact corporate@acm.illinois.edu") unless encrypted_password
+
+        correct_credentials = Encrypt.valid_password?(encrypted_password, params[:password])
         halt 400, Errors::INVALID_CREDENTIALS unless correct_credentials
         halt 400, Errors::ACCOUNT_EXPIRED if recruiter.expires_on < Date.today
         
@@ -50,7 +53,7 @@ module Sinatra
 
         params = ResponseFormat.get_params(request.body.read)
 
-        status, error = Recruiter.validate(params, [:company_name, :first_name, :last_name, :email, :type])
+        status, error = Recruiter.validate(params, [:company_name, :first_name, :last_name, :email, :type, :email, :password])
         halt status, ResponseFormat.error(error) if error
 
         # Recruiter with these parameters should not exist already
@@ -70,8 +73,12 @@ module Sinatra
         subject = '[Corporate-l] ACM@UIUC Resume Book'
         html_body = erb :new_account_email, locals: { recruiter: r, password: random_password }
 
+        credentials = {
+          email: params[:email],
+          password: params[:password]
+        }
         # Only email general recruiters, but save all recruiters
-        if !r.is_sponsor? || Mailer.email(subject, html_body, params[:email])
+        if !r.is_sponsor? || Mailer.email(subject, html_body, credentials, params[:email])
           r.save
           ResponseFormat.message("Created account for #{r.company_name} in our database")
         else
@@ -93,7 +100,7 @@ module Sinatra
         params = ResponseFormat.get_params(request.body.read)
         params[:recruiter_id] = recruiter_id
 
-        status, error = Recruiter.validate(params, [:recruiter_id, :email, :first_name, :last_name, :type])
+        status, error = Recruiter.validate(params, [:recruiter_id, :email, :first_name, :last_name, :type, :email, :password])
         halt status, ResponseFormat.error(error) if error
         
         recruiter = Recruiter.get(params[:recruiter_id])
@@ -116,7 +123,11 @@ module Sinatra
           
           subject = '[Corporate-l] ACM@UIUC Resume Book'
           html_body = erb :new_account_email, locals: { recruiter: recruiter, password: random_password }
-          Mailer.email(subject, html_body, recruiter.email)
+          credentials = {
+            email: params[:email],
+            password: params[:password]
+          }
+          Mailer.email(subject, html_body, credentials, recruiter.email)
 
           message = "#{recruiter.first_name} has been granted access to the resume book"
         elsif sponsor_before && !sponsor_now
@@ -169,7 +180,7 @@ module Sinatra
 
         recruiter_id = params[:recruiter_id]
         params = ResponseFormat.get_params(request.body.read)
-        status, error = Recruiter.validate(params, [:to, :subject, :body])
+        status, error = Recruiter.validate(params, [:to, :subject, :body, :email, :password])
         halt status, ResponseFormat.error(error) if error
         params[:recruiter_id] = recruiter_id
 
@@ -177,7 +188,11 @@ module Sinatra
         halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
         halt 400, ResponseFormat.error("Recruiter was already invited") if recruiter.invited
 
-        if Mailer.email(params[:subject], params[:body], params[:to])
+        credentials = {
+          username: params[:username],
+          password: params[:password]
+        }
+        if Mailer.email(params[:subject], params[:body], credentials, params[:to])
           recruiter.update(invited: true)
           ResponseFormat.message("Sent #{params[:to]} an email")
         else

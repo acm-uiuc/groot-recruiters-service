@@ -9,9 +9,7 @@
 require 'pony'
 
 module Mailer
-  def self.email(subject, body, sender, attachment=nil)
-    credentials = Config.load_config('email')
-
+  def self.email(subject, body, credentials, to, attachment=nil)
     Pony.options = {
       subject: subject,
       body: body,
@@ -20,25 +18,24 @@ module Mailer
         address: 'smtp.gmail.com',
         port: '587',
         enable_starttls_auto: true,
-        user_name: credentials['username'],
-        password: credentials['password'],
-        authentication: :plain,
+        user_name: credentials[:email],
+        password: credentials[:password],
         domain: 'localhost.localdomain'
       }
     }
 
     if attachment
       Pony.mail(
-        to: sender,
-        cc: credentials['username'],
+        to: to,
+        cc: credentials[:email],
         attachments: {
           attachment[:file_name] => attachment[:file_content]
         }
       )
     else
       Pony.mail(
-        to: sender,
-        cc: credentials['username']
+        to: to,
+        cc: credentials[:email]
       )
     end
   end

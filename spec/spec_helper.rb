@@ -30,7 +30,7 @@ RSpec.shared_examples "invalid parameters" do |parameters, url, method|
   end
   
   parameters.each do |key|
-    it "should not create the recruiter and return an error when #{key} is missing" do
+    it "should not create the model and return an error when #{key} is missing" do
       old_value = payload.delete(key)
       
       if method == "post"

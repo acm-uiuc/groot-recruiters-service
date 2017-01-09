@@ -87,19 +87,18 @@ module Sinatra
         
         student.update(approved_resume: true) || halt(500, ResponseFormat.error("Error updating student."))
 
-        # TODO send email to student?
         ResponseFormat.data(Student.all(order: [ :date_joined.desc ], approved_resume: false))
       end
 
       app.get '/students/:netid' do
-        student = Student.first(netid: params[:netid]) || halt(500, Errors::STUDENT_NOT_FOUND)
+        student = Student.first(netid: params[:netid]) || halt(404, Errors::STUDENT_NOT_FOUND)
         ResponseFormat.data(student)
       end
 
       app.delete '/students/:netid' do
         halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
 
-        student = Student.first(netid: params[:netid]) || halt(500, Errors::STUDENT_NOT_FOUND)
+        student = Student.first(netid: params[:netid]) || halt(404, Errors::STUDENT_NOT_FOUND)
         
         AWS.delete_resume(student.netid)
         student.destroy!
@@ -111,7 +110,7 @@ module Sinatra
         halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
         params = ResponseFormat.get_params(request.body.read)
 
-        status, error = Student.validate(params, [:last_updated_at])
+        status, error = Student.validate(params, [:email, :last_updated_at])
         halt status, ResponseFormat.error(error) if error
 
         last_updated_at = Date.parse(params[:last_updated_at]) rescue nil
@@ -128,7 +127,7 @@ module Sinatra
             file_name: "#{student.netid}.pdf",
             file_content: open(student.resume_url).read
           }
-          Mailer.email(subject, html_body, student.email, attachment)
+          Mailer.email(subject, html_body, params[:email], student.email, attachment)
         end
 
         ResponseFormat.message("Emailed #{reminded_students.count} students.")

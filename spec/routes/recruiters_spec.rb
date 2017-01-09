@@ -4,7 +4,6 @@ RSpec.describe Sinatra::RecruitersRoutes do
   def match_recruiter(datum, recruiter)
     expect(recruiter.first_name).to eq datum['first_name']
     expect(recruiter.last_name).to eq datum['last_name']
-    expect(recruiter.email).to eq datum['email']
     expect(recruiter.company_name).to eq datum['company_name']
     expect(recruiter.type).to eq datum['type']
   end
@@ -125,14 +124,16 @@ RSpec.describe Sinatra::RecruitersRoutes do
       {
         first_name: "Steve",
         last_name: "Wozniak",
-        email: "wozniak@fake.com",
+        recruiter_email: "wozniak@fake.com",
         company_name: "Apple",
-        type: "Outreach"
+        type: "Outreach",
+        email: "senderemail@gmail.com"
       }
     }
     
     context 'with invalid params' do
-      include_examples "invalid parameters", [:first_name, :last_name, :company_name, :email, :type], "/recruiters", "post"
+      # Don't check type here, but check invalid separately
+      include_examples "invalid parameters", [:first_name, :last_name, :company_name, :recruiter_email, :email], "/recruiters", "post"
 
       it 'should not create the recruiter if type is invalid' do
         valid_params[:type] = "Invalid type"
@@ -164,6 +165,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
         end
         
         it 'should create the recruiter' do
+          # TODO figure out why this test fails when it shouldn't be.
           post '/recruiters', valid_params.to_json
           
           expect(last_response).to be_ok
@@ -241,12 +243,13 @@ RSpec.describe Sinatra::RecruitersRoutes do
       {
         first_name: recruiter.first_name,
         last_name: recruiter.last_name,
-        email: recruiter.email
+        recruiter_email: recruiter.email,
+        email: "senderemail@gmail.com"
       }
     }
 
     context 'for invalid parameters' do
-      include_examples "invalid parameters", [:first_name, :last_name, :email], "/recruiters/reset_password", "post"
+      include_examples "invalid parameters", [:first_name, :last_name, :recruiter_email, :email], "/recruiters/reset_password", "post"
 
       it 'should return an error if the recruiter does not exist' do
         valid_params[:first_name] = "Invalid"
@@ -325,12 +328,13 @@ RSpec.describe Sinatra::RecruitersRoutes do
       {
         to: recruiter.email,
         subject: "Subject",
-        body: "Message"
+        body: "Message",
+        email: "senderemail@gmail.com"
       }
     }
 
     context 'for invalid parameters' do
-      include_examples "invalid parameters", [:to, :subject, :body], "/recruiters/1/invite", "post"
+      include_examples "invalid parameters", [:to, :subject, :body, :email], "/recruiters/1/invite", "post"
 
       it 'should return an error if the corporate session cannot be verified' do
         allow(Auth).to receive(:verify_corporate_session).and_return(false)
@@ -352,7 +356,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
     context 'for valid params' do
       it 'should send the email' do
-        expect(Mailer).to receive(:email).with(valid_params[:subject], valid_params[:body], valid_params[:to])
+        expect(Mailer).to receive(:email)
 
         post "/recruiters/#{recruiter.id}/invite", valid_params.to_json
         expect(last_response).to be_ok

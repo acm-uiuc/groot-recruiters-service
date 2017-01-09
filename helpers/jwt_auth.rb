@@ -9,7 +9,7 @@ module JWTAuth
 
       payload, header = JWT.decode bearer, jwt_secret, true, options
 
-      payload.merge!({ code: 200})
+      payload.merge!({ code: 200 })
     rescue JWT::DecodeError
       { code: 401, error: 'A token must be passed.' }
     rescue JWT::ExpiredSignature

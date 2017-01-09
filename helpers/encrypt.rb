@@ -19,6 +19,6 @@ module Encrypt
 
   def self.valid_password?(encrypted_password, raw_password)
     password = BCrypt::Password.new(encrypted_password)
-    encrypted_password == raw_password
+    password == raw_password
   end
 end

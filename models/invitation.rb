@@ -10,8 +10,6 @@ require "erb"
 
 # NOTE: this is not stored in the database.
 class Invitation
-  attr_reader :html
-
   def initialize(recruiter, username)
     @recruiter = recruiter
 
@@ -30,10 +28,8 @@ class Invitation
   end
 
   def serialize
-    credentials = Config.load_config("email")
     {
       subject: @subject,
-      from: credentials['username'],
       to: @recruiter.email,
       body: @html,
       recruiter: @recruiter.serialize

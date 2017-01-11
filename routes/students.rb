@@ -64,11 +64,13 @@ module Sinatra
             active: true
           })
         )
-        
-        successful_upload = AWS.upload_resume(params[:netid], params[:resume])
+        # TODO check if previous resume was there and delete? Do we only want one copy of each resume on S3?
+
+        file_name = "#{params[:netid]}-#{SecureRandom.uuid}"
+        successful_upload = AWS.upload_resume(file_name, params[:resume])
         halt 400, ResponseFormat.error("There was an error uploading your resume to S3") unless successful_upload
         
-        student.resume_url = AWS.fetch_resume(params[:netid])
+        student.resume_url = AWS.fetch_resume(file_name)
         student.approved_resume = false
         student.save!
         
@@ -99,8 +101,7 @@ module Sinatra
         halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
 
         student = Student.first(netid: params[:netid]) || halt(404, Errors::STUDENT_NOT_FOUND)
-        
-        AWS.delete_resume(student.netid)
+        AWS.delete_resume(student.netid, student.resume_url)
         student.destroy!
 
         ResponseFormat.data(Student.all(order: [ :date_joined.desc ], approved_resume: false))

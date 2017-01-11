@@ -9,11 +9,11 @@
 require 'pony'
 
 module Mailer
-  def self.email(subject, body, from, to, attachment=nil)
+  def self.email(subject, body, sender, recipient, attachment=nil)
     Pony.options = {
       subject: subject,
-      from: from,
-      cc: from,
+      from: sender,
+      cc: sender,
       body: body,
       via: :smtp,
       via_options: {
@@ -25,13 +25,13 @@ module Mailer
 
     if attachment
       Pony.mail(
-        to: to,
+        to: recipient,
         attachments: {
           attachment[:file_name] => attachment[:file_content]
         }
       )
     else
-      Pony.mail(to: to)
+      Pony.mail(to: recipient)
     end
   end
 end

@@ -21,37 +21,38 @@ module AWS
       )
     end
 
-    def self.upload_file(file_path, netid)
+    def self.upload_file(file_path, file_key)
         self.init_aws
         
         # Store if not already stored
-        AWS::S3::S3Object.store(netid + ".pdf", open(file_path), RESUME_S3_LOCATION) if self.fetch_resume(netid) == false
+        AWS::S3::S3Object.store(file_key + ".pdf", open(file_path), RESUME_S3_LOCATION) if self.fetch_resume(file_key) == false
     end
     
-    def self.upload_resume(netid, data)
+    def self.upload_resume(file_key, data)
         return if data.nil?
         self.init_aws
         
         buffer = JSONBase64Decoder.decode(data)
         
-        AWS::S3::S3Object.store(netid + ".pdf", Base64.decode64(buffer["data"]), RESUME_S3_LOCATION, content_type: 'application/pdf')
+        AWS::S3::S3Object.store(file_key + ".pdf", Base64.decode64(buffer["data"]), RESUME_S3_LOCATION, content_type: 'application/pdf')
     end
     
-    def self.fetch_resume(netid)
+    def self.fetch_resume(file_key)
         self.init_aws
         
-        return false unless AWS::S3::S3Object.exists?(netid + ".pdf", RESUME_S3_LOCATION)
+        return false unless AWS::S3::S3Object.exists?(file_key + ".pdf", RESUME_S3_LOCATION)
         
-        resume = AWS::S3::S3Object.find("resumes/#{netid}.pdf", BUCKET)
+        resume = AWS::S3::S3Object.find("resumes/#{file_key}.pdf", BUCKET)
 
         resume.url(expires_in: 60 * 60 * 24 * 365 * 4) # expires in 4 years
     end
     
-    def self.delete_resume(netid)
+    def self.delete_resume(netid, resume_url)
         self.init_aws
         
-        return false unless AWS::S3::S3Object.exists?(netid + ".pdf", RESUME_S3_LOCATION)
+        file_name = resume_url[resume_url.index(netid)..-resume_url.index(".pdf") + ".pdf".length]
+        return false unless AWS::S3::S3Object.exists?(file_name, RESUME_S3_LOCATION)
         
-        AWS::S3::S3Object.delete(netid + ".pdf", RESUME_S3_LOCATION)
+        AWS::S3::S3Object.delete(file_name, RESUME_S3_LOCATION)
     end
 end

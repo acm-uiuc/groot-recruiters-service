@@ -35,14 +35,15 @@ module Auth
     request['Authorization'] = groot_access_key
     
     response = http.request(request)
-    JSON.parse(response.body)["isValid"] == "true"
+    return false unless response.code == "200"
+    JSON.parse(response.body)["isValid"]
   end
 
   # Verifies that the session (validated by users service) is active
   def self.verify_session(request)
     session_token = request['HTTP_TOKEN']
     groot_access_key = Config.load_config("groot")["access_key"]
-
+    
     uri = URI.parse("#{SERVICES_URL}#{VALIDATE_SESSION_URL}#{session_token}")
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Post.new(uri.request_uri)
@@ -56,7 +57,7 @@ module Auth
     request['Accept'] = 'application/json'
     request['Content-Type'] = 'application/json'
     response = http.request(request)
-
+    
     return false unless response.code == "200"
     JSON.parse(response.body)["token"] == session_token
   end

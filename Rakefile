@@ -27,12 +27,15 @@ namespace :db do
     task :seed do
         puts "Seeding database"
         
+        # Delete data and load from schema
         DataMapper.auto_migrate!
         require './scripts/seed.rb'
     end
 
     desc "Load the database with data from liquid"
     task :liquid do
+        
+        # Delete data and load from schema
         DataMapper.auto_migrate!
         require './scripts/liquid.rb'
     end

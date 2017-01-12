@@ -13,7 +13,7 @@ module ResponseFormat
         { error: error }.to_json
     end
 
-    def self.success(data)
+    def self.data(data)
         if data.is_a? Array
           { error: nil, data: data.map { |e| e.serialize } }.to_json  
         else

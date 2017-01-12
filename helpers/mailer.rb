@@ -9,33 +9,29 @@
 require 'pony'
 
 module Mailer
-  def self.email(subject, body, sender, attachment=nil)
-    credentials = Config.load_config('email')
-
+  def self.email(subject, body, sender, recipient, attachment=nil)
     Pony.options = {
       subject: subject,
+      from: sender,
+      cc: sender,
       body: body,
       via: :smtp,
       via_options: {
-        address: 'smtp.gmail.com',
-        port: '587',
-        enable_starttls_auto: true,
-        user_name: credentials['username'],
-        password: credentials['password'],
-        authentication: :plain,
-        domain: 'localhost.localdomain'
+        address: 'express-smtp.cites.uiuc.edu',
+        port: '25',
+        :enable_starttls_auto => false,
       }
     }
 
     if attachment
       Pony.mail(
-        to: sender,
+        to: recipient,
         attachments: {
           attachment[:file_name] => attachment[:file_content]
         }
       )
     else
-      Pony.mail(to: sender)
+      Pony.mail(to: recipient)
     end
   end
 end

@@ -33,30 +33,31 @@ def get_student(row)
 end
 
 STUDENT_FILE_PATH = "/scripts/2017-01-04.csv"
-puts "Importing students from #{STUDENT_FILE_PATH}"
+puts "IMPORT LOCATION: #{STUDENT_FILE_PATH}"
 
 CSV.foreach(Dir.pwd + STUDENT_FILE_PATH, headers: true) do |row|
   # next if Date.strptime(row['graduation'], '%m/%d/%y') < Date.today # uncomment if we only want active users
   s = get_student(row)
   s.save
 end
-puts "Added #{Student.all.count} students"
+puts "#{Student.all.count} STUDENTS ADDED"
 
-# only works after mounting samba
+# Only works after mounting Samba
 RESUME_LOCATION = "/Volumes/resumes"
 Dir.glob("#{RESUME_LOCATION}/*.pdf").sort.reverse.each do |file_path|
-  # by sorting it in reverse order, the most recent pdf file will be first, so the most recent resume will be uploaded first, and the rest will not.
+  # By sorting it in reverse order, the most recent pdf file will be first, so the most recent resume will be uploaded first, and the rest will not.
 
   # File format is: /file/to/resume/locally/netid-randomhash.pdf
-  netid = file_path.split("/")[-1].split("-")[0]
+  file_key = file_path.split("/")[-1].gsub ".pdf", ""
+  netid = file_key.split("-")[0]
   student = Student.first(netid: netid)
 
-  if student
-    AWS.upload_file(file_path, netid)
-    student.update(resume_url: AWS.fetch_resume(netid))
+  if student && student.resume_url.nil?
+    AWS.upload_file(file_path, file_key)
+    student.update(resume_url: AWS.fetch_resume(file_key))
     student.update(approved_resume: true)
-    puts "Updated #{student.netid}s resume"
+    puts "#{student.netid}:\tADDED"
   else
-    puts "#{netid} not a current student"
+    puts "#{netid}:\tDID NOT ADD"
   end
 end

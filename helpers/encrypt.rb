@@ -13,7 +13,7 @@ module Encrypt
   end
 
   def self.generate_encrypted_password
-    password = ('A'..'z').to_a.sample(8).join
+    password = (('a'..'z').to_a + ('0'..'9').to_a).sample(8).join
     return password, self.encrypt_password(password)
   end
 

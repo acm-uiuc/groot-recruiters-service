@@ -19,15 +19,14 @@ require 'dm-timestamps'
 require 'dm-validations'
 require 'dm-mysql-adapter'
 require 'better_errors'
+require 'json'
+require 'jwt'
 
 require_relative 'helpers/init'
 require_relative 'routes/init'
 require_relative 'models/init'
 
 class GrootRecruiterService < Sinatra::Base
-
-    enable :sessions
-
     register Sinatra::AuthsRoutes
     register Sinatra::JobsRoutes
     register Sinatra::RecruitersRoutes

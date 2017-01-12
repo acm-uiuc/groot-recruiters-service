@@ -8,3 +8,4 @@
 require_relative "student"
 require_relative "recruiter"
 require_relative "job"
+require_relative "invitation"

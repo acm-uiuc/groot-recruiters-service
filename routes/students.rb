@@ -15,16 +15,21 @@ module Sinatra
   module StudentsRoutes
     def self.registered(app)
       app.get '/students' do
+        payload = JWTAuth.decode(env)
+        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env) || (payload[:code] == 200)
+
         graduation_start_date = Date.parse(params[:graduationStart]) rescue nil
         graduation_end_date = Date.parse(params[:graduationEnd]) rescue nil
+        
         last_updated_at = Date.parse(params[:last_updated_at]) rescue nil
+        return 400, ERRORS::FUTURE_DATE if last_updated_at && last_updated_at > Date.today
 
         conditions = {}.tap do |conditions|
           conditions[:first_name] = params[:name].split.first if params[:name] && !params[:name].empty?
           conditions[:netid] = params[:netid] if params[:netid] && !params[:netid].empty?
           conditions[:"graduation_date.gte"] = graduation_start_date if graduation_start_date
           conditions[:"graduation_date.lte"] = graduation_end_date if graduation_end_date
-          conditions[:"updated_on.lte"] = last_updated_at if last_updated_at
+          conditions[:"updated_at.lte"] = last_updated_at if last_updated_at
           conditions[:degree_type] = params[:degree_type] if params[:degree_type] && !params[:degree_type].empty?
           conditions[:job_type] = params[:job_type] if params[:job_type] && !params[:job_type].empty?
           conditions[:active] = true
@@ -33,8 +38,8 @@ module Sinatra
         
         conditions[:order] = [ :last_name.asc, :first_name.asc ]
         matching_students = Student.all(conditions)
-        
-        ResponseFormat.success(matching_students)
+
+        ResponseFormat.data(matching_students)
       end
 
       app.post '/students' do
@@ -59,19 +64,21 @@ module Sinatra
             active: true
           })
         )
+        # TODO check if previous resume was there and delete? Do we only want one copy of each resume on S3?
+
+        file_name = "#{params[:netid]}-#{SecureRandom.uuid}"
+        successful_upload = AWS.upload_resume(file_name, params[:resume])
+        halt 400, ResponseFormat.error("There was an error uploading your resume to S3") unless successful_upload
         
-        successful_upload = AWS.upload_resume(params[:netid], params[:resume])
-        halt 400, ResponseFormat.error("Error uploading resume to S3") unless successful_upload
-        
-        student.resume_url = AWS.fetch_resume(params[:netid])
+        student.resume_url = AWS.fetch_resume(file_name)
         student.approved_resume = false
         student.save!
         
-        ResponseFormat.success(student)
+        ResponseFormat.message("Uploaded your information successfully!")
       end
 
       app.put '/students/:netid/approve' do
-        halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
 
         status, error = Student.validate(params, [:netid])
         halt status, ResponseFormat.error(error) if error
@@ -82,45 +89,46 @@ module Sinatra
         
         student.update(approved_resume: true) || halt(500, ResponseFormat.error("Error updating student."))
 
-        # TODO send email to student?
-        ResponseFormat.success(Student.all(order: [ :date_joined.desc ], approved_resume: false))
+        ResponseFormat.data(Student.all(order: [ :date_joined.desc ], approved_resume: false))
       end
 
       app.get '/students/:netid' do
-        student = Student.first(netid: params[:netid]) || halt(404)
-        ResponseFormat.success(student)
+        student = Student.first(netid: params[:netid]) || halt(404, Errors::STUDENT_NOT_FOUND)
+        ResponseFormat.data(student)
       end
 
       app.delete '/students/:netid' do
-        halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
 
-        student = Student.first(netid: params[:netid]) || halt(404)
-        
-        AWS.delete_resume(student.netid)
+        student = Student.first(netid: params[:netid]) || halt(404, Errors::STUDENT_NOT_FOUND)
+        AWS.delete_resume(student.netid, student.resume_url)
         student.destroy!
 
-        ResponseFormat.success(Student.all(order: [ :date_joined.desc ], approved_resume: false))
+        ResponseFormat.data(Student.all(order: [ :date_joined.desc ], approved_resume: false))
       end
 
-      app.get '/students/remind' do
-        halt 400, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+      app.post '/students/remind' do
+        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
         params = ResponseFormat.get_params(request.body.read)
 
-        status, error = Student.validate(params, [:last_updated_at])
+        status, error = Student.validate(params, [:email, :last_updated_at])
         halt status, ResponseFormat.error(error) if error
 
         last_updated_at = Date.parse(params[:last_updated_at]) rescue nil
+        return 400, ERRORS::INVALID_DATE unless last_updated_at
+        return 400, ERRORS::FUTURE_DATE if last_updated_at > Date.today
 
         reminded_students = Student.all({:"updated_at.lte" => last_updated_at})
+
         reminded_students.each do |student|
-          subject = '[Corporate-l] ACM@UIUC Resume Book'
+          subject = '[Corporate-l] ACM@UIUC Resume Update Reminder'
           html_body = erb :update_resume_email, locals: { student: student }
           
           attachment = {
             file_name: "#{student.netid}.pdf",
             file_content: open(student.resume_url).read
           }
-          Mailer.email(subject, html_body, student.email, attachment)
+          Mailer.email(subject, html_body, params[:email], student.email, attachment)
         end
 
         ResponseFormat.message("Emailed #{reminded_students.count} students.")

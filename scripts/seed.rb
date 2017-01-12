@@ -23,7 +23,8 @@ require_relative '../helpers/init'
     company_name: Faker::Company.unique.name,
     email: Faker::Internet.unique.email,
     encrypted_password: Encrypt.encrypt_password(Faker::Internet.password(8)),
-    expires_on: Faker::Date.forward(23)
+    expires_on: Faker::Date.forward(23),
+    type: ["Sponsor", "Jobfair", "Startup", "Outreach"].sample
   )
 
   Job.create(

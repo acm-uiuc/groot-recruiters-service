@@ -13,12 +13,14 @@ class Recruiter
     include DataMapper::Resource
     
     property :id, Serial
-    property :encrypted_password, Text, required: true
+    property :encrypted_password, BCryptHash
     property :expires_on, Date, default: Date.today.next_year
     property :email, String, required: true, unique: true
     property :company_name, String, required: true
     property :first_name, String, required: true
     property :last_name, String, required: true
+    property :type, String, required: true
+    property :invited, Boolean, default: false
 
     property :created_on, Date
     property :updated_on, Date
@@ -26,6 +28,12 @@ class Recruiter
     def self.validate(params, attributes)
       attributes.each do |attr|
         return [400, "Missing #{attr}"] unless params[attr] && !params[attr].empty?
+
+        case attr
+        when :type
+          options = ["Sponsor", "Jobfair", "Startup", "Outreach"]
+          return [400, "Valid options are: #{options.to_s}"] unless options.include? params[attr]
+        end
       end
 
       [200, nil]
@@ -40,7 +48,14 @@ class Recruiter
         first_name: self.first_name,
         last_name: self.last_name,
         created_on: self.created_on,
-        updated_on: self.updated_on
+        updated_on: self.updated_on,
+        type: self.type,
+        invited: self.invited,
+        is_sponsor: self.is_sponsor?
       }
+    end
+
+    def is_sponsor?
+      self.type == "Sponsor"
     end
 end

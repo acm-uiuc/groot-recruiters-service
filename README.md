@@ -30,6 +30,14 @@ In `mysql`:
 CREATE DATABASE groot_recruiter_service
 ```
 
+## Download email template folder
+
+```
+git clone https://github.com/acm-uiuc/groot-recruiters-templates views
+```
+
+- In other words, download the store and name it `views`.
+
 ## Run Application
 ```
 ruby app.rb

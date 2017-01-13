@@ -41,28 +41,6 @@ namespace :db do
     end
 end
 
-
-namespace :generate do
-    desc "Add new spec file"
-    task :spec do
-        unless ENV.has_key?('NAME')
-            raise "Must specify spec file name, e.g., rake generate:spec NAME=craftsman_profile"
-        end
-
-        spec_path = "spec/" + ENV['NAME'].downcase + "_spec.rb"
-
-        if File.exist?(spec_path)
-            raise "ERROR: Spec file '#{spec_path}' already exists."
-        end
-
-        puts "Creating #{spec_path}"
-        File.open(spec_path, 'w+') do |f|
-            f.write("require 'spec_helper'")
-        end
-    end
-
-end
-
 desc 'Start Pry with application environment loaded'
 task :pry  do
     exec "pry -r./init.rb"

@@ -21,7 +21,7 @@ module Auth
     
     token = request['HTTP_AUTHORIZATION']
 
-    "Basic #{groot_access_key}" == token
+    "#{groot_access_key}" == token
   end
 
   # Verifies that an admin (defined by groups service) originated this request

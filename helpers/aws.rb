@@ -10,7 +10,7 @@ require 'base64'
 require 'pry'
 
 module AWS
-    BUCKET = 'groot-recruiters-service-fs'
+    BUCKET = 'storage.acm.illinois.edu'
     RESUME_S3_LOCATION = "#{BUCKET}/resumes"
     
     def self.init_aws()

@@ -35,6 +35,7 @@ class GrootRecruiterService < Sinatra::Base
     
     configure do
       enable :cross_origin
+      enable :logging
     end
 
     configure :development do

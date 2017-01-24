@@ -43,8 +43,8 @@ module AWS
         return false unless AWS::S3::S3Object.exists?(file_key + ".pdf", RESUME_S3_LOCATION)
         
         resume = AWS::S3::S3Object.find("resumes/#{file_key}.pdf", BUCKET)
-
-        resume.url(expires_in: 60 * 60 * 24 * 365 * 4) # expires in 4 years
+        
+        "http://#{RESUME_S3_LOCATION}/#{file_key}.pdf"
     end
     
     def self.delete_resume(netid, resume_url)

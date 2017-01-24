@@ -49,8 +49,11 @@ module AWS
     
     def self.delete_resume(netid, resume_url)
         self.init_aws
+
+        netid_in_file = resume_url.index(netid)
+        return false unless netid_in_file
         
-        file_name = resume_url[resume_url.index(netid)..-resume_url.index(".pdf") + ".pdf".length]
+        file_name = resume_url[netid_in_file..resume_url.index(".pdf") + ".pdf".length]
         return false unless AWS::S3::S3Object.exists?(file_name, RESUME_S3_LOCATION)
         
         AWS::S3::S3Object.delete(file_name, RESUME_S3_LOCATION)

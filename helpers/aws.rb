@@ -50,6 +50,8 @@ module AWS
     def self.delete_resume(netid, resume_url)
         self.init_aws
 
+        return false unless resume_url
+
         netid_in_file = resume_url.index(netid)
         return false unless netid_in_file
         

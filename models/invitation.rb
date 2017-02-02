@@ -10,10 +10,10 @@ require "erb"
 
 # NOTE: this is not stored in the database.
 class Invitation
-  def initialize(recruiter, username)
+  def initialize(recruiter, username, password)
     @recruiter = recruiter
-
-    @username = username
+    @username = username # Corporate Member name (to sign off email)
+    @password = password # Raw, unencrypted recruiter password
     case @recruiter.type
     when "Jobfair"
       @subject = "Invitation to ACM@UIUC Career Week"

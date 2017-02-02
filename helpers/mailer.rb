@@ -13,7 +13,7 @@ module Mailer
     Pony.options = {
       subject: subject,
       from: sender,
-      cc: sender,
+      cc: "corporate@acm.illinois.edu,#{sender}",
       body: body,
       via: :smtp,
       via_options: {

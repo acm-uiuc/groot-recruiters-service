@@ -67,14 +67,14 @@ module Sinatra
         r.email = params[:recruiter_email]
         r.type = params[:type]
         random_password, encrypted = Encrypt.generate_encrypted_password
-        r.encrypted_password = encrypted
-        r.expires_on = Date.today.next_year
+        r.encrypted_password = encrypted if r.is_sponsor?
+        r.expires_on = Date.today.next_year # Other recruiters will have their credentials later.
         
-        subject = '[Corporate-l] ACM@UIUC: Website Access'
+        subject = '[Corporate-l] ACM@UIUC: Resume Book'
         html_body = erb :new_account_email, locals: { recruiter: r, password: random_password }
 
-        # Only email general recruiters, but save all recruiters
-        if Mailer.email(subject, html_body, params[:email], params[:recruiter_email])
+        # Only email sponsor recruiters, but save all recruiters
+        if !r.is_sponsor? || Mailer.email(subject, html_body, params[:email], params[:recruiter_email])
           r.save
           ResponseFormat.message("Created account for #{r.company_name} in our database")
         else
@@ -143,8 +143,14 @@ module Sinatra
         recruiter = Recruiter.get(params[:recruiter_id])
         halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
 
+        # Sanity check, Sponsor recruiters should not be getting an invitation
+        halt 500, ResponseFormat.error("Sponsor recruiters cannot request an invite") if recruiter.is_sponsor?
+
+        random_password, encrypted = Encrypt.generate_encrypted_password
+        recruiter.update(encrypted_password: encrypted)
+
         # Username will also be optionally sent from the UI
-        invitation = Invitation.new(recruiter, params[:username] || "ENTER YOUR NAME HERE")
+        invitation = Invitation.new(recruiter, params[:username] || "ENTER YOUR NAME HERE", random_password)
         ResponseFormat.data(invitation)
       end
 

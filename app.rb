@@ -39,6 +39,8 @@ class GrootRecruiterService < Sinatra::Base
     end
 
     configure :development do
+        enable :unsecure
+        
         db = Config.load_db("development")    
         DataMapper::Logger.new($stdout, :debug)
         DataMapper.setup(

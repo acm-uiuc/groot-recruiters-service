@@ -9,11 +9,16 @@
 require 'pony'
 
 module Mailer
-  def self.email(subject, body, sender, recipient, attachment=nil)
+  def self.email(subject, body, sender, recipient, ccs=nil, attachment=nil)
+    # ccs are comma separated emails that are optionally sent from the UI
+    
+    # Only send email to corporate locally
+    corporate_email = GrootRecruiterService.development? ? "" : "corporate@acm.illinois.edu,"
+
     Pony.options = {
       subject: subject,
       from: sender,
-      cc: "corporate@acm.illinois.edu,#{sender}",
+      cc: "#{corporate_email}#{ccs}",
       body: body,
       via: :smtp,
       via_options: {

@@ -167,7 +167,7 @@ module Sinatra
         halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
         halt 400, ResponseFormat.error("Recruiter was already invited") if recruiter.invited
 
-        if Mailer.email(params[:subject], params[:body], params[:email], params[:to])
+        if Mailer.email(params[:subject], params[:body], params[:email], params[:to], params[:ccs])
           recruiter.update(invited: true)
           ResponseFormat.message("Sent #{params[:to]} an email")
         else

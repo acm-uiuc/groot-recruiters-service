@@ -17,13 +17,13 @@ class Invitation
     case @recruiter.type
     when "Jobfair"
       @subject = "Invitation to ACM@UIUC Career Week"
-      @html = ERB.new(File.read(Dir.pwd + '/views/jobfair_invitation.erb')).result(binding)
+      @html = ERB.new(File.open(File.expand_path("../../views/jobfair_invitation.erb", __FILE__)).read ).result(binding)
     when "Startup"
       @subject = "Invitation to ACM@UIUC Career Week"
-      @html = ERB.new(File.read(Dir.pwd + '/views/startupfair_invitation.erb')).result(binding)
+      @html = ERB.new(File.open(File.expand_path("../../views/startupfair_invitation.erb", __FILE__)).read).result(binding)
     when "Outreach"
       @subject = "#{@recruiter.company_name} ACM@UIUC"
-      @html = ERB.new(File.read(Dir.pwd + '/views/outreach_invitation.erb')).result(binding)
+      @html = ERB.new(File.open(File.expand_path("../../views/outreach_invitation.erb", __FILE__)).read).result(binding)
     end
   end
 

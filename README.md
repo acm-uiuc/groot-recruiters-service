@@ -49,9 +49,8 @@ git clone https://github.com/acm-uiuc/groot-recruiters-templates views
 
 ## Run Application
 ```
-rackup -p 4567
+ruby app.rb
 ```
-TLDR: You must use the `rackup -p 4567` rather than simply `ruby app.rb` because then the Sinatra app is run as a `GrootRecruiterService` app with all of it's settings, like `settings.unsecure` that allows the service to run unsecured locally.
 
 
 ## API Documentation

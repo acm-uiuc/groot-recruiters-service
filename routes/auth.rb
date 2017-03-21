@@ -10,7 +10,7 @@ module Sinatra
   module AuthsRoutes
     def self.registered(app)
       app.before do
-        halt(401, Errors::VERIFY_GROOT) unless Auth.verify_request(env) || settings.unsecure
+        halt(401, Errors::VERIFY_GROOT) unless Auth.verify_request(env) || GrootRecruiterService.unsecure
       end
 
       app.get '/status' do

@@ -22,7 +22,7 @@ module Sinatra
         graduation_end_date = Date.parse(params[:graduationEnd]) rescue nil
         
         last_updated_at = Date.parse(params[:last_updated_at]) rescue nil
-        return 400, ERRORS::FUTURE_DATE if last_updated_at && last_updated_at > Date.today
+        return 400, Errors::FUTURE_DATE if last_updated_at && last_updated_at > Date.today
 
         conditions = {}.tap do |conditions|
           conditions[:first_name] = params[:name].split.first if params[:name] && !params[:name].empty?
@@ -115,8 +115,8 @@ module Sinatra
         halt status, ResponseFormat.error(error) if error
 
         last_updated_at = Date.parse(params[:last_updated_at]) rescue nil
-        return 400, ERRORS::INVALID_DATE unless last_updated_at
-        return 400, ERRORS::FUTURE_DATE if last_updated_at > Date.today
+        return 400, Errors::INVALID_DATE unless last_updated_at
+        return 400, Errors::FUTURE_DATE if last_updated_at > Date.today
 
         reminded_students = Student.all({:"updated_at.lte" => last_updated_at})
 

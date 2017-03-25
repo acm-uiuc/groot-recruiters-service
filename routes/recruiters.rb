@@ -133,7 +133,7 @@ module Sinatra
           recruiter.save
           ResponseFormat.message("We have verified your account details. Check your email for a new password.")
         else
-          halt 500, ERRORS::EMAIL_ERROR
+          halt 500, Errors::EMAIL_ERROR
         end
       end
       

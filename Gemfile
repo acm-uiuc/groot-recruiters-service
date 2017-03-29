@@ -51,6 +51,4 @@ group :development, :test do
   gem 'shotgun' # Auto-reload sinatra app on change.
   gem 'better_errors' # Show an awesome console in the browser on error.
   gem 'rest-client'
-  gem 'dm-sqlite-adapter'
-  gem 'sqlite3', '~> 1.3', '>= 1.3.11'
 end

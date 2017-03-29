@@ -16,10 +16,10 @@ class Invitation
     @password = password # Raw, unencrypted recruiter password
     case @recruiter.type
     when "Jobfair"
-      @subject = "Invitation to ACM@UIUC Career Week"
+      @subject = "Invitation to ACM@UIUC Career Week ~ #{@recruiter.company_name}"
       @html = ERB.new(File.open(File.expand_path("../../views/jobfair_invitation.erb", __FILE__)).read ).result(binding)
     when "Startup"
-      @subject = "Invitation to ACM@UIUC Career Week"
+      @subject = "Invitation to ACM@UIUC Career Week ~ #{@recruiter.company_name}"
       @html = ERB.new(File.open(File.expand_path("../../views/startupfair_invitation.erb", __FILE__)).read).result(binding)
     when "Outreach"
       @subject = "#{@recruiter.company_name} ACM@UIUC"

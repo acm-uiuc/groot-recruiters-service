@@ -25,14 +25,11 @@ rake db:migrate
 
 ```
 cp secrets.yaml.template secrets.yaml
-cp database.yaml.template database.yaml
 ```
-
-Fill out the appropriate credentials in each of the yaml files. For example, fill in the correct email and password.
 
 ## Create databases
 
-You need to login to `mysql`, and create the database names for your development and test environments and fill it in the `database.yaml`. For example,
+You need to login to `mysql`, and create the database names for your development and test environments and fill it in the `secrets.yaml`. For example,
 
 In `mysql`:
 ```

@@ -12,9 +12,4 @@ module Config
       config = YAML.load_file(__dir__ + "/../config/secrets.yaml")
       config[section]
     end
-
-    def self.load_db(section)
-      config = YAML.load_file(__dir__ + "/../config/database.yaml")
-      config[section]
-    end
 end

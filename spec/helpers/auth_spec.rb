@@ -13,10 +13,10 @@ RSpec.describe Auth do
       .to receive(:request)
       .and_return(double(code: "200", body: {token: token, isValid: 'true' }.to_json))
   end
-
+  
   describe 'self.verify_request' do
     it 'should verify the token on the header' do
-      get "/status", {}, { "HTTP_AUTHORIZATION" => "Basic #{token}" }
+      get "/status", {}, { "HTTP_AUTHORIZATION" => "#{token}" }
 
       expect(last_response).to be_ok
     end

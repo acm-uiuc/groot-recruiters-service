@@ -9,7 +9,7 @@
 module Sinatra
   module AuthsRoutes
     def self.registered(app)
-      app.set port: 3000
+      app.set port: 4567
       app.set bind: '0.0.0.0'
 
       app.before do

@@ -65,6 +65,8 @@ class GrootRecruiterService < Sinatra::Base
     end
 
     configure :production do
+        disable :unsecure
+        
         db = Config.load_config("production")
         DataMapper.setup(
             :default,

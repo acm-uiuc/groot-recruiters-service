@@ -12,21 +12,17 @@ module Sinatra
       app.set port: 4567
       app.set bind: '0.0.0.0'
 
-      app.before do
-        halt(401, Errors::VERIFY_GROOT) unless Auth.verify_request(env) || GrootRecruiterService.unsecure
-      end
-
       app.get '/status' do
         ResponseFormat.message("OK")
       end
 
       app.get '/status/corporate' do
-        halt(403, Errors::VERIFY_CORPORATE_SESSION) unless Auth.verify_corporate(env)
+        halt(403, Errors::VERIFY_ADMIN_SESSION) unless Auth.verify_corporate(env)
         ResponseFormat.message("OK")
       end
 
       app.get '/status/session' do
-        halt(403, Errors::VERIFY_CORPORATE_SESSION) unless Auth.verify_session(env)
+        halt(403, Errors::VERIFY_ADMIN_SESSION) unless Auth.verify_session(env)
         ResponseFormat.message("OK")
       end
 

@@ -13,10 +13,6 @@ module Auth
   VERIFY_CORPORATE_URL = '/groups/committees/corporate?isMember='
   VALIDATE_SESSION_URL = '/session/'
 
-  def self.verify_request(request)
-    Config.load_config("groot")["request_key"] == request['HTTP_AUTHORIZATION']
-  end
-
   def self.services_url
     Config.load_config("groot")["host"]
   end
@@ -26,17 +22,16 @@ module Auth
   end
 
   # Verifies that an admin (defined by groups service) originated this request
-  def self.verify_corporate(request)
+  def self.verify_credentials(type, request)
     netid = request['HTTP_NETID']
     
-    uri = URI.parse("#{Auth.services_url}#{VERIFY_CORPORATE_URL}#{netid}")
+    uri = URI.parse("#{Auth.services_url}#{VERIFY_COMMITTEE_URL}#{type}?isMember=#{netid}")
     http = Net::HTTP.new(uri.host, uri.port)
     request = Net::HTTP::Get.new(uri.request_uri)
-    request['Authorization'] = self.groot_access_key
+    request['Authorization'] = Auth.groot_access_key
     
     response = http.request(request)
-    return false unless response.code == "200"
-    JSON.parse(response.body)["isValid"]
+    return response.code == "200"
   end
 
   # Verifies that the session (validated by users service) is active
@@ -61,7 +56,11 @@ module Auth
     JSON.parse(response.body)["token"] == session_token
   end
 
-  def self.verify_corporate_session(request)
-    self.verify_session(request) && self.verify_corporate(request)
+  def self.verify_admin_session(request)
+    self.verify_session(request) && (
+      self.verify_credentials('admin', request) ||
+      self.verify_credentials('top4', request) ||
+      self.verify_credentials('corporate', request)
+    )
   end
 end

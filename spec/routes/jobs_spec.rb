@@ -2,8 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Sinatra::JobsRoutes do
   before :each do
-    expect(Auth).to receive(:verify_request).and_return(true)
-    allow(Auth).to receive(:verify_corporate_session).and_return(true)
+    allow(Auth).to receive(:verify_admin_session).and_return(true)
   end
 
   def match_job(datum, job)
@@ -99,12 +98,12 @@ RSpec.describe Sinatra::JobsRoutes do
 
   describe "PUT /jobs/:job_id/approve" do
     it 'should not allow a non-corporate user to access this route' do
-      allow(Auth).to receive(:verify_corporate_session).and_return(false)
+      allow(Auth).to receive(:verify_admin_session).and_return(false)
 
       put "/jobs/#{job.id}/approve"
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
-      expect_error(json_data, Errors::VERIFY_CORPORATE_SESSION)
+      expect_error(json_data, Errors::VERIFY_ADMIN_SESSION)
     end
 
     it 'should approve an unapproved job' do
@@ -133,12 +132,12 @@ RSpec.describe Sinatra::JobsRoutes do
 
   describe "DELETE /jobs/:job_id" do
     it 'should not allow a non-corporate user to access this route' do
-      allow(Auth).to receive(:verify_corporate_session).and_return(false)
+      allow(Auth).to receive(:verify_admin_session).and_return(false)
 
       delete "/jobs/#{job.id}"
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
-      expect_error(json_data, Errors::VERIFY_CORPORATE_SESSION)
+      expect_error(json_data, Errors::VERIFY_ADMIN_SESSION)
     end
 
     it 'should return an error if it cannot find the job by id' do

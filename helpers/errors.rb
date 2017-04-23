@@ -11,8 +11,7 @@ module Errors
   ACCOUNT_EXPIRED = ResponseFormat.error "Your account has expired! Please reach out to corporate@acm.illinois.edu so that your account can be renewed!"
   DUPLICATE_ACCOUNT = ResponseFormat.error "An account with these credentials already exists."
 
-  VERIFY_CORPORATE_SESSION = ResponseFormat.error "Corporate session could not be verified"
-  VERIFY_GROOT = ResponseFormat.error "Request did not originate from groot"
+  VERIFY_ADMIN_SESSION = ResponseFormat.error "Corporate session could not be verified"
 
   FUTURE_DATE = ResponseFormat.error "You entered a date from the future"
   INVALID_DATE = ResponseFormat.error "Date was not in a readable format"

@@ -10,7 +10,7 @@ require 'uri'
 require 'pry'
 
 module Auth
-  VERIFY_CORPORATE_URL = '/groups/committees/corporate?isMember='
+  VERIFY_COMMITTEE_URL = '/groups/committees/'
   VALIDATE_SESSION_URL = '/session/'
 
   def self.services_url

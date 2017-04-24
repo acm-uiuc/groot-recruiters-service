@@ -41,7 +41,7 @@ class GrootRecruiterService < Sinatra::Base
     configure :development do
         enable :unsecure
         
-        db = Config.load_config("development")    
+        db = Config.load_config("development_db")
         DataMapper::Logger.new($stdout, :debug)
         DataMapper.setup(
             :default,
@@ -56,7 +56,7 @@ class GrootRecruiterService < Sinatra::Base
     end
 
     configure :test do
-        db = Config.load_config("test")
+        db = Config.load_config("test_db")
         DataMapper.setup(
             :default,
             "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
@@ -67,7 +67,7 @@ class GrootRecruiterService < Sinatra::Base
     configure :production do
         disable :unsecure
         
-        db = Config.load_config("production")
+        db = Config.load_config("production_db")
         DataMapper.setup(
             :default,
             "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]

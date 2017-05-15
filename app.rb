@@ -38,11 +38,21 @@ class GrootRecruiterService < Sinatra::Base
       enable :logging
     end
 
-    db = Config.load_config("database")
-    DataMapper.setup(
-        :default,
-        "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
-    )
+    configure :development, :production do
+        db = Config.load_config("database")
+        DataMapper.setup(
+            :default,
+            "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
+        )
+    end
+
+    configure :test do
+        db = Config.load_config("test_database")
+        DataMapper.setup(
+            :default,
+            "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
+        )
+    end
 
     configure :development do
         enable :unsecure

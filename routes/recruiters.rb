@@ -12,7 +12,7 @@ module Sinatra
   module RecruitersRoutes
     def self.registered(app)
       app.get '/recruiters' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
 
         conditions = {}.tap do |conditions|
           conditions[:type] = params[:type] if params[:type] && Recruiter.validate(params, [:type])
@@ -49,7 +49,7 @@ module Sinatra
       end
 
       app.post '/recruiters' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
 
         params = ResponseFormat.get_params(request.body.read)
 
@@ -83,14 +83,14 @@ module Sinatra
       end
 
       app.get '/recruiters/:recruiter_id' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
         
         recruiter = Recruiter.get(params[:recruiter_id]) || halt(404, Errors::RECRUITER_NOT_FOUND)
         ResponseFormat.data(recruiter)
       end
       
       app.put '/recruiters/:recruiter_id' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
 
         recruiter_id = params[:recruiter_id]
         params = ResponseFormat.get_params(request.body.read)
@@ -138,7 +138,7 @@ module Sinatra
       end
       
       app.get '/recruiters/:recruiter_id/invite' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
 
         recruiter = Recruiter.get(params[:recruiter_id])
         halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
@@ -155,7 +155,7 @@ module Sinatra
       end
 
       app.post '/recruiters/:recruiter_id/invite' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
 
         recruiter_id = params[:recruiter_id]
         params = ResponseFormat.get_params(request.body.read)
@@ -176,7 +176,7 @@ module Sinatra
       end
 
       app.put '/recruiters/:recruiter_id/renew' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
 
         recruiter = Recruiter.get(params[:recruiter_id])
         halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter
@@ -187,14 +187,14 @@ module Sinatra
       end
 
       app.post '/recruiters/reset' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
 
         Recruiter.update(invited: false)
         ResponseFormat.message("Reset all recruiter invitations. You can now invite recruiters to fairs again")
       end
 
       app.delete '/recruiters/:recruiter_id' do
-        halt(400, Errors::VERIFY_CORPORATE_SESSION) unless Auth.verify_corporate_session(env)
+        halt(400, Errors::VERIFY_ADMIN_SESSION) unless Auth.verify_admin_session(env)
 
         recruiter = Recruiter.get(params[:recruiter_id])
         halt 404, Errors::RECRUITER_NOT_FOUND unless recruiter

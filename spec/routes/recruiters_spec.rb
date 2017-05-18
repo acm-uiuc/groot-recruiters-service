@@ -21,8 +21,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
   }
 
   before :each do
-    expect(Auth).to receive(:verify_request).and_return(true)
-    allow(Auth).to receive(:verify_corporate_session).and_return(true)
+    allow(Auth).to receive(:verify_admin_session).and_return(true)
 
     allow(Mailer).to receive(:email).and_return(true)
   end
@@ -30,13 +29,13 @@ RSpec.describe Sinatra::RecruitersRoutes do
   describe "GET /recruiters" do
     context 'for invalid parameters' do
       it 'should not allow a non-corporate user to access this route' do
-        allow(Auth).to receive(:verify_corporate_session).and_return(false)
+        allow(Auth).to receive(:verify_admin_session).and_return(false)
 
         get "/recruiters", {}.to_json
 
         expect(last_response).not_to be_ok
         json_data = JSON.parse(last_response.body)
-        expect_error(json_data, Errors::VERIFY_CORPORATE_SESSION)
+        expect_error(json_data, Errors::VERIFY_ADMIN_SESSION)
       end
     end
 
@@ -183,12 +182,12 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
   describe "GET /recruiters/:recruiter_id" do
     it 'should return an error if the corporate session cannot be verified' do
-      allow(Auth).to receive(:verify_corporate_session).and_return(false)
+      allow(Auth).to receive(:verify_admin_session).and_return(false)
 
       get "/recruiters/#{recruiter.id}"
       expect(last_response).not_to be_ok
       json_response = JSON.parse(last_response.body)
-      expect(json_response.to_json).to eq Errors::VERIFY_CORPORATE_SESSION
+      expect(json_response.to_json).to eq Errors::VERIFY_ADMIN_SESSION
     end
 
     it 'should return an error if it cannot find a recruiter by id' do
@@ -295,12 +294,12 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
   describe "GET /recruiters/:recruiter_id/invite" do
     it 'should return an error if the corporate session cannot be verified' do
-      allow(Auth).to receive(:verify_corporate_session).and_return(false)
+      allow(Auth).to receive(:verify_admin_session).and_return(false)
 
       get "/recruiters/#{recruiter.id}/invite"
       expect(last_response).not_to be_ok
       json_response = JSON.parse(last_response.body)
-      expect(json_response.to_json).to eq Errors::VERIFY_CORPORATE_SESSION
+      expect(json_response.to_json).to eq Errors::VERIFY_ADMIN_SESSION
     end
 
     it 'should return an error if it cannot find a recruiter by id' do
@@ -337,12 +336,12 @@ RSpec.describe Sinatra::RecruitersRoutes do
       include_examples "invalid parameters", [:to, :subject, :body, :email], "/recruiters/1/invite", "post"
 
       it 'should return an error if the corporate session cannot be verified' do
-        allow(Auth).to receive(:verify_corporate_session).and_return(false)
+        allow(Auth).to receive(:verify_admin_session).and_return(false)
 
         post "/recruiters/#{recruiter.id}/invite", valid_params.to_json
         expect(last_response).not_to be_ok
         json_response = JSON.parse(last_response.body)
-        expect(json_response.to_json).to eq Errors::VERIFY_CORPORATE_SESSION
+        expect(json_response.to_json).to eq Errors::VERIFY_ADMIN_SESSION
       end
 
       it 'should return an error if it cannot find a recruiter by id' do
@@ -375,13 +374,13 @@ RSpec.describe Sinatra::RecruitersRoutes do
   describe "PUT /recruiters/:recruiter_id/renew" do
     context 'for invalid parameters' do
       it 'should not allow a non-corporate user to access this route' do
-        allow(Auth).to receive(:verify_corporate_session).and_return(false)
+        allow(Auth).to receive(:verify_admin_session).and_return(false)
 
         put "/recruiters/#{recruiter.id}/renew", {}.to_json
 
         expect(last_response).not_to be_ok
         json_data = JSON.parse(last_response.body)
-        expect_error(json_data, Errors::VERIFY_CORPORATE_SESSION)
+        expect_error(json_data, Errors::VERIFY_ADMIN_SESSION)
       end
 
       it 'should return an error if the recruiter does not exist' do
@@ -413,13 +412,13 @@ RSpec.describe Sinatra::RecruitersRoutes do
   describe "POST /recruiters/reset" do
     context 'for invalid parameters' do
       it 'should not allow a non-corporate user to access this route' do
-        allow(Auth).to receive(:verify_corporate_session).and_return(false)
+        allow(Auth).to receive(:verify_admin_session).and_return(false)
 
         post "/recruiters/reset", {}.to_json
 
         expect(last_response).not_to be_ok
         json_data = JSON.parse(last_response.body)
-        expect_error(json_data, Errors::VERIFY_CORPORATE_SESSION)
+        expect_error(json_data, Errors::VERIFY_ADMIN_SESSION)
       end
     end
 
@@ -435,13 +434,13 @@ RSpec.describe Sinatra::RecruitersRoutes do
   describe "DELETE /recruiters/:recruiter_id" do
     context 'for invalid parameters' do
       it 'should not allow a non-corporate user to access this route' do
-        allow(Auth).to receive(:verify_corporate_session).and_return(false)
+        allow(Auth).to receive(:verify_admin_session).and_return(false)
 
         delete "/recruiters/#{recruiter.id}", {}.to_json
 
         expect(last_response).not_to be_ok
         json_data = JSON.parse(last_response.body)
-        expect_error(json_data, Errors::VERIFY_CORPORATE_SESSION)
+        expect_error(json_data, Errors::VERIFY_ADMIN_SESSION)
       end
 
       it 'should return an error if the recruiter does not exist' do

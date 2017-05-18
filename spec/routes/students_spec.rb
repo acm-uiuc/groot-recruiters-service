@@ -8,8 +8,7 @@ RSpec.describe Sinatra::StudentsRoutes do
   end
 
   before :each do
-    expect(Auth).to receive(:verify_request).and_return(true)
-    allow(Auth).to receive(:verify_corporate_session).and_return(true)
+    allow(Auth).to receive(:verify_admin_session).and_return(true)
   end
 
   let!(:netid) { "jsmith2" }
@@ -29,13 +28,13 @@ RSpec.describe Sinatra::StudentsRoutes do
   describe 'GET /students' do
     context 'for invalid authentication' do
       it 'should not allow a non-corporate user to access this route' do
-        allow(Auth).to receive(:verify_corporate_session).and_return(false)
+        allow(Auth).to receive(:verify_admin_session).and_return(false)
 
         get "/students", {}.to_json
 
         expect(last_response).not_to be_ok
         json_data = JSON.parse(last_response.body)
-        expect_error(json_data, Errors::VERIFY_CORPORATE_SESSION)
+        expect_error(json_data, Errors::VERIFY_ADMIN_SESSION)
       end
     end
 

@@ -22,9 +22,9 @@ require 'better_errors'
 require 'json'
 require 'jwt'
 
-require_relative 'helpers/init'
-require_relative 'routes/init'
-require_relative 'models/init'
+require_relative './models/init'
+require_relative './routes/init'
+require_relative './helpers/init'
 
 class GrootRecruiterService < Sinatra::Base
     register Sinatra::AuthsRoutes
@@ -38,40 +38,34 @@ class GrootRecruiterService < Sinatra::Base
       enable :logging
     end
 
-    configure :development do
-        enable :unsecure
-        
-        db = Config.load_config("development")    
-        DataMapper::Logger.new($stdout, :debug)
+    configure :development, :production do
+        db = Config.load_config("database")
         DataMapper.setup(
             :default,
             "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
         )
-        use BetterErrors::Middleware
-        
-        # you need to set the application root in order to abbreviate filenames
-        # within the application:
-        BetterErrors.application_root = File.expand_path('..', __FILE__)
-        DataMapper.auto_upgrade!
     end
 
     configure :test do
-        db = Config.load_config("test")
+        db = Config.load_config("test_database")
         DataMapper.setup(
             :default,
             "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
         )
+    end
+
+    configure :development do
+        enable :unsecure
+        
+        DataMapper::Logger.new($stdout, :debug)
+        use BetterErrors::Middleware
+        
+        BetterErrors.application_root = File.expand_path('..', __FILE__)
         DataMapper.auto_upgrade!
     end
 
     configure :production do
         disable :unsecure
-        
-        db = Config.load_config("production")
-        DataMapper.setup(
-            :default,
-            "mysql://" + db["user"] + ":" + db["password"] + "@" + db["hostname"]+ "/" + db["name"]
-        )
     end
 
     DataMapper.finalize

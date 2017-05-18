@@ -16,7 +16,7 @@ module Sinatra
     def self.registered(app)
       app.get '/students' do
         payload = JWTAuth.decode(env)
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env) || (payload[:code] == 200)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env) || (payload[:code] == 200)
 
         graduation_start_date = Date.parse(params[:graduationStart]) rescue nil
         graduation_end_date = Date.parse(params[:graduationEnd]) rescue nil
@@ -78,7 +78,7 @@ module Sinatra
       end
 
       app.put '/students/:netid/approve' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
 
         status, error = Student.validate(params, [:netid])
         halt status, ResponseFormat.error(error) if error
@@ -98,7 +98,7 @@ module Sinatra
       end
 
       app.delete '/students/:netid' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
 
         student = Student.first(netid: params[:netid]) || halt(404, Errors::STUDENT_NOT_FOUND)
         AWS.delete_resume(student.netid, student.resume_url)
@@ -108,7 +108,7 @@ module Sinatra
       end
 
       app.post '/students/remind' do
-        halt 401, Errors::VERIFY_CORPORATE_SESSION unless Auth.verify_corporate_session(env)
+        halt 401, Errors::VERIFY_ADMIN_SESSION unless Auth.verify_admin_session(env)
         params = ResponseFormat.get_params(request.body.read)
 
         status, error = Student.validate(params, [:email, :last_updated_at])

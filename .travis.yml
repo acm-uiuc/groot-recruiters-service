@@ -1,0 +1,20 @@
+language: ruby
+
+rvm:
+  - 2.2
+
+services:
+  - mysql
+
+before_install:
+  - gem update bundler
+  - cp config/secrets.yaml.template config/secrets.yaml
+  - git clone https://github.com/acm-uiuc/groot-recruiters-templates-example.git views 
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS groot_recruiter_service_test;'
+
+install:
+  - bundle install
+  - gem install rubocop
+  - rake db:migrate
+
+script: rubocop * && rspec

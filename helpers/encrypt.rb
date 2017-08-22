@@ -1,10 +1,11 @@
 # Copyright © 2017, ACM@UIUC
 #
-# This file is part of the Groot Project.  
-# 
+# This file is part of the Groot Project.
+#
 # The Groot Project is open source software, released under the University of
 # Illinois/NCSA Open Source License. You should have received a copy of
 # this license in a file with the distribution.
+
 require 'bcrypt'
 
 module Encrypt
@@ -14,7 +15,7 @@ module Encrypt
 
   def self.generate_encrypted_password
     password = (('a'..'z').to_a + ('0'..'9').to_a).sample(8).join
-    return password, self.encrypt_password(password)
+    return password, encrypt_password(password)
   end
 
   def self.valid_password?(encrypted_password, raw_password)

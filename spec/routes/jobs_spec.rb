@@ -10,48 +10,45 @@ RSpec.describe Sinatra::JobsRoutes do
     expect(job.company).to eq datum['company']
     expect(job.contact_name).to eq datum['contact_name']
   end
-  
+
   let(:job) {
     Job.create(
-      title: "Software Engineer",
-      company: "Apple",
-      contact_name: "Steve Jobs",
-      contact_email: "banana@apple.com",
-      contact_phone: "111-111-1111",
-      job_type: "Full-Time",
-      description: "You work at Apple."
+      title: 'Software Engineer', company: 'Apple',
+      contact_name: 'Steve Jobs', contact_email: 'banana@apple.com',
+      contact_phone: '111-111-1111', job_type: 'Full-Time',
+      description: 'You work at Apple.'
     )
   }
 
-  describe "GET /jobs" do
+  describe 'GET /jobs' do
     it 'should return a 200' do
-      get "/jobs"
+      get '/jobs'
       expect(last_response).to be_ok
     end
 
     it 'should return all unapproved jobs' do
-      job1 = Job.create(
-        title: "Software Engineer",
-        company: "Apple",
-        contact_name: "Steve Jobs",
-        contact_email: "banana@apple.com",
-        contact_phone: "111-111-1111",
-        job_type: "Full-Time",
-        description: "You work at Apple.",
+      Job.create(
+        title: 'Software Engineer',
+        company: 'Apple',
+        contact_name: 'Steve Jobs',
+        contact_email: 'banana@apple.com',
+        contact_phone: '111-111-1111',
+        job_type: 'Full-Time',
+        description: 'You work at Apple.',
         approved: true
       )
 
       job2 = Job.create(
-        title: "Fake Software Engineer",
-        company: "Apple",
-        contact_name: "Steve Jobs",
-        contact_email: "banana@apple.com",
-        contact_phone: "111-111-1111",
-        job_type: "Internship",
-        description: "You work at Apple."
+        title: 'Fake Software Engineer',
+        company: 'Apple',
+        contact_name: 'Steve Jobs',
+        contact_email: 'banana@apple.com',
+        contact_phone: '111-111-1111',
+        job_type: 'Internship',
+        description: 'You work at Apple.'
       )
 
-      get "/jobs"
+      get '/jobs'
       expect(last_response).to be_ok
       json_data = JSON.parse(last_response.body)
       expect(json_data['data'].count).to eq 1
@@ -60,21 +57,21 @@ RSpec.describe Sinatra::JobsRoutes do
     end
   end
 
-  describe "POST /jobs" do
+  describe 'POST /jobs' do
     before do
       @valid_params = {
-        job_title: "Software Engineer",
-        organization: "Apple",
-        contact_name: "Steve Jobs",
-        contact_email: "banana@apple.com",
-        contact_phone: "111-111-1111",
-        job_type: "Full-Time",
-        description: "You work at Apple."
+        job_title: 'Software Engineer',
+        organization: 'Apple',
+        contact_name: 'Steve Jobs',
+        contact_email: 'banana@apple.com',
+        contact_phone: '111-111-1111',
+        job_type: 'Full-Time',
+        description: 'You work at Apple.'
       }
     end
 
     context 'with invalid params' do
-      [:job_title, :organization, :contact_name, :contact_email, :contact_phone, :job_type, :description].each do |key|
+      %i[job_title organization contact_name contact_email contact_phone job_type description].each do |key|
         it "should not create the job and return an error when #{key} is missing" do
           @valid_params.delete(key)
 
@@ -96,7 +93,7 @@ RSpec.describe Sinatra::JobsRoutes do
     end
   end
 
-  describe "PUT /jobs/:job_id/approve" do
+  describe 'PUT /jobs/:job_id/approve' do
     it 'should not allow a non-corporate user to access this route' do
       allow(Auth).to receive(:verify_admin_session).and_return(false)
 
@@ -107,9 +104,8 @@ RSpec.describe Sinatra::JobsRoutes do
     end
 
     it 'should approve an unapproved job' do
-      
       expect(job.approved).to eq false
-  
+
       put "/jobs/#{job.id}/approve", {}.to_json
       expect(last_response).to be_ok
       expect(Job.last.approved).to eq true
@@ -117,7 +113,7 @@ RSpec.describe Sinatra::JobsRoutes do
       json_data = JSON.parse(last_response.body)
       expect(json_data['data'].count).to eq 0
     end
-    
+
     it 'should not approve a job which has already been approved' do
       job.update(approved: true)
 
@@ -125,12 +121,11 @@ RSpec.describe Sinatra::JobsRoutes do
 
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
-      # expect(json_data['error']).to eq "Job already approved"
       expect_error(json_data, Errors::JOB_APPROVED)
     end
   end
 
-  describe "DELETE /jobs/:job_id" do
+  describe 'DELETE /jobs/:job_id' do
     it 'should not allow a non-corporate user to access this route' do
       allow(Auth).to receive(:verify_admin_session).and_return(false)
 

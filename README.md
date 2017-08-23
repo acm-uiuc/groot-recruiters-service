@@ -2,6 +2,8 @@
 
 - The recruiter service serves as an API portal for recruiters to view resumes uploaded by students and interact with job ads.
 
+[![Build Status](https://travis-ci.org/acm-uiuc/groot-recruiters-service.svg?branch=master)](https://travis-ci.org/acm-uiuc/groot-recruiters-service)
+
 Groot core development:
 
 [![Join the chat at https://gitter.im/acm-uiuc/groot-development](https://badges.gitter.im/acm-uiuc/groot-development.svg)](https://gitter.im/acm-uiuc/groot-development?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)

@@ -1,7 +1,7 @@
 # Copyright © 2017, ACM@UIUC
 #
-# This file is part of the Groot Project.  
-# 
+# This file is part of the Groot Project.
+#
 # The Groot Project is open source software, released under the University of
 # Illinois/NCSA Open Source License. You should have received a copy of
 # this license in a file with the distribution.
@@ -23,26 +23,26 @@ module TestHelpers
   end
 end
 
-RSpec.shared_examples "invalid parameters" do |parameters, url, method|
+RSpec.shared_examples 'invalid parameters' do |parameters, url, method|
   payload = {}
   parameters.each do |key|
     payload[key] = key.to_s
   end
-  
+
   parameters.each do |key|
     it "should not create the model and return an error when #{key} is missing" do
       old_value = payload.delete(key)
-      
-      if method == "post"
+
+      if method == 'post'
         post url, payload.to_json
-      elsif method == "put"
+      elsif method == 'put'
         put url, payload.to_json
       end
 
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
       expect(json_data['error']).to eq "Missing #{key}"
-      
+
       payload[key] = old_value
     end
   end
@@ -62,7 +62,6 @@ RSpec.configure do |config|
       example.run
     end
   end
-
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true

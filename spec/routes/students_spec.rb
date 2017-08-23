@@ -11,26 +11,26 @@ RSpec.describe Sinatra::StudentsRoutes do
     allow(Auth).to receive(:verify_admin_session).and_return(true)
   end
 
-  let!(:netid) { "jsmith2" }
+  let!(:netid) { 'jsmith2' }
   let!(:student) {
     Student.create(
-      first_name: "John",
-      last_name: "Smith",
+      first_name: 'John',
+      last_name: 'Smith',
       netid: netid,
       email: "#{netid}@illinois.edu",
       graduation_date: Date.today.next_year,
-      degree_type: "Bachelors",
-      job_type: "Full-Time"
+      degree_type: 'Bachelors',
+      job_type: 'Full-Time'
     )
   }
+  let!(:uuid) { 'fake-uuid' }
 
-  # Since this is a get request, the params are encoded in the url, so groot doesn't send it as json, but it automatically gets called as a ruby hash
   describe 'GET /students' do
     context 'for invalid authentication' do
       it 'should not allow a non-corporate user to access this route' do
         allow(Auth).to receive(:verify_admin_session).and_return(false)
 
-        get "/students", {}.to_json
+        get '/students', {}.to_json
 
         expect(last_response).not_to be_ok
         json_data = JSON.parse(last_response.body)
@@ -40,14 +40,14 @@ RSpec.describe Sinatra::StudentsRoutes do
 
     context 'for valid recruiter authentication' do
       it 'should return a 200' do
-        allow(JWTAuth).to receive(:decode).and_return({
+        allow(JWTAuth).to receive(:decode).and_return(
           id: 1,
           code: 200,
-          first_name: "Recruiter First Name",
-          last_name: "Recruiter Last Name"
-        })
+          first_name: 'Recruiter First Name',
+          last_name: 'Recruiter Last Name'
+        )
 
-        get "/students", {}.to_json
+        get '/students', {}.to_json
 
         expect(last_response).to be_ok
         json_data = JSON.parse(last_response.body)
@@ -57,32 +57,32 @@ RSpec.describe Sinatra::StudentsRoutes do
 
     context 'without students' do
       it 'should return a 200' do
-        get "/students", {}
-        
+        get '/students', {}
+
         expect(last_response).to be_ok
         json_data = JSON.parse(last_response.body)
         expect(json_data['data']).to eq([])
       end
     end
-    
+
     context 'with students' do
       it 'should only return approved students' do
-        first_name = "Jake"
-        last_name = "Smith"
-        netid3 = "jsmith3" 
+        first_name = 'Jake'
+        last_name = 'Smith'
+        netid3 = 'jsmith3'
         approved_student = Student.create(
           first_name: first_name,
           last_name: last_name,
-          email: "jakesmith@gmail.com",
+          email: 'jakesmith@gmail.com',
           graduation_date: Date.today.next_year,
-          degree_type: "Bachelors",
-          job_type: "Full-Time",
+          degree_type: 'Bachelors',
+          job_type: 'Full-Time',
           netid: netid3,
           approved_resume: true
         )
 
-        get "/students", {}
-        
+        get '/students', {}
+
         expect(last_response).to be_ok
         json_data = JSON.parse(last_response.body)
         expect(json_data['data'].count).to eq 1
@@ -91,10 +91,10 @@ RSpec.describe Sinatra::StudentsRoutes do
     end
 
     context 'with a user' do
-      let(:first_name) { "Association" }
-      let(:last_name) { "Machinery" }
-      let(:netid1) { "acm2" }
-      let(:netid2) { "acm32" }
+      let(:first_name) { 'Association' }
+      let(:last_name) { 'Machinery' }
+      let(:netid1) { 'acm2' }
+      let(:netid2) { 'acm32' }
 
       let!(:student1) {
         Student.create(
@@ -102,8 +102,8 @@ RSpec.describe Sinatra::StudentsRoutes do
           last_name: last_name,
           email: "#{netid1}@gmail.com",
           graduation_date: Date.today.next_year,
-          degree_type: "Bachelors",
-          job_type: "Full-Time",
+          degree_type: 'Bachelors',
+          job_type: 'Full-Time',
           netid: netid1,
           approved_resume: true
         )
@@ -115,15 +115,15 @@ RSpec.describe Sinatra::StudentsRoutes do
           last_name: last_name,
           email: "#{netid2}@gmail.com",
           graduation_date: Date.today.next_year,
-          degree_type: "Bachelors",
-          job_type: "Full-Time",
+          degree_type: 'Bachelors',
+          job_type: 'Full-Time',
           netid: netid2,
           approved_resume: true
         )
       }
 
       it 'should return one student by his unique netid' do
-        get "/students", { netid: netid1 }
+        get '/students', netid: netid1
 
         expect(last_response).to be_ok
         json_data = JSON.parse(last_response.body)
@@ -132,7 +132,7 @@ RSpec.describe Sinatra::StudentsRoutes do
       end
 
       it 'should return all students by their first_name' do
-        get "/students", { first_name: first_name }
+        get '/students', first_name: first_name
 
         expect(last_response).to be_ok
         json_data = JSON.parse(last_response.body)
@@ -140,9 +140,9 @@ RSpec.describe Sinatra::StudentsRoutes do
         match_student(json_data['data'][0], student1)
         match_student(json_data['data'][1], student2)
       end
-      
+
       it 'should return all students who will graduate after a certain date' do
-        get "/students", { graduationStart: Date.today.to_s }
+        get '/students', graduationStart: Date.today.to_s
 
         expect(last_response).to be_ok
         json_data = JSON.parse(last_response.body)
@@ -152,7 +152,7 @@ RSpec.describe Sinatra::StudentsRoutes do
       end
 
       it 'should return all students who will graduate before a certain date' do
-        get "/students", { graduationEnd: (Date.today.next_year + 1).to_s }
+        get '/students', graduationEnd: (Date.today.next_year + 1).to_s
 
         expect(last_response).to be_ok
         json_data = JSON.parse(last_response.body)
@@ -163,22 +163,22 @@ RSpec.describe Sinatra::StudentsRoutes do
     end
   end
 
-  describe "POST /students" do
+  describe 'POST /students' do
     before do
       @valid_params = {
-        netid: "jsmith2",
-        firstName: "John",
-        lastName: "Smith",
-        email: "jsmith2@illinois.edu",
+        netid: 'jsmith2',
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'jsmith2@illinois.edu',
         gradYear: "December #{Date.today.next_year.year}",
-        degreeType: "Bachelors",
-        jobType: "Internship",
-        resume: "BASE64ENCODEDSTRING"
+        degreeType: 'Bachelors',
+        jobType: 'Internship',
+        resume: 'BASE64ENCODEDSTRING'
       }
     end
 
     context 'with invalid params' do
-      [:netid, :firstName, :lastName, :email, :gradYear, :degreeType, :jobType, :resume].each do |key|
+      %i[netid firstName lastName email gradYear degreeType jobType resume].each do |key|
         it "should not create the student and return an error when #{key} is missing" do
           @valid_params.delete(key)
 
@@ -192,23 +192,28 @@ RSpec.describe Sinatra::StudentsRoutes do
     end
 
     context 'with valid params' do
-      let(:resume_url) { "RESUME_URL" }
+      let(:resume_url) { 'RESUME_URL' }
 
       before do
+        allow(SecureRandom)
+          .to receive(:uuid)
+          .and_return(uuid)
+
+        file_path = "#{@valid_params[:netid]}-#{uuid}"
         allow(AWS)
           .to receive(:upload_resume)
-          .with(@valid_params[:netid], @valid_params[:resume])
+          .with(file_path, @valid_params[:resume])
           .and_return(true)
-        
+
         allow(AWS)
           .to receive(:fetch_resume)
-          .with(@valid_params[:netid])
+          .with(file_path)
           .and_return(resume_url)
       end
 
       it 'should create the student' do
         post '/students', @valid_params.to_json
-        
+
         expect(last_response).to be_ok
 
         expect(Student.last.first_name).to eq @valid_params[:firstName]
@@ -217,40 +222,40 @@ RSpec.describe Sinatra::StudentsRoutes do
       end
 
       it 'should upload the resume to S3' do
+        file_path = "#{@valid_params[:netid]}-#{uuid}"
         expect(AWS)
           .to receive(:upload_resume)
-          .with(@valid_params[:netid], @valid_params[:resume])
+          .with(file_path, @valid_params[:resume])
           .and_return(true)
-        
+
         expect(AWS)
           .to receive(:fetch_resume)
-          .with(@valid_params[:netid])
+          .with(file_path)
           .and_return(resume_url)
-        
-        post '/students', @valid_params.to_json
 
+        post '/students', @valid_params.to_json
         expect(Student.last.resume_url).to eq resume_url
       end
     end
   end
 
-  describe "PUT /students/:netid/approve" do
-    let!(:netid) { "jsmith2" }
+  describe 'PUT /students/:netid/approve' do
+    let!(:netid) { 'jsmith2' }
     let!(:student) {
       Student.create(
-        first_name: "John",
-        last_name: "Smith",
+        first_name: 'John',
+        last_name: 'Smith',
         netid: netid,
         email: "#{netid}@illinois.edu",
         graduation_date: Date.today.next_year,
-        degree_type: "Bachelors",
-        job_type: "Full-Time"
+        degree_type: 'Bachelors',
+        job_type: 'Full-Time'
       )
     }
 
     it 'should approve a student whose resume has not already been approved' do
       expect(student.approved_resume).to eq false
-  
+
       put "/students/#{netid}/approve", {}.to_json
       expect(last_response).to be_ok
       expect(Student.last.approved_resume).to eq true
@@ -258,7 +263,7 @@ RSpec.describe Sinatra::StudentsRoutes do
       json_data = JSON.parse(last_response.body)
       expect(json_data['data'].count).to eq 0
     end
-    
+
     it 'should not approve a student whose resume has already been approved' do
       student.update(approved_resume: true)
 
@@ -266,19 +271,19 @@ RSpec.describe Sinatra::StudentsRoutes do
 
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
-      expect(json_data['error']).to eq "Resume already approved"
+      expect(json_data['error']).to eq 'Resume already approved'
     end
 
     it 'should return an error if it cannot find the student by netid' do
-      put "/students/randomne/approve"
+      put '/students/randomne/approve'
 
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
-      expect(json_data['error']).to eq "Student not found"
+      expect(json_data['error']).to eq 'Student not found'
     end
   end
 
-  describe "GET /students/:netid" do
+  describe 'GET /students/:netid' do
     it 'should return the student by netid' do
       get "/students/#{netid}"
 
@@ -295,7 +300,7 @@ RSpec.describe Sinatra::StudentsRoutes do
     end
   end
 
-  describe "DELETE /students/:netid" do
+  describe 'DELETE /students/:netid' do
     it 'should return an error if it cannot find the student by netid' do
       delete "/students/#{netid}1"
 
@@ -312,8 +317,7 @@ RSpec.describe Sinatra::StudentsRoutes do
     it 'should remove their resume from S3' do
       expect(AWS)
         .to receive(:delete_resume)
-        .with(netid)
-      
+
       delete "/students/#{netid}"
       expect(last_response).to be_ok
     end

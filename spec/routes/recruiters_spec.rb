@@ -8,30 +8,27 @@ RSpec.describe Sinatra::RecruitersRoutes do
     expect(recruiter.type).to eq datum['type']
   end
 
-  let(:password) { "foo" }
+  let(:password) { 'foo' }
   let!(:recruiter) {
     Recruiter.create(
-      first_name: "Steve",
-      last_name: "Jobs",
-      email: "steve@apple.com",
-      company_name: "Apple",
+      first_name: 'Steve', last_name: 'Jobs',
+      email: 'steve@apple.com', company_name: 'Apple',
       encrypted_password: Encrypt.encrypt_password(password),
-      type: "Outreach"
+      type: 'Outreach'
     )
   }
 
   before :each do
     allow(Auth).to receive(:verify_admin_session).and_return(true)
-
     allow(Mailer).to receive(:email).and_return(true)
   end
 
-  describe "GET /recruiters" do
+  describe 'GET /recruiters' do
     context 'for invalid parameters' do
       it 'should not allow a non-corporate user to access this route' do
         allow(Auth).to receive(:verify_admin_session).and_return(false)
 
-        get "/recruiters", {}.to_json
+        get '/recruiters', {}.to_json
 
         expect(last_response).not_to be_ok
         json_data = JSON.parse(last_response.body)
@@ -40,7 +37,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
 
     it 'should return all recruiters' do
-      get "/recruiters"
+      get '/recruiters'
 
       expect(last_response).to be_ok
       json_data = JSON.parse(last_response.body)
@@ -49,28 +46,28 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
   end
 
-  describe "POST /recruiters/login" do
-    let(:email) { "someemail@gmail.com" }
+  describe 'POST /recruiters/login' do
+    let(:email) { 'someemail@gmail.com' }
 
     context 'for invalid params' do
-      include_examples "invalid parameters", [:email, :password], "/recruiters/login", "post"
+      include_examples 'invalid parameters', %i[email password], '/recruiters/login', 'post'
     end
-    
+
     context 'when email is invalid' do
       it 'should return 400' do
-        post "/recruiters/login", { email: email, password: password }.to_json
+        post '/recruiters/login', { email: email, password: password }.to_json
 
         expect(last_response.status).to eq 400
         json_data = JSON.parse(last_response.body)
-        expect(json_data['error']).to eq("Invalid credentials")
+        expect(json_data['error']).to eq('Invalid credentials')
       end
     end
 
     context 'when email and password are valid' do
-      let(:first_name) { "John" }
-      let(:last_name) { "Smith" }
-      let(:company_name) { "UIUC" }
-      
+      let(:first_name) { 'John' }
+      let(:last_name) { 'Smith' }
+      let(:company_name) { 'UIUC' }
+
       before do
         @recruiter = Recruiter.create(
           first_name: first_name,
@@ -79,12 +76,12 @@ RSpec.describe Sinatra::RecruitersRoutes do
           email: email,
           encrypted_password: Encrypt.encrypt_password(password),
           expires_on: Date.today.next_year,
-          type: "Outreach"
+          type: 'Outreach'
         )
       end
 
       it 'should return the recruiter information' do
-        post "/recruiters/login", { email: email, password: password }.to_json
+        post '/recruiters/login', { email: email, password: password }.to_json
 
         expect(last_response).to be_ok
         json_data = JSON.parse(last_response.body)
@@ -95,20 +92,19 @@ RSpec.describe Sinatra::RecruitersRoutes do
       end
 
       it 'should return an encoded JWT token' do
-        expect(JWT).to receive(:encode).and_return "ENCODED TOKEN"
-        
-        post "/recruiters/login", { email: email, password: password }.to_json
-        
+        expect(JWT).to receive(:encode).and_return 'ENCODED TOKEN'
+        post '/recruiters/login', { email: email, password: password }.to_json
+
         expect(last_response).to be_ok
         json_data = JSON.parse(last_response.body)
-        expect(json_data['data']['token']).to eq "ENCODED TOKEN"
+        expect(json_data['data']['token']).to eq 'ENCODED TOKEN'
       end
 
       context 'when recruiter account has expired' do
         it 'should return 400' do
           @recruiter.update(expires_on: Date.today - 1)
 
-          post "/recruiters/login", { email: email, password: password }.to_json
+          post '/recruiters/login', { email: email, password: password }.to_json
 
           expect(last_response.status).to eq(400)
           json_data = JSON.parse(last_response.body)
@@ -118,24 +114,26 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
   end
 
-  describe "POST /recruiters" do
+  describe 'POST /recruiters' do
     let(:valid_params) {
       {
-        first_name: "Steve",
-        last_name: "Wozniak",
-        recruiter_email: "wozniak@fake.com",
-        company_name: "Apple",
-        type: "Outreach",
-        email: "senderemail@gmail.com"
+        first_name: 'Steve',
+        last_name: 'Wozniak',
+        recruiter_email: 'wozniak@fake.com',
+        company_name: 'Apple',
+        type: 'Outreach',
+        email: 'senderemail@gmail.com'
       }
     }
-    
+
     context 'with invalid params' do
       # Don't check type here, but check invalid separately
-      include_examples "invalid parameters", [:first_name, :last_name, :company_name, :recruiter_email, :email], "/recruiters", "post"
+      include_examples 'invalid parameters',
+                       %i[first_name last_name company_name recruiter_email email],
+                       '/recruiters', 'post'
 
       it 'should not create the recruiter if type is invalid' do
-        valid_params[:type] = "Invalid type"
+        valid_params[:type] = 'Invalid type'
 
         post '/recruiters', valid_params.to_json
         expect(last_response).not_to be_ok
@@ -146,7 +144,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
       context 'for a non-sponsor recruiter' do
         it 'should create the recruiter' do
           post '/recruiters', valid_params.to_json
-          
+
           expect(last_response).to be_ok
           match_recruiter(JSON.parse(valid_params.to_json), Recruiter.last)
         end
@@ -154,19 +152,19 @@ RSpec.describe Sinatra::RecruitersRoutes do
         it 'should not send the email' do
           expect(Mailer).not_to receive(:email)
 
-          post '/recruiters', @valid_params.to_json
+          post '/recruiters', valid_params.to_json
         end
       end
 
       context 'for a sponsor recruiter' do
         before do
-          valid_params[:type] = "Sponsor"
+          valid_params[:type] = 'Sponsor'
         end
-        
+
         it 'should create the recruiter' do
-          # TODO figure out why this test fails when it shouldn't be.
+          # TODO: figure out why this test fails when it shouldn't be.
           post '/recruiters', valid_params.to_json
-          
+
           expect(last_response).to be_ok
           match_recruiter(JSON.parse(valid_params.to_json), Recruiter.last)
         end
@@ -180,7 +178,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
   end
 
-  describe "GET /recruiters/:recruiter_id" do
+  describe 'GET /recruiters/:recruiter_id' do
     it 'should return an error if the corporate session cannot be verified' do
       allow(Auth).to receive(:verify_admin_session).and_return(false)
 
@@ -191,7 +189,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
 
     it 'should return an error if it cannot find a recruiter by id' do
-      get "/recruiters/12345"
+      get '/recruiters/12345'
 
       expect(last_response).not_to be_ok
       json_response = JSON.parse(last_response.body)
@@ -203,12 +201,12 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
       expect(last_response).to be_ok
       json_response = JSON.parse(last_response.body)
-      expect(json_response["data"].to_json).to eq(recruiter.serialize.to_json)
+      expect(json_response['data'].to_json).to eq(recruiter.serialize.to_json)
     end
   end
 
-  describe "PUT /recruiters/:recruiter_id" do
-    let(:new_first_name) { "new first name" }
+  describe 'PUT /recruiters/:recruiter_id' do
+    let(:new_first_name) { 'new first name' }
     let(:payload) {
       {
         first_name: new_first_name,
@@ -219,11 +217,11 @@ RSpec.describe Sinatra::RecruitersRoutes do
     }
 
     context 'for invalid parameters' do
-      include_examples "invalid parameters", [:first_name, :last_name, :email, :type], "/recruiters/1", "put"
+      include_examples 'invalid parameters', %i[first_name last_name email type], '/recruiters/1', 'put'
     end
 
     it 'should return an error if the recruiter does not exist' do
-      put "/recruiters/12345", payload.to_json
+      put '/recruiters/12345', payload.to_json
 
       expect(last_response).not_to be_ok
       json_data = JSON.parse(last_response.body)
@@ -237,22 +235,23 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
   end
 
-  describe "POST /recruiters/reset_password" do
+  describe 'POST /recruiters/reset_password' do
     let(:valid_params) {
       {
         first_name: recruiter.first_name,
         last_name: recruiter.last_name,
         recruiter_email: recruiter.email,
-        email: "senderemail@gmail.com"
+        email: 'senderemail@gmail.com'
       }
     }
 
     context 'for invalid parameters' do
-      include_examples "invalid parameters", [:first_name, :last_name, :recruiter_email, :email], "/recruiters/reset_password", "post"
+      include_examples 'invalid parameters', %i[first_name last_name recruiter_email email],
+                       '/recruiters/reset_password', 'post'
 
       it 'should return an error if the recruiter does not exist' do
-        valid_params[:first_name] = "Invalid"
-        post "/recruiters/reset_password", valid_params.to_json
+        valid_params[:first_name] = 'Invalid'
+        post '/recruiters/reset_password', valid_params.to_json
 
         expect(last_response).not_to be_ok
         json_data = JSON.parse(last_response.body)
@@ -260,26 +259,18 @@ RSpec.describe Sinatra::RecruitersRoutes do
       end
     end
 
-    context 'for a non-sponsor recruiter' do
-      it 'should return an error' do
-        post "/recruiters/reset_password", valid_params.to_json
-        
-        expect(last_response).not_to be_ok
-      end
-    end
-
     context 'for a sponsor recruiter' do
       before do
-        recruiter.update(type: "Sponsor")
+        recruiter.update(type: 'Sponsor')
       end
 
       it 'should generate a new password' do
-        new_encrypted_password = "new_encrypted_password"
+        new_encrypted_password = 'new_encrypted_password'
         expect(Encrypt)
           .to receive(:generate_encrypted_password)
           .and_return([new_encrypted_password, new_encrypted_password])
-        
-        post "/recruiters/reset_password", valid_params.to_json
+
+        post '/recruiters/reset_password', valid_params.to_json
 
         expect(Recruiter.last.encrypted_password).to eq new_encrypted_password
       end
@@ -287,12 +278,12 @@ RSpec.describe Sinatra::RecruitersRoutes do
       it 'should send an email to the recruiter' do
         expect(Mailer).to receive(:email)
 
-        post "/recruiters/reset_password", valid_params.to_json
+        post '/recruiters/reset_password', valid_params.to_json
       end
     end
   end
 
-  describe "GET /recruiters/:recruiter_id/invite" do
+  describe 'GET /recruiters/:recruiter_id/invite' do
     it 'should return an error if the corporate session cannot be verified' do
       allow(Auth).to receive(:verify_admin_session).and_return(false)
 
@@ -303,7 +294,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
 
     it 'should return an error if it cannot find a recruiter by id' do
-      get "/recruiters/12345/invite"
+      get '/recruiters/12345/invite'
 
       expect(last_response).not_to be_ok
       json_response = JSON.parse(last_response.body)
@@ -316,24 +307,24 @@ RSpec.describe Sinatra::RecruitersRoutes do
       expect(last_response).to be_ok
       json_response = JSON.parse(last_response.body)
 
-      expect(json_response["data"]["subject"]).to eq "#{recruiter.company_name} ACM@UIUC"
-      expect(json_response["data"]["to"]).to eq recruiter.email
-      expect(json_response["data"]["recruiter"].to_json).to eq recruiter.serialize.to_json
+      expect(json_response['data']['subject']).to eq "#{recruiter.company_name} ACM@UIUC"
+      expect(json_response['data']['to']).to eq recruiter.email
+      expect(json_response['data']['recruiter'].to_json).to eq recruiter.serialize.to_json
     end
   end
 
-  describe "POST /recruiters/:recruiter_id/invite" do
+  describe 'POST /recruiters/:recruiter_id/invite' do
     let(:valid_params) {
       {
         to: recruiter.email,
-        subject: "Subject",
-        body: "Message",
-        email: "senderemail@gmail.com"
+        subject: 'Subject',
+        body: 'Message',
+        email: 'senderemail@gmail.com'
       }
     }
 
     context 'for invalid parameters' do
-      include_examples "invalid parameters", [:to, :subject, :body, :email], "/recruiters/1/invite", "post"
+      include_examples 'invalid parameters', %i[to subject body email], '/recruiters/1/invite', 'post'
 
       it 'should return an error if the corporate session cannot be verified' do
         allow(Auth).to receive(:verify_admin_session).and_return(false)
@@ -345,7 +336,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
       end
 
       it 'should return an error if it cannot find a recruiter by id' do
-        post "/recruiters/12345/invite", valid_params.to_json
+        post '/recruiters/12345/invite', valid_params.to_json
 
         expect(last_response).not_to be_ok
         json_response = JSON.parse(last_response.body)
@@ -363,7 +354,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
       it 'should set invited attribute to true' do
         expect(recruiter.invited).to eq false
-        
+
         post "/recruiters/#{recruiter.id}/invite", valid_params.to_json
         expect(last_response).to be_ok
         expect(Recruiter.last.invited).to eq true
@@ -371,7 +362,7 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
   end
 
-  describe "PUT /recruiters/:recruiter_id/renew" do
+  describe 'PUT /recruiters/:recruiter_id/renew' do
     context 'for invalid parameters' do
       it 'should not allow a non-corporate user to access this route' do
         allow(Auth).to receive(:verify_admin_session).and_return(false)
@@ -409,12 +400,12 @@ RSpec.describe Sinatra::RecruitersRoutes do
     end
   end
 
-  describe "POST /recruiters/reset" do
+  describe 'POST /recruiters/reset' do
     context 'for invalid parameters' do
       it 'should not allow a non-corporate user to access this route' do
         allow(Auth).to receive(:verify_admin_session).and_return(false)
 
-        post "/recruiters/reset", {}.to_json
+        post '/recruiters/reset', {}.to_json
 
         expect(last_response).not_to be_ok
         json_data = JSON.parse(last_response.body)
@@ -424,14 +415,14 @@ RSpec.describe Sinatra::RecruitersRoutes do
 
     context 'for valid parameters' do
       it 'should set all the recruiters invited status to false' do
-        post "/recruiters/reset", {}.to_json
+        post '/recruiters/reset', {}.to_json
         expect(last_response).to be_ok
         expect(Recruiter.all.map(&:invited)).to all(be false)
       end
     end
   end
 
-  describe "DELETE /recruiters/:recruiter_id" do
+  describe 'DELETE /recruiters/:recruiter_id' do
     context 'for invalid parameters' do
       it 'should not allow a non-corporate user to access this route' do
         allow(Auth).to receive(:verify_admin_session).and_return(false)

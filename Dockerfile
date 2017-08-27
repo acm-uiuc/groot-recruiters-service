@@ -13,14 +13,13 @@ COPY Gemfile* /usr/src/app/
 RUN bundle install
 
 # Get wait-for-it
-RUN git clone https://github.com/vishnubob/wait-for-it && \
-    cp wait-for-it/wait-for-it.sh wait-for-it.sh && \
-    rm -rf wait-for-it/ && \
-    chmod +x wait-for-it.sh
+RUN mkdir -p /usr/src/wait-for-it && \
+    git clone https://github.com/vishnubob/wait-for-it /usr/src/wait-for-it && \
+    chmod +x /usr/src/wait-for-it/wait-for-it.sh
 
 # Bundle app source
 COPY . /usr/src/app
 
 EXPOSE 3000
 
-CMD [ "./wait-for-it.sh", "db:3306", "--", "ruby", "app.rb" ]
+CMD [ "/usr/src/wait-for-it/wait-for-it.sh", "db:3306", "--", "ruby", "/usr/src/app/app.rb" ]

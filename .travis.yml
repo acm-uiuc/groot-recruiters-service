@@ -1,20 +1,18 @@
 language: ruby
-
 rvm:
-  - 2.2
-
+- 2.2
 services:
-  - mysql
-
+- mysql
 before_install:
-  - gem update bundler
-  - cp config/secrets.yaml.template config/secrets.yaml
-  - git clone https://github.com/acm-uiuc/groot-recruiters-templates-example.git views 
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS groot_recruiter_service_test;'
-
+- gem update bundler
+- cp config/secrets.yaml.template config/secrets.yaml
+- git clone https://github.com/acm-uiuc/groot-recruiters-templates-example.git views
+- mysql -e 'CREATE DATABASE IF NOT EXISTS groot_recruiter_service_test;'
 install:
-  - bundle install
-  - gem install rubocop
-  - rake db:migrate
-
+- bundle install
+- gem install rubocop
+- rake db:migrate
 script: rubocop * && rspec
+notifications:
+  slack:
+    secure: XRGwxJRHQggeuLT8XADBr5olQiH3bXC2HANpLrx8j0+469yeh5HIxgFSiN9Yk1VEgq68M4K4AnliAwVZF+tyMfo8kVBRfMvIR5bO2yjvKbDluLx1aqqh74xMoLwL7rlkilIdvR1dAxEkNnUw/RgdGPNdbi7PqCb7vGnztejKSpPeky/hI5ovhho+o4zaULdSzli8zvdbF0wj120pVA3Ha5qYS21I+5hSxuHKmhUMphxcDJ+mmN5GF90MpXoSoVWxaytfbn6IvWqaw3iwGCVFNxzv0F5iMGo/4D9bnt9BNY1feNgi/qImfvDgyspGKKyphbEYB+kATtXwbxXRBfsvdBxLsCtlmmkmrbrWQPHCedfeEGr+n42/2g1iobbv1dGMbNk4/yab5gTpmoZy0J01+KRsEDLjC8cD3dkA0z05vtRr/Ma3m/TLQFH7rcrSiafy1Fg/su1LMvlTxFAJUvYGw4Urud+GbC2uqsWWJBoY8lPIznqu07Q6Si/6LqWzSGPDrl4P8bDi/3GODBIxk3amzFw7LckgPfQXR2hiJMivkdTRJbLRvnNAWWxzJXyDxrVTTPgjAgoXDOqAZCNLWhX9mQQKpJqWUVVNt40lLlaYL4G/BO9tfyjw5XSrzUAeLQURivLEECkx+eVUzJQqDztZ4Qfm/gDbz74QYF6ed5d4gRw=

@@ -20,6 +20,6 @@ RUN mkdir -p /usr/src/wait-for-it && \
 # Bundle app source
 COPY . /usr/src/app
 
-EXPOSE 3000
+EXPOSE 4567
 
 CMD [ "/usr/src/wait-for-it/wait-for-it.sh", "db:3306", "--", "ruby", "/usr/src/app/app.rb" ]
